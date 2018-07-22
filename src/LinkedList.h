@@ -14,9 +14,12 @@ struct LinkedList{
   int count;
 };
 
-void LinkedListAddToHead(LinkedList *list, ListItem *itemToAdd);
-void LinkedListAddToTail(LinkedList *list, ListItem *itemToAdd);
-ListItem *LinkedListRemoveFromHead(LinkedList *list);
-ListItem *LinkedListRemoveFromTail(LinkedList *list);
+
+void LinkedListAddToHead(LinkedList *List, ListItem *ItemToAdd);
+void LinkedListAddToTail(LinkedList *List, ListItem *ItemToAdd);
+ListItem *LinkedListRemoveFromHead(LinkedList *List);
+ListItem *LinkedListRemoveFromTail(LinkedList *List);
+
+
 
 #endif // _LINKEDLIST_H
