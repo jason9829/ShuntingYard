@@ -15,9 +15,9 @@ struct LinkedList{
 };
 
 
-void LinkedListAddToHead(LinkedList *List, ListItem *ItemToAdd);
-void LinkedListAddToTail(LinkedList *List, ListItem *ItemToAdd);
-ListItem *LinkedListRemoveFromHead(LinkedList *List);
+void LinkedListAddToHead(LinkedList *List,void *data);
+void LinkedListAddToTail(LinkedList *List,void *data);
+ListItem *LinkedListRemoveFromHead(LinkedList *List, ListItem *previousData);
 ListItem *LinkedListRemoveFromTail(LinkedList *List);
 
 
