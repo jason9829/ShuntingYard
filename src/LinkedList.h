@@ -15,11 +15,10 @@ struct LinkedList{
 };
 
 
-void LinkedListAddToHead(LinkedList *List,void *data);
+int *LinkedListAddToHead(LinkedList *List,void *data);
 void LinkedListAddToTail(LinkedList *List,void *data);
-ListItem *LinkedListRemoveFromHead(LinkedList *List, ListItem *previousData);
+ListItem *LinkedListRemoveFromHead(LinkedList *List);
 ListItem *LinkedListRemoveFromTail(LinkedList *List);
-
 
 
 #endif // _LINKEDLIST_H

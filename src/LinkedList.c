@@ -5,7 +5,7 @@
 #include "Error.h"
 
 // ItemToAdd->next neccessary?
-void LinkedListAddToHead(LinkedList *List, void *data){
+int *LinkedListAddToHead(LinkedList *List, void *data){
 
   if(*(int*)(data) == NULL){
     throwSimpleError(ERR_DATA_NULL,"Data trying to add is NULL");
@@ -24,17 +24,17 @@ void LinkedListAddToHead(LinkedList *List, void *data){
       newLinkedList->next = List->head;     // Take previous node as next
       List->count++;
       List->head = newLinkedList;           // Point to the next node
-      List->tail = newLinkedList->next->next;
+      List->tail = newLinkedList;
     }
+    return newLinkedList;
 } }
 
-ListItem *LinkedListRemoveFromHead(LinkedList *List, ListItem *previousData){
+ListItem *LinkedListRemoveFromHead(LinkedList *List){
   if(List->head == NULL){
     throwSimpleError(ERR_LINKEDLIST_NULL,"Empty linkedlist detected");
   }
   else{
-    List->head = previousData->next;
-    previousData->next = NULL;
+    List->head = List->head->next;
     List->count--;
   }
 }
