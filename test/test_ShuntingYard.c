@@ -14,11 +14,11 @@ void tearDown(void){}
 void test_LinkedListAddToHead_given_empty_linked_list_add_NULL_expect_ERR_DATA_NULL(void){
   CEXCEPTION_T e;
   int value = NULL ;
+
   LinkedList List = {NULL, NULL , 0};
   ListItem Item = {NULL, (void*) &value};
 
   Try{
-    printf("%d\n",sizeof(value));
     LinkedListAddToHead(&List,&value);
     TEST_FAIL_MESSAGE("Expect ERR_DATA_NULL. But no exception thrown.");
   }
@@ -27,44 +27,43 @@ void test_LinkedListAddToHead_given_empty_linked_list_add_NULL_expect_ERR_DATA_N
     TEST_ASSERT_EQUAL(ERR_DATA_NULL, e->errorCode);
     freeError(e);
   }
-
 }
 
-
-// add char into the linked list
+// add char into the linked list, typecast int* so cant test the data
 void test_LinkedListAddToHead_given_empty_linked_list_add_char_a_expect_item_inserted(void){
-  CEXCEPTION_T e;
   char value = 'a';
   int *newLinkedList_ptr;
+
   LinkedList List = {NULL, NULL , 0};
-  ListItem Item = {NULL, (void*) &value};
+
   newLinkedList_ptr = LinkedListAddToHead(&List,&value);
+  ListItem *newLinkedList_verify;             // just to check the next and data of newLinkedList (can't access to newLinkedList at here)
+  newLinkedList_verify = &newLinkedList_ptr;  // point to the newLinkedList
 
   TEST_ASSERT_EQUAL(newLinkedList_ptr,List.tail);
-  TEST_ASSERT_EQUAL(NULL,Item.next);
+  TEST_ASSERT_EQUAL(newLinkedList_ptr,List.head);
+  TEST_ASSERT_EQUAL(NULL,newLinkedList_verify->next->next); // newLinkedList_verify->next->next same as newLinkedList->next
   TEST_ASSERT_EQUAL(1,List.count);
-
 }
-
 
 /*
  *  Starting from an empty linked-list, add item 1 into it
  *  BEFORE          AFTER
- *  head ------     head-----> item1 ---> address unknown
- *            |           next-----
- *  tail ------     tail----^     |
- *            |                   --
+ *  head ------     head------------------> item1 ---> address unknown
+ *            |           next-----> NULL    ^
+ *  tail ------     tail---------------------|
+ *            |
  *  count =0  --    count =1
  */
 void test_LinkedListAddToHead_given_empty_linked_list_add_1_expect_item_inserted(void){
   int value =1 ;
   int *newLinkedList_ptr;
+
   LinkedList List = {NULL, NULL , 0};
-  ListItem Item = {NULL, (void*) &value};
 
   newLinkedList_ptr = LinkedListAddToHead(&List,&value);
-  ListItem *newLinkedList_verify;             // just to check the next and data of newCreatedLinkList
-  newLinkedList_verify = &newLinkedList_ptr;  // point to the newCreatedLinkList
+  ListItem *newLinkedList_verify;             // just to check the next and data of newLinkedList (can't access to newLinkedList at here)
+  newLinkedList_verify = &newLinkedList_ptr;  // point to the newLinkedList
 
   TEST_ASSERT_EQUAL(newLinkedList_ptr,List.tail);
   TEST_ASSERT_EQUAL(newLinkedList_ptr,List.head);
@@ -78,27 +77,27 @@ void test_LinkedListAddToHead_given_empty_linked_list_add_1_expect_item_inserted
  *  Starting from an linked-list with item 1 ,add item 2 into it
  *  BEFORE                 AFTER
  *  head ------> item1     head ------> newLinkedList
- *              next---             next-----> next----
- *  tail --------^    |    tail------------------^    |
- *  count=1          --     count=2                  --
+ *              next---                  next.item1-----
+ *  tail --------^    |    tail------------>item1      |
+ *  count=1          --    next. newLinkedList-^      --
+ *                         count=2
  */
 
 void test_LinkedListAddToHead_given_linked_list_with_item_1_add_item_2_expect_item_2_then_item_1(void){
   int value1 =1, new_value =2;
   int *newLinkedList_ptr;
+
   ListItem Item1 = {NULL,(void*) &value1};
-  ListItem newLinkedList = {NULL,(void*) &new_value};
   LinkedList List = {&Item1, NULL , 1};
 
-
   newLinkedList_ptr = LinkedListAddToHead(&List,&new_value);
-  ListItem *newLinkedList_verify;             // just to check the next and data of newCreatedLinkList
-  newLinkedList_verify = &newLinkedList_ptr;  // point to the newCreatedLinkList
+  ListItem *newLinkedList_verify;             // just to check the next and data of newLinkedList (can't access to newLinkedList at here)
+  newLinkedList_verify = &newLinkedList_ptr;  // point to the newLinkedList
 
   TEST_ASSERT_EQUAL(&Item1,List.tail);
   TEST_ASSERT_EQUAL(newLinkedList_ptr,List.head);
-  TEST_ASSERT_EQUAL(NULL,newLinkedList_verify->next->next);
-  TEST_ASSERT_EQUAL( ,newLinkedList_verify->next->data);
+  TEST_ASSERT_EQUAL(&Item1,newLinkedList_verify->next->next);
+  TEST_ASSERT_EQUAL(2,newLinkedList_verify->next->data);
   TEST_ASSERT_EQUAL(2,List.count);
 
 }
@@ -119,7 +118,6 @@ void test_LinkedListRemoveFromHead_given_empty_linked_list_remove_expect_ERR_LIN
   CEXCEPTION_T e;
   LinkedList List = {NULL, NULL ,  0};
   ListItem Item = {NULL,  (void *) NULL};
-
 
   Try{
     LinkedListRemoveFromHead(&List);
@@ -146,7 +144,6 @@ void test_LinkedListRemoveFromHead_given_empty_linked_list_remove_expect_ERR_LIN
  */
 
 void test_LinkedListRemoveFromHead_given_linked_list_with_item_1_expect_NULL_after_remove(void){
-
   int value1 = 1;
 
   ListItem Item1 = {NULL,  (void *) &value1};
@@ -155,7 +152,6 @@ void test_LinkedListRemoveFromHead_given_linked_list_with_item_1_expect_NULL_aft
   LinkedListRemoveFromHead(&List);
 
   TEST_ASSERT_EQUAL(NULL,List.head);
-
   TEST_ASSERT_EQUAL(NULL,Item1.next);
   TEST_ASSERT_EQUAL(NULL,List.tail);
   TEST_ASSERT_EQUAL(0,List.count);
@@ -165,22 +161,22 @@ void test_LinkedListRemoveFromHead_given_linked_list_with_item_1_expect_NULL_aft
  *  Starting from an linked-list with item 1 ,remove item 2 from it
  *  BEFORE                                      AFTER
  *  head ------> item1                        head-----> item2
- *              next-----> item2                   next----->NULL
- *  tail --------^    next.item2----->NULL    tail---^
- *  count=1           tail----> item2
+ *              next-----> item2                           ^   next----->NULL
+ *  tail --------^    next.item2----->NULL    tail---------|
+ *  count=2           tail----> item2          count=1
  */
 
  void test_LinkedListRemoveFromHead_given_linked_list_with_item_2_expect_item1_remove(void){
-
    int value1 =1, value2 =2;
+
    ListItem Item2 = {NULL,(void*) &value2};
    ListItem Item1 ={&Item2,(void*) &value1};
-   LinkedList List = {&Item1, NULL , 1};
+   LinkedList List = {&Item1, &Item2 , 2};
 
    LinkedListRemoveFromHead(&List);
 
    TEST_ASSERT_EQUAL(NULL,Item1.next);
-   TEST_ASSERT_EQUAL_PTR(&Item2, List.head);
+   TEST_ASSERT_EQUAL(&Item2, List.head);
    TEST_ASSERT_EQUAL(NULL,List.tail);
    TEST_ASSERT_EQUAL(0,List.count);
  }

@@ -4,7 +4,7 @@
 #include "Exception.h"
 #include "Error.h"
 
-// ItemToAdd->next neccessary?
+
 int *LinkedListAddToHead(LinkedList *List, void *data){
 
   if(*(int*)(data) == NULL){
@@ -22,19 +22,35 @@ int *LinkedListAddToHead(LinkedList *List, void *data){
     else{
       newLinkedList->data = *(int*)(data);
       newLinkedList->next = List->head;     // Take previous node as next
+      if(List->count == 1){     // if 2 block (head->newLinkedList) take previous as tail else tail remain the same
+        List->tail = newLinkedList->next;              // previous node as tail
+      }
       List->count++;
-      List->head = newLinkedList;           // Point to the next node
-      List->tail = newLinkedList;
+      List->head = newLinkedList;
     }
     return newLinkedList;
-} }
+}
+}
 
 ListItem *LinkedListRemoveFromHead(LinkedList *List){
   if(List->head == NULL){
     throwSimpleError(ERR_LINKEDLIST_NULL,"Empty linkedlist detected");
   }
   else{
-    List->head = List->head->next;
+    LinkedList *temp = (struct LinkedList *)malloc (sizeof(struct LinkedList));
+    *temp = *List;
+
+    /*  List & temp (duplicate of List)
+     *                    (remove this)
+     *                       +++++++    next     +++++++   next
+     *           head----->  +  1  +-----------> +  2  +---------> NULL
+     *                       +++++++             +++++++
+     *
+     */
+
+    List->head = temp->head->next;
+    List->head->next = NULL;
+    temp = NULL;
     List->count--;
   }
 }
