@@ -1,6 +1,7 @@
 #include "unity.h"
 #include "ShuntingYard.h"
 #include "LinkedList.h"
+#include "Stack.h"
 #include "Error.h"
 #include "CException.h"
 #include "Exception.h"
@@ -215,9 +216,41 @@ void test_LinkedListRemoveFromHead_given_linked_list_with_item_1_expect_NULL_aft
    LinkedListRemoveFromHead(&List);
 
    TEST_ASSERT_EQUAL(NULL, Item1.next);
-   TEST_ASSERT_EQUAL(&Item2, List.head);
+   TEST_ASSERT_EQUAL(&Item2, List.head);  
    TEST_ASSERT_EQUAL(&Item3,Item2.next);
    TEST_ASSERT_EQUAL(&Item3, List.tail);
    TEST_ASSERT_EQUAL(NULL, Item3.next);
    TEST_ASSERT_EQUAL(2, List.count);
  }
+
+
+ //    *************************************************************
+ //    |   TEST FOR Push & Pop (WITHOUT TOKEN)                     |
+ //    |   FUNCTIONS TESTED                                        |
+ //    |   ****************                                        |
+ //    |   void pushStack(LinkedList *Stack,void *data)            |
+ //    |   ListItem *LinkedListRemoveFromHead(LinkedList *List)    |
+ //    *************************************************************
+
+/* Starting from empty (NULL) stack then push 20 into the stack
+ *
+ *   BEFORE             AFTER
+ *   +------+           +------+  next
+ *   + NULL +           +  20  + ------> NULL
+ *   +------+           +------+
+ *             head---------^
+ *             tail---------^
+ */
+void test_pushStack_push_20_expect_20_pushed(void){
+  int pushValue = 20;
+
+  LinkedList Stack = {NULL, NULL, 0}
+  pushStack(&Stack,&pushValue);
+
+  TEST_ASSERT_EQUAL();
+  TEST_ASSERT_EQUAL();
+  TEST_ASSERT_EQUAL();
+  TEST_ASSERT_EQUAL();
+  TEST_ASSERT_EQUAL();
+
+}
