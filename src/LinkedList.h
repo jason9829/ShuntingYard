@@ -14,8 +14,11 @@ struct LinkedList{
   int count;
 };
 
+// Both addtoHead function have same code
+// but int* func return the address  of newLinkedList
+int *LinkedListAddToHead_wNewLinkedListAddress(LinkedList *List,void *data);
+void LinkedListAddToHead(LinkedList *List,void *data);
 
-int *LinkedListAddToHead(LinkedList *List,void *data);
 void LinkedListAddToTail(LinkedList *List,void *data);
 ListItem *LinkedListRemoveFromHead(LinkedList *List);
 ListItem *LinkedListRemoveFromTail(LinkedList *List);

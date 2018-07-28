@@ -1,0 +1,5 @@
+#ifndef _TOKENTYPEIDENTIFIER_H
+#define _TOKENTYPEIDENTIFIER_H
+
+#include "Token.h"
+#endif // _TOKENTYPEIDENTIFIER_H

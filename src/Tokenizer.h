@@ -1,5 +1,5 @@
-#ifndef _TOKENIZER_H
-#define _TOKENIZER_H
+#ifndef Tokenizer_H
+#define Tokenizer_H
 
 #include <stdint.h>
 #include "Common.h"
@@ -24,4 +24,5 @@ void configureTokenizer(Tokenizer *tokenizer, uint32_t configuration);
 Token *advanceToken(Tokenizer *tokenizer);
 Token *getToken(Tokenizer *tokenizer);
 Token *peepToken(Tokenizer *tokenizer);
-#endif // _TOKENIZER_H
+
+#endif // Tokenizer_H

@@ -1,5 +1,5 @@
-#ifndef _TOKENR_H
-#define _TOKENR_H
+#ifndef Token_H
+#define Token_H
 
 #include <stdint.h>
 #include "Common.h"
@@ -18,10 +18,10 @@ typedef enum {
 } TokenType;
 
 typedef enum {
-  NO_AFFIX,
-  PREFIX,
-  INFIX,
-  POSTFIX,
+  NO_AFFIX = 0x00010000,
+  PREFIX   = 0x00020000,
+  INFIX    = 0x00030000,
+  POSTFIX  = 0x00040000,
 } Affix;
 
 typedef enum {
@@ -83,4 +83,4 @@ Token *createOperatorToken(char *str, char *originalString);
 void freeToken(void *token);
 void dumpTokenErrorMessage(CEXCEPTION_T ex, int lineNo);
 
-#endif // _TOKENR_H
+#endif // Token_H
