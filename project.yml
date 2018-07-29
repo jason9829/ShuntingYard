@@ -22,9 +22,6 @@
 
 :environment:
 
-:module_generator:
-  :naming: bumpy
-
 :extension:
   :executable: .exe
 
@@ -46,7 +43,9 @@
     - *common_defines
     - TEST
     - CEXCEPTION_USE_CONFIG_FILE
-    - _ISO999_SOURCE
+    # The following macro is to ensure vsnprintf() returns the length of
+    # bytes needed to write when it fails due to buffer being too small
+    - _ISOC99_SOURCE
   :test_preprocess:
     - *common_defines
     - TEST
@@ -72,7 +71,6 @@
 # Ceedling defaults to using gcc for compiling, linking, etc.
 # As [:tools] is blank, gcc will be used (so long as it's in your system path)
 # See documentation to configure a given toolchain for use
-
 :tools:
   :test_compiler:
     :executable: gcc                    #exists in system search path
@@ -80,7 +78,7 @@
     :arguments:
       - -c "${1}"                       #source code input file (Ruby method call param list sub)
       - -o "${2}"                       #object file output (Ruby method call param list sub)
-      - -g
+      - -g                              #add debugging info so that it can be debugged under GDB
       - -I test
       - -I vendor/ceedling/vendor/unity/src
       - -I vendor/ceedling/vendor/cmock/src
@@ -99,10 +97,14 @@
       - "${1}"                          #Link all the object files. Note that, this must come before
                                         #link libraries
 #      - -Llib/x86                       #Indicate where the user defined libraries reside
-      - -Llib/x64_7_3_0
+#      - -Llib/x64_7_3_0
+#      - -Llib/x64_6_3_0
+#      - -Llib/x64_5_3_0
+      - -Llib/x64_TDM_5_1_0
       - -lm                             #Link with math library
       - -ltokenizer                     #Link with Tokenizer library
       - -o "${2}"                       #Executable file output (Ruby method call param list sub)
+
 # LIBRARIES
 # These libraries are automatically injected into the build process. Those specified as
 # common will be used in all types of builds. Otherwise, libraries can be injected in just

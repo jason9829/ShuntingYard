@@ -5,3 +5,5 @@
 #include "Error.h"
 #include "CException.h"
 #include "Exception.h"
+void setUp(void){}
+void tearDown(void){}

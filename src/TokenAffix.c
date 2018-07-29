@@ -3,7 +3,9 @@
 
 // Combine TokenType and Affix
 void encodeAffix(Token *token, Affix affix){
-  token->type |= affix;
+  // both are the same
+  //token->type |= affix;
+  token->type = token->type | affix;
 }
 
 // get the affixType
