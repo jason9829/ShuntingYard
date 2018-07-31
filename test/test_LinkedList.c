@@ -1,7 +1,5 @@
 #include "unity.h"
 #include "LinkedList.h"
-#include "Token.h"
-#include "Tokenizer.h"
 #include "Error.h"
 #include "Common.h"
 #include "CException.h"
@@ -156,15 +154,17 @@ void test_LinkedListRemoveFromHead_given_empty_linked_list_remove_expect_ERR_LIN
 void test_LinkedListRemoveFromHead_given_linked_list_with_item_1_expect_NULL_after_remove(void){
   int value1 = 1;
 
+  ListItem *removedLinkedList;
   ListItem Item1 = {NULL,  (void *) &value1};
   LinkedList List = {&Item1, NULL , 1};
 
-  LinkedListRemoveFromHead(&List);
+  removedLinkedList = LinkedListRemoveFromHead(&List);
 
   TEST_ASSERT_EQUAL(NULL,List.head);
   TEST_ASSERT_EQUAL(NULL,Item1.next);
   TEST_ASSERT_EQUAL(NULL,List.tail);
   TEST_ASSERT_EQUAL(0,List.count);
+  TEST_ASSERT_EQUAL(&Item1,removedLinkedList);
 }
 
 /*
@@ -179,17 +179,19 @@ void test_LinkedListRemoveFromHead_given_linked_list_with_item_1_expect_NULL_aft
  void test_LinkedListRemoveFromHead_given_linked_list_with_item_2_expect_item1_remove(void){
    int value1 =1, value2 =2;
 
+   ListItem *removedLinkedList;
    ListItem Item2 = {NULL,(void*) &value2};
    ListItem Item1 ={&Item2,(void*) &value1};
    LinkedList List = {&Item1, &Item2 , 2};
 
-   LinkedListRemoveFromHead(&List);
+   removedLinkedList = LinkedListRemoveFromHead(&List);
 
    TEST_ASSERT_EQUAL(NULL, Item1.next);
    TEST_ASSERT_EQUAL(&Item2, List.head);
    TEST_ASSERT_EQUAL(&Item2, List.tail);
    TEST_ASSERT_EQUAL(NULL, Item2.next);
    TEST_ASSERT_EQUAL(1, List.count);
+   TEST_ASSERT_EQUAL(&Item1,removedLinkedList);
  }
 
 /*  Starting from LinkedList with Item1, Item2 and Item3, then remove Item1
@@ -208,14 +210,15 @@ void test_LinkedListRemoveFromHead_given_linked_list_with_item_1_expect_NULL_aft
  *
  */
  void test_LinkedListRemoveFromHead_given_linked_list_with_item_1_item_2_item_3_expect_item1_remove(void){
-
    int value1 =1, value2 =2, value3 = 3;
+
+   ListItem *removedLinkedList;
    ListItem Item3 = {NULL,(void*) &value3};
    ListItem Item2 = {&Item3,(void*) &value2};
    ListItem Item1 ={&Item2,(void*) &value1};
    LinkedList List = {&Item1, &Item3 , 3};
 
-   LinkedListRemoveFromHead(&List);
+   removedLinkedList = LinkedListRemoveFromHead(&List);
 
    TEST_ASSERT_EQUAL(NULL, Item1.next);
    TEST_ASSERT_EQUAL(&Item2, List.head);
@@ -223,32 +226,5 @@ void test_LinkedListRemoveFromHead_given_linked_list_with_item_1_expect_NULL_aft
    TEST_ASSERT_EQUAL(&Item3, List.tail);
    TEST_ASSERT_EQUAL(NULL, Item3.next);
    TEST_ASSERT_EQUAL(2, List.count);
+   TEST_ASSERT_EQUAL(&Item1,removedLinkedList);
  }
-
-
- //    *************************************************************
- //    |   TEST FOR LINKEDLIST (TOKEN)                             |
- //    |   FUNCTIONS TESTED                                        |
- //    |   ****************                                        |
- //    |   int *LinkedListAddToHead(LinkedList *List,void *data)   |
- //    |   ListItem *LinkedListRemoveFromHead(LinkedList *List)    |
- //    *************************************************************
-
-void test_LinkedListAddToHead_given_nullToken_expect_ERR_NULL_TOKEN(void){
-    CEXCEPTION_T e;
-
-    LinkedList List = {NULL,NULL,0};
-
-    Token *token = NULL;
-    Tokenizer *tokenizer = NULL;
-
-    tokenizer = createTokenizer("    ");
-    token = getToken(tokenizer);
-    Try{
-      LinkedListAddToHead(&List,&(token->type));
-    }
-    Catch(e){
-
-    }
-      TEST_ASSERT_NOT_NULL(token);
-}

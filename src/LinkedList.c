@@ -61,19 +61,27 @@ ListItem *LinkedListRemoveFromHead(LinkedList *List){
     throwSimpleError(ERR_LINKEDLIST_NULL,"Empty linkedlist detected");
   }
   else{
+    ListItem *removedLinkedList = (struct ListItem*)malloc (sizeof(struct ListItem));
+    removedLinkedList = List->head;
     int *nextItemAddress;
     nextItemAddress = List->head->next;
 
     /*  List
-     *                    (remove this)          (nextItemAddress)
+     *      BEFORE
+     *                   (remove this)          (nextItemAddress)
      *                       +-----+      next      +-----+   next
      *           head----->  |  1  |--------------> |  2  |---------> NULL
      *                       +-----+                +-----+
-     *
+     *                     removedLinkedList
+     *       AFTER
+     *                       +-----+      next
+     *           head----->  |  2  |--------------> NULL
+     *                       +-----+
      */
 
     List->head->next = NULL;
     List->head = nextItemAddress;
     List->count--;
+    return removedLinkedList;
   }
 }

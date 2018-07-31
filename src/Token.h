@@ -30,14 +30,22 @@ typedef enum {
   RIGHT_TO_LEFT,
 } Associativity;
 
-typedef struct {
+typedef struct Token Token;
+struct Token{
+  TokenType type;
+  uint32_t startColumn;
+  uint32_t length;
+  char *originalStr;         ///
+  char *str;};
+
+/*typedef struct {
   TokenType type;
   uint32_t startColumn;
   uint32_t length;
   char *originalStr;         ///
   char *str;
 } Token;
-
+*/
 typedef struct {
   TokenType type;
   uint32_t startColumn;
