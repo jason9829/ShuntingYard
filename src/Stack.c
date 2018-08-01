@@ -9,28 +9,52 @@
 
 int *pushStack_wNewStackAddress(StackBlock *List,void *data){
   Token *token = (struct Token*)malloc(sizeof(struct Token));
-  token = ((Token*)(data));
+  token = (Token*)(data);
 
   if(*(int*)(data) == NULL){
     throwSimpleError(ERR_INVALID_DATA,"Data trying to add is NULL");
   }
-  else{
-    StackItem *newStackItem = (struct StackItem*)malloc (sizeof(struct StackItem));
-    if(List->head == NULL){
-      if(token->type == TOKEN_INTEGER_TYPE){
-        newStackItem->data = token;
+    else{
+      StackItem *newStackItem = (struct StackItem*)malloc (sizeof(struct StackItem));
+      if(List->head == NULL){
+          if(token->type == TOKEN_INTEGER_TYPE){
+            newStackItem->data = (IntegerToken*)(data);
+          }
+          else if(token->type == TOKEN_FLOAT_TYPE){
+            newStackItem->data = (FloatToken*)(data);
+          }
+          else if(token->type == TOKEN_OPERATOR_TYPE){
+            newStackItem->data = (OperatorToken*)(data);
+          }
+          else if(token->type == TOKEN_IDENTIFIER_TYPE){
+            newStackItem->data = (IdentifierToken*)(data);
+          }
+          else if (token->type == TOKEN_STRING_TYPE){
+            newStackItem->data = (StringToken*)(data);
+          }
+          else{
+            newStackItem->data = *(int*)(data);
+          }
+            newStackItem->next = NULL;
+            List->count++;
+            List->head = newStackItem;
+            List->tail = newStackItem;
       }
-      else{
-        newStackItem->data = *(int*)(data);
-      }
-      newStackItem->next = NULL;
-      List->count++;
-      List->head = newStackItem;
-      List->tail = newStackItem;
-    }
     else{
       if(token->type == TOKEN_INTEGER_TYPE){
         newStackItem->data = token;
+      }
+      else if(token->type == TOKEN_FLOAT_TYPE){
+        newStackItem->data = (FloatToken*)(data);
+      }
+      else if(token->type == TOKEN_OPERATOR_TYPE){
+        newStackItem->data = (OperatorToken*)(data);
+      }
+      else if(token->type == TOKEN_IDENTIFIER_TYPE){
+        newStackItem->data = (IdentifierToken*)(data);
+      }
+      else if (token->type == TOKEN_STRING_TYPE){
+        newStackItem->data = (StringToken*)(data);
       }
       else{
         newStackItem->data = *(int*)(data);
@@ -46,6 +70,7 @@ int *pushStack_wNewStackAddress(StackBlock *List,void *data){
   }
 }
 
+
 void pushStack(StackBlock *List,void *data){
   Token *token = (struct Token*)malloc(sizeof(struct Token));
   token = ((Token*)(data));
@@ -53,40 +78,57 @@ void pushStack(StackBlock *List,void *data){
   if(token->type == TOKEN_NULL_TYPE){
       throwSimpleError(ERR_NULL_TOKEN,"Token is NULL");
   }
-  else{
-    if(*(int*)(data) == NULL){
-    throwSimpleError(ERR_INVALID_DATA,"Data trying to add is NULL");
-    }
-    else{
-      StackItem *newStackItem = (struct StackItem*)malloc (sizeof(struct StackItem));
-      if(List->head == NULL){
-          if(token->type == TOKEN_INTEGER_TYPE){
-            newStackItem->data = token;
-          }
-          else{
-            newStackItem->data = *(int*)(data);
-          }
-            newStackItem->next = NULL;
-            List->count++;
-            List->head = newStackItem;
-            List->tail = newStackItem;
+  StackItem *newStackItem = (struct StackItem*)malloc (sizeof(struct StackItem));
+  if(List->head == NULL){
+      if(token->type == TOKEN_INTEGER_TYPE){
+        newStackItem->data = (IntegerToken*)(data);
+      }
+      else if(token->type == TOKEN_FLOAT_TYPE){
+        newStackItem->data = (FloatToken*)(data);
+      }
+      else if(token->type == TOKEN_OPERATOR_TYPE){
+        newStackItem->data = (OperatorToken*)(data);
+      }
+      else if(token->type == TOKEN_IDENTIFIER_TYPE){
+        newStackItem->data = (IdentifierToken*)(data);
+      }
+      else if (token->type == TOKEN_STRING_TYPE){
+        newStackItem->data = (StringToken*)(data);
       }
       else{
-        if(token->type == TOKEN_INTEGER_TYPE){
-          newStackItem->data = token;
-        }
-        else{
-          newStackItem->data = *(int*)(data);
-        }
-        newStackItem->next = List->head;     // Take previous node as next
-        if(List->count == 1){     // if 2 block (head->newLinkedList) take previous as tail else tail remain the same
-          List->tail = newStackItem->next;              // previous node as tail
-        }
+        newStackItem->data = *(int*)(data);
+      }
+        newStackItem->next = NULL;
         List->count++;
         List->head = newStackItem;
-      }
-    }
+        List->tail = newStackItem;
   }
+else{
+  if(token->type == TOKEN_INTEGER_TYPE){
+    newStackItem->data = token;
+  }
+  else if(token->type == TOKEN_FLOAT_TYPE){
+    newStackItem->data = (FloatToken*)(data);
+  }
+  else if(token->type == TOKEN_OPERATOR_TYPE){
+    newStackItem->data = (OperatorToken*)(data);
+  }
+  else if(token->type == TOKEN_IDENTIFIER_TYPE){
+    newStackItem->data = (IdentifierToken*)(data);
+  }
+  else if (token->type == TOKEN_STRING_TYPE){
+    newStackItem->data = (StringToken*)(data);
+  }
+  else{
+    newStackItem->data = *(int*)(data);
+  }
+  newStackItem->next = List->head;     // Take previous node as next
+  if(List->count == 1){     // if 2 block (head->newLinkedList) take previous as tail else tail remain the same
+    List->tail = newStackItem->next;              // previous node as tail
+  }
+  List->count++;
+  List->head = newStackItem;
+}
 }
 
 StackItem *popStack(StackBlock *List){

@@ -118,7 +118,7 @@ void test_popStack_with_item1_and_item2_expect_item1_popped(void){
 //    |   ListItem *LinkedListRemoveFromHead(LinkedList *List)    |
 //    *************************************************************
 
-void test_LinkedListAddToHead_given_nullToken_expect_ERR_NULL_TOKEN(void){
+void test_pushStack_given_nullToken_expect_ERR_NULL_TOKEN(void){
    CEXCEPTION_T e;
 
    StackBlock Stack = {NULL,NULL,0};
@@ -137,4 +137,114 @@ void test_LinkedListAddToHead_given_nullToken_expect_ERR_NULL_TOKEN(void){
      freeError(e);
    }
      TEST_ASSERT_NOT_NULL(token);
+}
+
+
+void test_pushStack_given_int_expect_int_token_pushed(void){
+  StackBlock Stack = {NULL,NULL,0};
+  int *newStackAddress;
+
+  Token *token = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  StackItem * newStackVerify;
+  newStackVerify = &newStackAddress;
+
+  tokenizer = createTokenizer("2");
+  token = getToken(tokenizer);
+
+  newStackAddress = pushStack_wNewStackAddress(&Stack,token);
+  TEST_ASSERT_NOT_NULL(token);
+  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE,token->type);
+  TEST_ASSERT_EQUAL(NULL, newStackVerify->next->next);
+  TEST_ASSERT_EQUAL(token, newStackVerify->next->data);
+  TEST_ASSERT_EQUAL(1, Stack.count);
+  TEST_ASSERT_EQUAL(newStackAddress, Stack.head);
+  TEST_ASSERT_EQUAL(newStackAddress, Stack.tail);
+}
+
+void test_pushStack_given_float_expect_float_token_pushed(void){
+  StackBlock Stack = {NULL,NULL,0};
+  int *newStackAddress;
+
+  Token *token = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  StackItem * newStackVerify;
+  newStackVerify = &newStackAddress;
+
+  tokenizer = createTokenizer("2.12 3");
+  token = getToken(tokenizer);
+
+  newStackAddress = pushStack_wNewStackAddress(&Stack,token);
+  TEST_ASSERT_NOT_NULL(token);
+  TEST_ASSERT_EQUAL(TOKEN_FLOAT_TYPE,token->type);
+  TEST_ASSERT_EQUAL(NULL, newStackVerify->next->next);
+  TEST_ASSERT_EQUAL(token, newStackVerify->next->data);
+  TEST_ASSERT_EQUAL(1, Stack.count);
+  TEST_ASSERT_EQUAL(newStackAddress, Stack.head);
+  TEST_ASSERT_EQUAL(newStackAddress, Stack.tail);
+}
+
+void test_pushStack_given_string_expect_string_token_pushed(void){
+  StackBlock Stack = {NULL,NULL,0};
+  int *newStackAddress;
+
+  Token *token = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  StackItem * newStackVerify;
+  newStackVerify = &newStackAddress;
+
+  tokenizer = createTokenizer("mjkkjj");
+  token = getToken(tokenizer);
+
+  newStackAddress = pushStack_wNewStackAddress(&Stack,token);
+  TEST_ASSERT_NOT_NULL(token);
+  TEST_ASSERT_EQUAL(NULL, newStackVerify->next->next);
+  // IdentifierToken, StringToken, CharConstToken
+  // same type
+  TEST_ASSERT_EQUAL(TOKEN_IDENTIFIER_TYPE,token->type);
+  TEST_ASSERT_EQUAL(token, newStackVerify->next->data);
+  TEST_ASSERT_EQUAL(1, Stack.count);
+  TEST_ASSERT_EQUAL(newStackAddress, Stack.head);
+  TEST_ASSERT_EQUAL(newStackAddress, Stack.tail);
+}
+
+void test_pushStack_push_operator_then_float_expect_both_pushed(void){
+  StackBlock Stack = {NULL,NULL,0};
+  int *newStackAddress_1;
+  int *newStackAddress_2;
+
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  StackItem * newStackVerify_1;
+  newStackVerify_1 = &newStackAddress_1;
+
+  StackItem * newStackVerify_2;
+  newStackVerify_2 = &newStackAddress_2;
+
+  tokenizer = createTokenizer("- 2.123");
+  token_1 = getToken(tokenizer);
+
+  newStackAddress_1 = pushStack_wNewStackAddress(&Stack,token_1);
+
+  TEST_ASSERT_EQUAL(NULL, newStackVerify_1->next->next);
+  TEST_ASSERT_EQUAL(TOKEN_OPERATOR_TYPE,token_1->type);
+  TEST_ASSERT_EQUAL(token_1, newStackVerify_1->next->data);
+  TEST_ASSERT_EQUAL(1, Stack.count);
+  TEST_ASSERT_EQUAL(newStackAddress_1, Stack.head);
+  TEST_ASSERT_EQUAL(newStackAddress_1, Stack.tail);
+
+  token_2 = getToken(tokenizer);
+  newStackAddress_2 = pushStack_wNewStackAddress(&Stack,token_2);
+
+  TEST_ASSERT_EQUAL(newStackVerify_1->next, newStackVerify_2->next->next);
+  TEST_ASSERT_EQUAL(TOKEN_FLOAT_TYPE,token_2->type);
+  TEST_ASSERT_EQUAL(token_2, newStackVerify_2->next->data);
+  TEST_ASSERT_EQUAL(2, Stack.count);
+  TEST_ASSERT_EQUAL(newStackAddress_2, Stack.head);
+  TEST_ASSERT_EQUAL(newStackAddress_1, Stack.tail);
 }
