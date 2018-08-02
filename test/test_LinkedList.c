@@ -156,7 +156,7 @@ void test_LinkedListRemoveFromHead_given_linked_list_with_item_1_expect_NULL_aft
 
   ListItem *removedLinkedList;
   ListItem Item1 = {NULL,  (void *) &value1};
-  LinkedList List = {&Item1, NULL , 1};
+  LinkedList List = {&Item1, &Item1 , 1};
 
   removedLinkedList = LinkedListRemoveFromHead(&List);
 

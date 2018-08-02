@@ -159,6 +159,9 @@ StackItem *popStack(StackBlock *List){
 
     List->head->next = NULL;
     List->head = nextItemAddress;
+    if(List->count == 1){
+      List->tail = NULL;
+    }
     List->count--;
     return poppedStack;
   }

@@ -65,7 +65,9 @@ ListItem *LinkedListRemoveFromHead(LinkedList *List){
     removedLinkedList = List->head;
     int *nextItemAddress;
     nextItemAddress = List->head->next;
-
+    if(List->count == 1){
+      List->tail = NULL;
+    }
     /*  List
      *      BEFORE
      *                   (remove this)          (nextItemAddress)
@@ -81,6 +83,7 @@ ListItem *LinkedListRemoveFromHead(LinkedList *List){
 
     List->head->next = NULL;
     List->head = nextItemAddress;
+
     List->count--;
     return removedLinkedList;
   }

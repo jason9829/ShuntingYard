@@ -13,5 +13,5 @@
 #define ERR_INVALID_DATA         101
 #define ERR_LINKEDLIST_NULL      102
 #define ERR_NULL_TOKEN           103
-
+#define ERR_STACK_NULL           104
 #endif // _ERROR_H

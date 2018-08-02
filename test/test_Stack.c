@@ -248,3 +248,131 @@ void test_pushStack_push_operator_then_float_expect_both_pushed(void){
   TEST_ASSERT_EQUAL(newStackAddress_2, Stack.head);
   TEST_ASSERT_EQUAL(newStackAddress_1, Stack.tail);
 }
+
+/*  Starting from stack with Token (int) then popped the token
+ *
+ *  BEFORE              AFtER
+ *
+ *     +-------+        head-----> NULL
+ *     | Token |        tail-----> NULL
+ *     +-------+
+ *  head ---^
+ *  tail----^
+ *
+ */
+void test_popStack_given_int_token_expect_NULL(void){
+  Token *token = NULL;
+  Token *poppedToken_data = NULL;
+  StackItem *poppedToken;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer(" 1");
+  token = getToken(tokenizer);
+
+  StackItem TOKEN = {NULL, (void *)token};
+  StackBlock Stack = {&TOKEN, &TOKEN,1};
+
+  poppedToken = popStack(&Stack);
+  poppedToken_data = (Token*)(poppedToken->data);
+
+  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE,poppedToken_data->type);
+  TEST_ASSERT_EQUAL(&TOKEN,poppedToken);
+  TEST_ASSERT_EQUAL(0, Stack.count);
+  TEST_ASSERT_EQUAL(NULL, Stack.head);
+  TEST_ASSERT_EQUAL(NULL, Stack.tail);
+}
+
+void test_push_Stack_and_popStack_given_empty_Stack_then_push_int_token_push_operator_token_and_float_token_then_pop_float_token_expect_all_tokens_popped(void){
+  // for pushStack
+  Token *token_int      = NULL;
+  Token *token_operator = NULL;
+  Token *token_float    = NULL;
+  Tokenizer *tokenizer  = NULL;
+
+  int *newStackAddress_int;
+  int *newStackAddress_operator;
+  int *newStackAddress_float;
+
+  // for popStack
+  Token *poppedToken_int_data = NULL;
+  StackItem *poppedToken_int;
+  Token *poppedToken_operator_data = NULL;
+  StackItem *poppedToken_operator;
+  Token *poppedToken_float_data = NULL;
+  StackItem *poppedToken_float;
+
+  StackBlock Stack = {NULL, NULL, 0};
+  tokenizer = createTokenizer("1 + 2.12 ");
+
+  // ****************************pushStack*************************************
+  // for int token
+  token_int = getToken(tokenizer);
+  StackItem * newStackVerify_int;
+  newStackVerify_int = &newStackAddress_int;
+
+  newStackAddress_int = pushStack_wNewStackAddress(&Stack, token_int);
+
+  TEST_ASSERT_EQUAL(1, Stack.count);
+  TEST_ASSERT_EQUAL(token_int, newStackVerify_int->next->data);
+  TEST_ASSERT_EQUAL(NULL, newStackVerify_int->next->next);
+  TEST_ASSERT_EQUAL(newStackVerify_int->next, Stack.head);
+  TEST_ASSERT_EQUAL(newStackVerify_int->next, Stack.tail);
+
+  // for operator token
+  token_operator = getToken(tokenizer);
+  StackItem * newStackVerify_operator;
+  newStackVerify_operator = &newStackAddress_operator;
+
+  newStackAddress_operator = pushStack_wNewStackAddress(&Stack, token_operator);
+
+  TEST_ASSERT_EQUAL(2, Stack.count);
+  TEST_ASSERT_EQUAL(token_operator, newStackVerify_operator->next->data);
+  TEST_ASSERT_EQUAL(newStackVerify_int->next, newStackVerify_operator->next->next);
+  TEST_ASSERT_EQUAL(newStackVerify_operator->next, Stack.head);
+  TEST_ASSERT_EQUAL(newStackVerify_int->next, Stack.tail);
+
+  // for operator token
+  token_float = getToken(tokenizer);
+  StackItem * newStackVerify_float;
+  newStackVerify_float = &newStackAddress_float;
+
+  newStackAddress_float = pushStack_wNewStackAddress(&Stack, token_float);
+
+  TEST_ASSERT_EQUAL(3, Stack.count);
+  TEST_ASSERT_EQUAL(token_float, newStackVerify_float->next->data);
+  TEST_ASSERT_EQUAL(newStackVerify_operator->next, newStackVerify_float->next->next);
+  TEST_ASSERT_EQUAL(newStackVerify_float->next, Stack.head);
+  TEST_ASSERT_EQUAL(newStackVerify_int->next, Stack.tail);
+
+
+// ****************************popStack*************************************
+// for FloatToken
+poppedToken_float = popStack(&Stack);
+poppedToken_float_data = (Token*)(poppedToken_float->data);
+
+TEST_ASSERT_EQUAL(TOKEN_FLOAT_TYPE,poppedToken_float_data->type);
+TEST_ASSERT_EQUAL(newStackVerify_float->next,poppedToken_float);
+TEST_ASSERT_EQUAL(2, Stack.count);
+TEST_ASSERT_EQUAL(newStackVerify_operator->next, Stack.head);
+TEST_ASSERT_EQUAL(newStackVerify_int->next, Stack.tail);
+
+// for operatorToken
+poppedToken_operator = popStack(&Stack);
+poppedToken_operator_data = (Token*)(poppedToken_operator->data);
+
+TEST_ASSERT_EQUAL(TOKEN_OPERATOR_TYPE,poppedToken_operator_data->type);
+TEST_ASSERT_EQUAL(newStackVerify_operator->next,poppedToken_operator);
+TEST_ASSERT_EQUAL(1, Stack.count);
+TEST_ASSERT_EQUAL(newStackVerify_int->next, Stack.head);
+TEST_ASSERT_EQUAL(newStackVerify_int->next, Stack.tail);
+
+// for intToken
+poppedToken_int = popStack(&Stack);
+poppedToken_int_data = (Token*)(poppedToken_int->data);
+
+TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE,poppedToken_int_data->type);
+TEST_ASSERT_EQUAL(newStackVerify_int->next,poppedToken_int);
+TEST_ASSERT_EQUAL(0, Stack.count);
+TEST_ASSERT_EQUAL(NULL, Stack.head);
+TEST_ASSERT_EQUAL(NULL, Stack.tail);
+}
