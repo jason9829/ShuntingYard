@@ -23,34 +23,208 @@
 }
 */
 Token *calculationOnTokens(Token *token_1, Token *token_2, Token *token_operator){
-  Token *Ans;
+  //Token *Ans;
+  Token *Ans = (struct Token*)malloc (sizeof(struct Token));
   char operation;
   operation = *((OperatorToken*)token_operator)->str;
 
-  int v1,v2;
-  v1 = ((IntegerToken *)token_1)->value;
-  v2 = ((IntegerToken *)token_2)->value;
-
   switch (operation) {
     case '+':
-    ((IntegerToken *)Ans)->value = v1 + v2;
+    Ans = additionOf2Tokens(token_1, token_2);
+    return Ans;
     break;
     case '-':
-    ((IntegerToken *)Ans)->value = v1 - v2;
+    Ans = subtractionOf2Tokens(token_1, token_2);
+    return Ans;
     break;
     case '*':
-    ((IntegerToken *)Ans)->value = v1 * v2;
+    //((IntegerToken *)Ans)->value = v1 * v2;
     break;
     case '/':
-    ((IntegerToken *)Ans)->value = v1 / v2;
+    //((IntegerToken *)Ans)->value = v1 / v2;
     break;
     default: throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator detected");
   }
 
-  return Ans;
+}
+
+Token *additionOf2Tokens(Token *token_1, Token *token_2){
+
+  int v1 = 0, v2= 0;
+  float v_1 = 0,v_2 = 0;
+  //Token *Answer;
+  Token *Answer = (struct Token*)malloc (sizeof(struct Token));
+
+  if(token_1->type == TOKEN_INTEGER_TYPE && token_2->type == TOKEN_INTEGER_TYPE){
+    (IntegerToken*)Answer;
+    v1 = ((IntegerToken *)token_1)->value;
+    v2 = ((IntegerToken *)token_2)->value;
+    ((IntegerToken*)Answer)->value = v1 + v2;
+    Answer->type = TOKEN_INTEGER_TYPE;    // type corrupted when check with codelite
+    return Answer;
+  }
+  else if(token_1->type == TOKEN_INTEGER_TYPE && token_2->type == TOKEN_FLOAT_TYPE){
+    (FloatToken*)Answer;
+    v1  = ((IntegerToken*)token_1)->value;
+    v_2 = ((FloatToken*)token_2)->value;
+    ((FloatToken*)Answer)->value = v1 + v_2;
+    Answer->type = TOKEN_FLOAT_TYPE;
+    return Answer;
+  }
+  else if(token_1->type == TOKEN_FLOAT_TYPE && token_2->type == TOKEN_INTEGER_TYPE){
+    (FloatToken*)Answer;
+    v_1 = ((FloatToken*)token_1)->value;
+    v2 = ((IntegerToken*)token_2)->value;
+    ((FloatToken*)Answer)->value = v_1 + v2;
+    Answer->type = TOKEN_FLOAT_TYPE;
+    return Answer;
+  }
+  else if(token_1->type == TOKEN_FLOAT_TYPE && token_2->type == TOKEN_FLOAT_TYPE){
+    (FloatToken*)Answer;
+    v_1 = ((FloatToken*)token_1)->value;
+    v_2 = ((FloatToken*)token_2)->value;
+    ((FloatToken*)Answer)->value = v_1 + v_2;
+    Answer->type = TOKEN_FLOAT_TYPE;
+    return Answer;
+  }
+  else{
+  throwSimpleError(ERR_INVALID_OPERAND,"Operand type is invalid");
+  }
+}
+
+Token *subtractionOf2Tokens(Token *token_1, Token *token_2){
+
+  int v1 = 0, v2= 0;
+  float v_1 = 0,v_2 = 0;
+
+  Token *Answer = (struct Token*)malloc (sizeof(struct Token));
+
+  if(token_1->type == TOKEN_INTEGER_TYPE && token_2->type == TOKEN_INTEGER_TYPE){
+    (IntegerToken*)Answer;
+    v1 = ((IntegerToken *)token_1)->value;
+    v2 = ((IntegerToken *)token_2)->value;
+    ((IntegerToken*)Answer)->value = v1 - v2;
+    Answer->type = TOKEN_INTEGER_TYPE;    // type corrupted when check with codelite
+    return Answer;
+  }
+  else if(token_1->type == TOKEN_INTEGER_TYPE && token_2->type == TOKEN_FLOAT_TYPE){
+    (FloatToken*)Answer;
+    v1  = ((IntegerToken*)token_1)->value;
+    v_2 = ((FloatToken*)token_2)->value;
+    ((FloatToken*)Answer)->value = v1 - v_2;
+    Answer->type = TOKEN_FLOAT_TYPE;
+    return Answer;
+  }
+  else if(token_1->type == TOKEN_FLOAT_TYPE && token_2->type == TOKEN_INTEGER_TYPE){
+    (FloatToken*)Answer;
+    v_1 = ((FloatToken*)token_1)->value;
+    v2 = ((IntegerToken*)token_2)->value;
+    ((FloatToken*)Answer)->value = v_1 - v2;
+    Answer->type = TOKEN_FLOAT_TYPE;
+    return Answer;
+  }
+  else if(token_1->type == TOKEN_FLOAT_TYPE && token_2->type == TOKEN_FLOAT_TYPE){
+    (FloatToken*)Answer;
+    v_1 = ((FloatToken*)token_1)->value;
+    v_2 = ((FloatToken*)token_2)->value;
+    ((FloatToken*)Answer)->value = v_1 - v_2;
+    Answer->type = TOKEN_FLOAT_TYPE;
+    return Answer;
+  }
+  else{
+  throwSimpleError(ERR_INVALID_OPERAND,"Operand type is invalid");
+  }
 
 }
 
-TokenType typecastTokenType(Token *token){
+
+Token *multiplicationOf2Tokens(Token *token_1, Token *token_2){
+
+  int v1 = 0, v2= 0;
+  float v_1 = 0,v_2 = 0;
+
+  Token *Answer = (struct Token*)malloc (sizeof(struct Token));
+
+  if(token_1->type == TOKEN_INTEGER_TYPE && token_2->type == TOKEN_INTEGER_TYPE){
+    (IntegerToken*)Answer;
+    v1 = ((IntegerToken *)token_1)->value;
+    v2 = ((IntegerToken *)token_2)->value;
+    ((IntegerToken*)Answer)->value = v1 * v2;
+    Answer->type = TOKEN_INTEGER_TYPE;    // type corrupted when check with codelite
+    return Answer;
+  }
+  else if(token_1->type == TOKEN_INTEGER_TYPE && token_2->type == TOKEN_FLOAT_TYPE){
+    (FloatToken*)Answer;
+    v1  = ((IntegerToken*)token_1)->value;
+    v_2 = ((FloatToken*)token_2)->value;
+    ((FloatToken*)Answer)->value = v1 * v_2;
+    Answer->type = TOKEN_FLOAT_TYPE;
+    return Answer;
+  }
+  else if(token_1->type == TOKEN_FLOAT_TYPE && token_2->type == TOKEN_INTEGER_TYPE){
+    (FloatToken*)Answer;
+    v_1 = ((FloatToken*)token_1)->value;
+    v2 = ((IntegerToken*)token_2)->value;
+    ((FloatToken*)Answer)->value = v_1 * v2;
+    Answer->type = TOKEN_FLOAT_TYPE;
+    return Answer;
+  }
+  else if(token_1->type == TOKEN_FLOAT_TYPE && token_2->type == TOKEN_FLOAT_TYPE){
+    (FloatToken*)Answer;
+    v_1 = ((FloatToken*)token_1)->value;
+    v_2 = ((FloatToken*)token_2)->value;
+    ((FloatToken*)Answer)->value = v_1 * v_2;
+    Answer->type = TOKEN_FLOAT_TYPE;
+    return Answer;
+  }
+  else{
+  throwSimpleError(ERR_INVALID_OPERAND,"Operand type is invalid");
+  }
+
+}
+
+
+Token *divisionOf2Tokens(Token *token_1, Token *token_2){
+
+  int v1 = 0, v2= 0;
+  float v_1 = 0,v_2 = 0;
+
+  Token *Answer = (struct Token*)malloc (sizeof(struct Token));
+
+  if(token_1->type == TOKEN_INTEGER_TYPE && token_2->type == TOKEN_INTEGER_TYPE){
+    (IntegerToken*)Answer;
+    v1 = ((IntegerToken *)token_1)->value;
+    v2 = ((IntegerToken *)token_2)->value;
+    ((IntegerToken*)Answer)->value = v1 / v2;
+    Answer->type = TOKEN_INTEGER_TYPE;    // type corrupted when check with codelite
+    return Answer;
+  }
+  else if(token_1->type == TOKEN_INTEGER_TYPE && token_2->type == TOKEN_FLOAT_TYPE){
+    (FloatToken*)Answer;
+    v1  = ((IntegerToken*)token_1)->value;
+    v_2 = ((FloatToken*)token_2)->value;
+    ((FloatToken*)Answer)->value = v1 / v_2;
+    Answer->type = TOKEN_FLOAT_TYPE;
+    return Answer;
+  }
+  else if(token_1->type == TOKEN_FLOAT_TYPE && token_2->type == TOKEN_INTEGER_TYPE){
+    (FloatToken*)Answer;
+    v_1 = ((FloatToken*)token_1)->value;
+    v2 = ((IntegerToken*)token_2)->value;
+    ((FloatToken*)Answer)->value = v_1 / v2;
+    Answer->type = TOKEN_FLOAT_TYPE;
+    return Answer;
+  }
+  else if(token_1->type == TOKEN_FLOAT_TYPE && token_2->type == TOKEN_FLOAT_TYPE){
+    (FloatToken*)Answer;
+    v_1 = ((FloatToken*)token_1)->value;
+    v_2 = ((FloatToken*)token_2)->value;
+    ((FloatToken*)Answer)->value = v_1 / v_2;
+    Answer->type = TOKEN_FLOAT_TYPE;
+    return Answer;
+  }
+  else{
+  throwSimpleError(ERR_INVALID_OPERAND,"Operand type is invalid");
+  }
 
 }
