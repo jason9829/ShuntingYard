@@ -40,34 +40,34 @@ int *pushStack_wNewStackAddress(StackBlock *List,void *data){
             List->head = newStackItem;
             List->tail = newStackItem;
       }
-    else{
-      if(token->type == TOKEN_INTEGER_TYPE){
-        newStackItem->data = token;
-      }
-      else if(token->type == TOKEN_FLOAT_TYPE){
-        newStackItem->data = (FloatToken*)(data);
-      }
-      else if(token->type == TOKEN_OPERATOR_TYPE){
-        newStackItem->data = (OperatorToken*)(data);
-      }
-      else if(token->type == TOKEN_IDENTIFIER_TYPE){
-        newStackItem->data = (IdentifierToken*)(data);
-      }
-      else if (token->type == TOKEN_STRING_TYPE){
-        newStackItem->data = (StringToken*)(data);
-      }
       else{
-        newStackItem->data = *(int*)(data);
+        if(token->type == TOKEN_INTEGER_TYPE){
+          newStackItem->data = token;
+        }
+        else if(token->type == TOKEN_FLOAT_TYPE){
+          newStackItem->data = (FloatToken*)(data);
+        }
+        else if(token->type == TOKEN_OPERATOR_TYPE){
+          newStackItem->data = (OperatorToken*)(data);
+        }
+        else if(token->type == TOKEN_IDENTIFIER_TYPE){
+          newStackItem->data = (IdentifierToken*)(data);
+        }
+        else if (token->type == TOKEN_STRING_TYPE){
+          newStackItem->data = (StringToken*)(data);
+        }
+        else{
+          newStackItem->data = *(int*)(data);
+        }
+        newStackItem->next = List->head;     // Take previous node as next
+        if(List->count == 1){     // if 2 block (head->newLinkedList) take previous as tail else tail remain the same
+          List->tail = newStackItem->next;              // previous node as tail
+        }
+        List->count++;
+        List->head = newStackItem;
       }
-      newStackItem->next = List->head;     // Take previous node as next
-      if(List->count == 1){     // if 2 block (head->newLinkedList) take previous as tail else tail remain the same
-        List->tail = newStackItem->next;              // previous node as tail
-      }
-      List->count++;
-      List->head = newStackItem;
+      return newStackItem;
     }
-    return newStackItem;
-  }
 }
 
 
@@ -103,32 +103,32 @@ void pushStack(StackBlock *List,void *data){
         List->head = newStackItem;
         List->tail = newStackItem;
   }
-else{
-  if(token->type == TOKEN_INTEGER_TYPE){
-    newStackItem->data = token;
-  }
-  else if(token->type == TOKEN_FLOAT_TYPE){
-    newStackItem->data = (FloatToken*)(data);
-  }
-  else if(token->type == TOKEN_OPERATOR_TYPE){
-    newStackItem->data = (OperatorToken*)(data);
-  }
-  else if(token->type == TOKEN_IDENTIFIER_TYPE){
-    newStackItem->data = (IdentifierToken*)(data);
-  }
-  else if (token->type == TOKEN_STRING_TYPE){
-    newStackItem->data = (StringToken*)(data);
-  }
   else{
-    newStackItem->data = *(int*)(data);
+    if(token->type == TOKEN_INTEGER_TYPE){
+      newStackItem->data = token;
+    }
+    else if(token->type == TOKEN_FLOAT_TYPE){
+      newStackItem->data = (FloatToken*)(data);
+    }
+    else if(token->type == TOKEN_OPERATOR_TYPE){
+      newStackItem->data = (OperatorToken*)(data);
+    }
+    else if(token->type == TOKEN_IDENTIFIER_TYPE){
+      newStackItem->data = (IdentifierToken*)(data);
+    }
+    else if (token->type == TOKEN_STRING_TYPE){
+      newStackItem->data = (StringToken*)(data);
+    }
+    else{
+      newStackItem->data = *(int*)(data);
+    }
+    newStackItem->next = List->head;     // Take previous node as next
+    if(List->count == 1){     // if 2 block (head->newLinkedList) take previous as tail else tail remain the same
+      List->tail = newStackItem->next;              // previous node as tail
+    }
+    List->count++;
+    List->head = newStackItem;
   }
-  newStackItem->next = List->head;     // Take previous node as next
-  if(List->count == 1){     // if 2 block (head->newLinkedList) take previous as tail else tail remain the same
-    List->tail = newStackItem->next;              // previous node as tail
-  }
-  List->count++;
-  List->head = newStackItem;
-}
 }
 
 StackItem *popStack(StackBlock *List){

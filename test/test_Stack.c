@@ -14,14 +14,15 @@ void setUp(void){}
 void tearDown(void){}
 
 //    ******************************************************************
-//    |  TEST UNNECESSARY                                               |
-//    |  Same with LinkedList TEST                                      |
+//    |  TEST STACK WITHOUT TOKEN                                      |
+//    |  Similar with LinkedList TEST                                  |
 //    ******************************************************************
 //    |   TEST FOR Push & Pop (WITHOUT TOKEN)                          |
 //    |   FUNCTIONS TESTED                                             |
 //    |   ****************                                             |
 //    |  int *pushStack_wNewStackAddress(StackBlock *List,void *data); |
-//    *****************************************************************
+//    |  StackItem *popStack(StackBlock *List);                        |
+//    ******************************************************************
 
 /* Starting from empty (NULL) stack then push 10 into the stack
 *
@@ -110,14 +111,13 @@ void test_popStack_with_item1_and_item2_expect_item1_popped(void){
   TEST_ASSERT_EQUAL(1, Stack.count);
 }
 
-//    *************************************************************
-//    |   TEST FOR LINKEDLIST (TOKEN)                             |
-//    |   FUNCTIONS TESTED                                        |
-//    |   ****************                                        |
-//    |   int *LinkedListAddToHead(LinkedList *List,void *data)   |
-//    |   ListItem *LinkedListRemoveFromHead(LinkedList *List)    |
-//    *************************************************************
-
+//    *******************************************************************
+//    |   TEST FOR STACK (TOKEN)                                        |
+//    |   FUNCTIONS TESTED                                              |
+//    |   ****************                                              |
+//    |  int *pushStack_wNewStackAddress(StackBlock *List,void *data);  |
+//    |  StackItem *popStack(StackBlock *List);                         |
+//    *******************************************************************
 void test_pushStack_given_nullToken_expect_ERR_NULL_TOKEN(void){
    CEXCEPTION_T e;
 

@@ -13,7 +13,20 @@
 
 void setUp(void){}
 void tearDown(void){}
-/*
+
+/* Starting from empty stack then push to the tokens to respective Stack
+ * Then expect both operand popped and operator popped then do the Arithmetic
+ *
+ *             Operand Stack         Operator Stack
+ *              +-----+               +-----+
+ *    tail--->  +  1  +               +  +  +
+ *              +-----+               +-----+
+ *              +  2  +           head---^
+ *              +-----+           tail---^
+ *          head---^
+ *
+ */
+ /*
 void test_operateOnTokens_given_1_plus_2_exptect_3(void){
   Token *token_1        = NULL;
   Token *token_2        = NULL;
@@ -28,10 +41,15 @@ void test_operateOnTokens_given_1_plus_2_exptect_3(void){
 
   token_1 = getToken(tokenizer);
   pushStack(&operandStack, token_1);
+
   token_operator = getToken(tokenizer);
   pushStack(&operatorStack, token_operator);
+
   token_2 = getToken(tokenizer);
   pushStack(&operandStack, token_2);
 
   Ans = operateOnTokens(operatorStack, operandStack);
-}*/
+  TEST_ASSERT_EQUAL(3, (IntegerToken*)Ans ->value);
+
+}
+*/

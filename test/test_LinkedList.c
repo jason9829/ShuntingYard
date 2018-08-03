@@ -60,7 +60,7 @@ void test_LinkedListAddToHead_given_empty_linked_list_add_char_a_expect_item_ins
  *  BEFORE          AFTER
  *  head ------     head------------------> item1 ---> address unknown
  *            |           next-----> NULL    ^
- *  tail ------     tail---------------------|
+ *  tail ------     tail_____________________|
  *            |
  *  count =0  --    count =1
  */
@@ -172,7 +172,7 @@ void test_LinkedListRemoveFromHead_given_linked_list_with_item_1_expect_NULL_aft
  *  BEFORE                                      AFTER
  *  head ------> item1                        head-----> item2
  *              next-----> item2                           ^   next----->NULL
- *  tail --------^    next.item2----->NULL    tail---------|
+ *  tail --------^    next.item2----->NULL    tail_________|
  *  count=2           tail----> item2          count=1
  */
 
@@ -204,7 +204,7 @@ void test_LinkedListRemoveFromHead_given_linked_list_with_item_1_expect_NULL_aft
  *      AFTER
  *      head-----------> item2   -----> item3
  *              next.item2_______|      ^     next.item3-------
- *                 tail-----------------|                      |
+ *                 tail_________________|
  *                                                            NULL
  *      next.item1----> NULL
  *
