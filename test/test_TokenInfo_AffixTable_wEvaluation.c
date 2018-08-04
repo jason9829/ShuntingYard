@@ -87,3 +87,76 @@ void test_checkOperatorsAffixPossibilities_given_plus_and_plus_expect_TRUE(void)
   result = checkOperatorsAffixPossibilities(token, tokenizer);
   TEST_ASSERT_EQUAL(1, result);
 }
+
+// TokenInfo = (7) -------------> PREFIX_TYPE | INFIX_TYPE | SUFFIX_TYPE = 7
+void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_7_and_7_expect_TRUE_1(void){
+  int result;
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+  TokenInfo *tokenInfo_1 = NULL;
+  TokenInfo *tokenInfo_2 = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer("+ +");
+  token_1 = getToken(tokenizer);
+  token_2 = getToken(tokenizer);
+  tokenInfo_1 = getTokenInfo(token_1);
+  tokenInfo_2 = getTokenInfo(token_2);
+
+  result = compareCurrTokenAndNextTokenWithTable(tokenInfo_1, tokenInfo_2);
+  TEST_ASSERT_EQUAL(1, result);
+}
+
+void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_7_and_2_expect_FALSE_0(void){
+  int result;
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+  TokenInfo *tokenInfo_1 = NULL;
+  TokenInfo *tokenInfo_2 = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer("+ /");
+  token_1 = getToken(tokenizer);
+  token_2 = getToken(tokenizer);
+  tokenInfo_1 = getTokenInfo(token_1);
+  tokenInfo_2 = getTokenInfo(token_2);
+
+  result = compareCurrTokenAndNextTokenWithTable(tokenInfo_1, tokenInfo_2);
+  TEST_ASSERT_EQUAL(0, result);
+}
+
+void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_2_and_7_expect_TRUE_1(void){
+  int result;
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+  TokenInfo *tokenInfo_1 = NULL;
+  TokenInfo *tokenInfo_2 = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer("*-");
+  token_1 = getToken(tokenizer);
+  token_2 = getToken(tokenizer);
+  tokenInfo_1 = getTokenInfo(token_1);
+  tokenInfo_2 = getTokenInfo(token_2);
+
+  result = compareCurrTokenAndNextTokenWithTable(tokenInfo_1, tokenInfo_2);
+  TEST_ASSERT_EQUAL(1, result);
+}
+
+void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_2_and_2_expect_FALSE_0(void){
+  int result;
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+  TokenInfo *tokenInfo_1 = NULL;
+  TokenInfo *tokenInfo_2 = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer("/*");
+  token_1 = getToken(tokenizer);
+  token_2 = getToken(tokenizer);
+  tokenInfo_1 = getTokenInfo(token_1);
+  tokenInfo_2 = getTokenInfo(token_2);
+
+  result = compareCurrTokenAndNextTokenWithTable(tokenInfo_1, tokenInfo_2);
+  TEST_ASSERT_EQUAL(0, result);
+}

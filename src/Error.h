@@ -14,4 +14,6 @@
 #define ERR_LINKEDLIST_NULL      102
 #define ERR_NULL_TOKEN           103
 #define ERR_STACK_NULL           104
+#define ERR_INVALID_ANSWER       105
+#define ERR_INVALID_TOKENINFO    106
 #endif // _ERROR_H
