@@ -3,13 +3,13 @@
 
 #include "Token.h"
 #include "Stack.h"
-#include "TokenInfo.h"
+#include "Tokenizer.h"
 
 typedef struct TokenInfo TokenInfo;
 struct TokenInfo{
- uint8_t Attribute;
+ int Attribute;
 };
 
 int checkOperatorsAffixPossibilities(Token *currOperatorToken, Tokenizer *nextOperators);
-
+int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *nextTokenInfo);
 #endif // _TOKENINFO_AFFIXTABLE_WEVALUATION_H

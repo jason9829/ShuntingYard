@@ -36,6 +36,7 @@ void test_LinkedListAddToHead_given_empty_linked_list_add_NULL_expect_ERR_DATA_N
     TEST_ASSERT_EQUAL(ERR_INVALID_DATA, e->errorCode);
     freeError(e);
   }
+
 }
 
 // add char into the linked list, typecast int* so cant test the data

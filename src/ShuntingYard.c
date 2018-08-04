@@ -33,7 +33,7 @@ Token operateOnTokens(StackBlock *operatorStack, StackBlock *operandStack){
 //      head----^
 //  *For this example expect return '1'
 // Check for operators precendence return '1' if next operator presidence is higher
-int checkForOperatorPrecedence(StackBlock *operatorStack){
+/*int checkForOperatorPrecedence(StackBlock *operatorStack){
   if(operatorStack->head == NULL || operatorStack->tail == NULL){
     throwSimpleError(ERR_STACK_NULL,"Operator Stack is empty");
   }
@@ -46,4 +46,4 @@ int checkForOperatorPrecedence(StackBlock *operatorStack){
 
 int comparePrecedenceOf2_Operator(char operator1, char operator2){
 
-}
+}*/
