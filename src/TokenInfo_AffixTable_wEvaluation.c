@@ -72,6 +72,7 @@ int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens){
   if(currToken->type == TOKEN_OPERATOR_TYPE){
     currTokenInfo = getTokenInfo(currToken);
     nextToken = getToken(nextTokens);
+
     if(nextToken->type == TOKEN_OPERATOR_TYPE){
       nextTokenInfo = getTokenInfo(nextToken);
       compareWithTableResult = compareCurrTokenAndNextTokenWithTable(currTokenInfo, nextTokenInfo);
@@ -81,16 +82,23 @@ int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens){
                  return 0;
         case 1 : pushBackToken(nextToken, nextTokens);
                  return 1;
-        default : throwSimpleError(ERR_INVALID_ANSWER, "Invalid answer from compareCurrTokenAndNextTokenWithTable");
+        // compareCurrTokenAndNextTokenWithTable only return 1 or 0
+        // else error will be thrown in getTokenInfo
+        //default : throwSimpleError(ERR_INVALID_ANSWER, "Invalid answer from compareCurrTokenAndNextTokenWithTable");
       }
     }
+    /*
     else{
+      // getTokenInfo only accept '+', '-', '*', '/'
+      // else error already thrown at getTokenInfo
       throwSimpleError(ERR_INVALID_OPERATOR, "nextToken is not an operator");
-    }
-  }
+    }*/
+  } /*
   else{
+    // getTokenInfo only accept '+', '-', '*', '/'
+    // else error already thrown at getTokenInfo
     throwSimpleError(ERR_INVALID_OPERATOR, "Token is not an operator");
-  }
+  }*/
 
 }
 
@@ -100,16 +108,61 @@ int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *n
     switch (nextTokenInfo->Attribute) {
       case 7 : return 1;
       case 2 : return 0;
-      default: throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
+      // getTokenInfo only give 2 or 7
+      // else error already thrown at getTokenInfo
+      //default: throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
     }
   }
   else if(currTokenInfo->Attribute == 2){
     switch (nextTokenInfo->Attribute) {
       case 7 : return 1;
       case 2 : return 0;
-      default: throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
+      // getTokenInfo only give 2 or 7
+      // else error already thrown at getTokenInfo
+      //default: throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
     }
   }
+  // getTokenInfo only give 2 or 7
+  // else error already thrown at getTokenInfo
+  //else{
+  //  throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
+  //}
 
+}
 
+// The function check the affix of currToken
+Affix checkTokenAffix(Token *currToken, Tokenizer *nextTokens){
+  char operatorSymbol;
+  Token *nextToken;
+  if(currToken ->type == TOKEN_OPERATOR_TYPE){
+    operatorSymbol = *((OperatorToken*)currToken)->str;
+    nextToken = getToken(nextTokens);
+
+    switch (nextToken->type) {
+      case TOKEN_INTEGER_TYPE   : pushBackToken(nextToken, nextTokens);
+                                  return PREFIX;
+      case TOKEN_FLOAT_TYPE     : pushBackToken(nextToken, nextTokens);
+                                  return PREFIX;
+      case TOKEN_OPERATOR_TYPE  : pushBackToken(nextToken, nextTokens);
+                                  return INFIX;
+
+      default:   throwSimpleError(ERR_WRONG_TOKENTYPE, "Tokentype was wrong");
+    }
+  }
+  else if (currToken ->type == TOKEN_INTEGER_TYPE || currToken ->type == TOKEN_FLOAT_TYPE){
+    Token *nextNextToken;
+    nextToken = getToken(nextTokens);
+    switch (nextToken->type) {
+      case TOKEN_INTEGER_TYPE   : pushBackToken(nextToken, nextTokens);
+                                  throwSimpleError(ERR_WRONG_TOKENTYPE, "Expected an operator but integer was found");
+      case TOKEN_FLOAT_TYPE     : pushBackToken(nextToken, nextTokens);
+                                  throwSimpleError(ERR_WRONG_TOKENTYPE, "Expected an operator but float was found");
+      case TOKEN_OPERATOR_TYPE  : pushBackToken(nextToken, nextTokens);
+                                  return SUFFIX;
+      default:   throwSimpleError(ERR_WRONG_TOKENTYPE, "Tokentype was wrong");
+    }
+  }
+  else{
+    throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
+  }
 }

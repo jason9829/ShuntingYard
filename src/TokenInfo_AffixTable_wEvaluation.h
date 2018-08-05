@@ -10,6 +10,7 @@ struct TokenInfo{
  int Attribute;
 };
 
-int checkOperatorsAffixPossibilities(Token *currOperatorToken, Tokenizer *nextOperators);
+int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens);
 int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *nextTokenInfo);
+Affix checkTokenAffix(Token *currToken, Tokenizer *nextTokens);
 #endif // _TOKENINFO_AFFIXTABLE_WEVALUATION_H

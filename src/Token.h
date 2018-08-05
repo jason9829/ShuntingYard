@@ -21,7 +21,7 @@ typedef enum {
   NO_AFFIX = 0x00010000,
   PREFIX   = 0x00020000,
   INFIX    = 0x00030000,
-  POSTFIX  = 0x00040000,
+  SUFFIX  = 0x00040000,
 } Affix;
 
 typedef enum {
