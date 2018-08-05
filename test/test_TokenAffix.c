@@ -180,11 +180,11 @@ void test_TokenAffix_three_functions_encodeAffix_getAffix_getTokenType_given_min
 
   // should get operator '+'
   token = getToken(tokenizer);
-  encodeAffix(token,POSTFIX);
+  encodeAffix(token, SUFFIX);
   affix = getAffix(token);
   tokenType = getTokenType(token);
   TEST_ASSERT_EQUAL(262148,token->type);
-  TEST_ASSERT_EQUAL(POSTFIX,affix);
+  TEST_ASSERT_EQUAL(SUFFIX,affix);
   TEST_ASSERT_EQUAL(TOKEN_OPERATOR_TYPE,tokenType);
 
   // should get operand '3'

@@ -23,7 +23,7 @@ void freeTokenizer(Tokenizer *tokenizer);
 void configureTokenizer(Tokenizer *tokenizer, uint32_t configuration);
 Token *advanceToken(Tokenizer *tokenizer);
 Token *getToken(Tokenizer *tokenizer);
-void pushBackToken(Token *token, Tokenizer *tokenizer);
+void pushBackToken(Tokenizer *tokenizer, Token *token);
 Token *peepToken(Tokenizer *tokenizer);
 
 #endif // Tokenizer_H

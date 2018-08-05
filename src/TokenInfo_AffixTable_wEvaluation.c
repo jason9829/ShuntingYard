@@ -78,9 +78,9 @@ int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens){
       compareWithTableResult = compareCurrTokenAndNextTokenWithTable(currTokenInfo, nextTokenInfo);
 
       switch (compareWithTableResult) {
-        case 0 : pushBackToken(nextToken, nextTokens);
+        case 0 : pushBackToken(nextTokens, nextToken);
                  return 0;
-        case 1 : pushBackToken(nextToken, nextTokens);
+        case 1 : pushBackToken(nextTokens, nextToken);
                  return 1;
         // compareCurrTokenAndNextTokenWithTable only return 1 or 0
         // else error will be thrown in getTokenInfo
@@ -130,39 +130,123 @@ int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *n
 
 }
 
-// The function check the affix of currToken
-Affix checkTokenAffix(Token *currToken, Tokenizer *nextTokens){
-  char operatorSymbol;
-  Token *nextToken;
+// The function check the affix of first operator token of tokenizer
+Affix checkTokenAffix(Tokenizer *tokenizer){
+  int  compareWithTableResult;
+  char currOperatorSymbol;
+  char nextOperatorSymbol;
+
+  Token *currToken = NULL;
+  Token *nextToken = NULL;
+
+  TokenInfo *currTokenInfo;
+  TokenInfo *nextTokenInfo;
+
+  OperatorType currTokenOperatorType;
+  currTokenOperatorType = determinieOperatorType(tokenizer);
+  currToken = getToken(tokenizer);
+
   if(currToken ->type == TOKEN_OPERATOR_TYPE){
-    operatorSymbol = *((OperatorToken*)currToken)->str;
-    nextToken = getToken(nextTokens);
+    currOperatorSymbol = *((OperatorToken*)currToken)->str;
+    nextToken = getToken(tokenizer);
+    if(nextToken->type == TOKEN_OPERATOR_TYPE){
+    nextOperatorSymbol = *((OperatorToken*)nextToken)->str;
+    }
+    currTokenInfo = getTokenInfo(currToken);
 
     switch (nextToken->type) {
-      case TOKEN_INTEGER_TYPE   : pushBackToken(nextToken, nextTokens);
+      case TOKEN_INTEGER_TYPE   : pushBackToken(tokenizer, nextToken);
+                                  pushBackToken(tokenizer, currToken);
                                   return PREFIX;
-      case TOKEN_FLOAT_TYPE     : pushBackToken(nextToken, nextTokens);
+      case TOKEN_FLOAT_TYPE     : pushBackToken(tokenizer, nextToken);
+                                  pushBackToken(tokenizer, currToken);
                                   return PREFIX;
-      case TOKEN_OPERATOR_TYPE  : pushBackToken(nextToken, nextTokens);
-                                  return INFIX;
+      case TOKEN_OPERATOR_TYPE  : nextTokenInfo = getTokenInfo(nextToken);
+                                  compareWithTableResult = compareCurrTokenAndNextTokenWithTable(currTokenInfo, nextTokenInfo);
+                                  if(compareWithTableResult == 1){
+                                    pushBackToken(tokenizer, nextToken);
+                                    pushBackToken(tokenizer, currToken);
+                                    return INFIX;
+                                   }
+                                  else{
+                                    pushBackToken(tokenizer, nextToken);
+                                    pushBackToken(tokenizer, currToken);
+                                    throwSimpleError(ERR_INVALID_AFFIX, "Invalid affix found (nextToken is either '*' or '/') ");
+                                  }
 
       default:   throwSimpleError(ERR_WRONG_TOKENTYPE, "Tokentype was wrong");
     }
-  }
+  }/*
   else if (currToken ->type == TOKEN_INTEGER_TYPE || currToken ->type == TOKEN_FLOAT_TYPE){
     Token *nextNextToken;
-    nextToken = getToken(nextTokens);
+    nextToken = getToken(tokenizer);
     switch (nextToken->type) {
-      case TOKEN_INTEGER_TYPE   : pushBackToken(nextToken, nextTokens);
+      case TOKEN_INTEGER_TYPE   : pushBackToken(nextToken, tokenizer);
                                   throwSimpleError(ERR_WRONG_TOKENTYPE, "Expected an operator but integer was found");
-      case TOKEN_FLOAT_TYPE     : pushBackToken(nextToken, nextTokens);
+      case TOKEN_FLOAT_TYPE     : pushBackToken(nextToken, tokenizer);
                                   throwSimpleError(ERR_WRONG_TOKENTYPE, "Expected an operator but float was found");
-      case TOKEN_OPERATOR_TYPE  : pushBackToken(nextToken, nextTokens);
+      case TOKEN_OPERATOR_TYPE  : pushBackToken(nextToken, tokenizer);
                                   return SUFFIX;
       default:   throwSimpleError(ERR_WRONG_TOKENTYPE, "Tokentype was wrong");
     }
-  }
+  }*/
   else{
     throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
   }
 }
+
+OperatorType determinieOperatorType(Tokenizer *tokenizer){
+  Token *token_1;
+  Token *token_2;
+  Token *token_3;
+
+  token_1 = getToken(tokenizer);
+  token_2 = getToken(tokenizer);
+  token_3 = getToken(tokenizer);
+
+  if(token_1 ->type == TOKEN_INTEGER_TYPE || token_1 ->type == TOKEN_FLOAT_TYPE){
+    if(token_2 ->type == TOKEN_OPERATOR_TYPE){
+        if(token_3 ->type != TOKEN_NULL_TYPE){
+        pushBackToken(tokenizer, token_3);
+        }
+        pushBackToken(tokenizer, token_2);
+        pushBackToken(tokenizer, token_1);
+        return BINARY;
+    }
+  }
+  else{
+    pushBackToken(tokenizer, token_3);
+    pushBackToken(tokenizer, token_2);
+    pushBackToken(tokenizer, token_1);
+    return UNARY;
+  }
+}
+
+/*
+int numberOfOperatorTokenInTokenizer(Tokenizer *tokenizer){
+  Token *token = NULL;
+  int numberOfOperatorToken = 0;
+  int pushBackCounter = 0;
+  token = getToken(tokenizer);
+
+  if(token->type == TOKEN_NULL_TYPE){
+    throwSimpleError(ERR_NULL_TOKEN, "Null token detected");
+  }
+  else if(token->type == TOKEN_OPERATOR_TYPE){
+    numberOfOperatorToken++;
+    while(getToken(tokenizer)->type == TOKEN_OPERATOR_TYPE){
+      numberOfOperatorToken++;
+    }
+    pushBackCounter = numberOfOperatorToken;
+    while(pushBackCounter !=0){
+      pushBackToken(token, tokenizer);
+    }
+
+    return numberOfOperatorToken;
+  }
+  else{
+    return 0;
+  }
+
+}
+*/

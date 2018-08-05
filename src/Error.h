@@ -17,4 +17,5 @@
 #define ERR_INVALID_ANSWER       105
 #define ERR_INVALID_TOKENINFO    106
 #define ERR_WRONG_TOKENTYPE      107
+#define ERR_INVALID_AFFIX        108
 #endif // _ERROR_H

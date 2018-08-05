@@ -6,10 +6,10 @@
 #include "Common.h"
 #include "Exception.h"
 #include "Error.h"
+#include "Arithmetic.h"
 
 #include <stdarg.h>
 #include <stdio.h>
-
 
 void setUp(void){}
 void tearDown(void){}
@@ -26,11 +26,8 @@ void tearDown(void){}
  *          head---^
  *
  */
- /*
+
 void test_operateOnTokens_given_1_plus_2_exptect_3(void){
-  Token *token_1        = NULL;
-  Token *token_2        = NULL;
-  Token *token_operator = NULL;
   Token *Ans            = NULL;
   Tokenizer *tokenizer  = NULL;
 
@@ -39,17 +36,43 @@ void test_operateOnTokens_given_1_plus_2_exptect_3(void){
 
   tokenizer = createTokenizer(" 1 +2");
 
-  token_1 = getToken(tokenizer);
-  pushStack(&operandStack, token_1);
+  Ans = shuntingYard(tokenizer, &operatorStack, &operandStack);
 
-  token_operator = getToken(tokenizer);
-  pushStack(&operatorStack, token_operator);
-
-  token_2 = getToken(tokenizer);
-  pushStack(&operandStack, token_2);
-
-  Ans = operateOnTokens(operatorStack, operandStack);
-  TEST_ASSERT_EQUAL(3, (IntegerToken*)Ans ->value);
+  TEST_ASSERT_EQUAL(3, ((IntegerToken*)Ans) ->value);
 
 }
-*/
+
+void test_pushBackToken(void){
+  Token *token_1;
+  Token *token_2;
+  Token *token_3;
+
+  Token *token_1_afterPush;
+  Token *token_2_afterPush;
+  Token *token_3_afterPush;
+
+  Tokenizer *tokenizer  = NULL;
+
+  tokenizer = createTokenizer("1 2 3");
+
+  token_1 = getToken(tokenizer);
+  token_2 = getToken(tokenizer);
+  token_3 = getToken(tokenizer);
+
+  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE, token_1->type);
+  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE, token_2->type);
+  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE, token_3->type);
+
+  pushBackToken(tokenizer, token_3);
+  pushBackToken(tokenizer, token_2);
+  pushBackToken(tokenizer, token_1);
+
+  token_1_afterPush = getToken(tokenizer);
+  token_2_afterPush = getToken(tokenizer);
+  token_3_afterPush = getToken(tokenizer);
+
+  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE, token_1_afterPush->type);
+  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE, token_2_afterPush->type);
+  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE, token_3_afterPush->type);
+
+}

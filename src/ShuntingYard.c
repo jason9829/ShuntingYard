@@ -1,49 +1,53 @@
 #include "ShuntingYard.h"
+#include "Arithmetic.h"
 #include "Token.h"
-#include "TokenAffix.h"
+#include "Tokenizer.h"
 #include "Stack.h"
 #include "Exception.h"
 #include "Error.h"
 #include "Common.h"
 #include <stdio.h>
-/*
-Token operateOnTokens(StackBlock *operatorStack, StackBlock *operandStack){
-  if(operatorStack->head == NULL || operandStack->head == NULL){
-    throwSimpleError(ERR_STACK_NULL, "Empty Stack detected");
-  }
-  else{
+
+Token *shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
+    StackItem *poppedToken_1;
+    StackItem *poppedToken_2;
+    StackItem *poppedToken_operator;
+
+    Token *token;
     Token *token_1;
     Token *token_2;
     Token *token_operator;
-    if(operatorStack->count >=1 && operandStack->count >=2){
-      popStack()
-    }
-  }
-}
-*/
+    Token *ans;
 
-// Example
-//
-//     operatorStack
-//            +-----+
-//  tail-->   +  *  + <---
-//            +-----+    | next
-//            +  -  +  __|
-//            +-----+
-//      head----^
-//  *For this example expect return '1'
-// Check for operators precendence return '1' if next operator presidence is higher
-/*int checkForOperatorPrecedence(StackBlock *operatorStack){
-  if(operatorStack->head == NULL || operatorStack->tail == NULL){
-    throwSimpleError(ERR_STACK_NULL,"Operator Stack is empty");
-  }
-  else{
-      if(){
-
+    token = getToken(tokenizer);
+    while(token-> type != TOKEN_NULL_TYPE){
+      if(token->type == TOKEN_INTEGER_TYPE || token->type == TOKEN_FLOAT_TYPE){
+      pushOperandStack(operandStack, token);
+      token = getToken(tokenizer);
       }
-  }
+      else{
+      pushOperatorStack(operatorStack, token);
+      token = getToken(tokenizer);
+      }
+    }
+
+    if(operatorStack->count >=1 && operandStack->count >=2){
+      poppedToken_1 = popStack(operandStack);
+      poppedToken_2 = popStack(operandStack);
+      poppedToken_operator = popStack(operatorStack);
+      token_1 = (Token*)(poppedToken_1->data);
+      token_2 = (Token*)(poppedToken_2->data);
+      token_operator = (Token*)(poppedToken_operator->data);
+      ans = calculationOnTokens(token_1, token_2, token_operator);
+      pushStack(operandStack, ans);
+      return ans;
+    }
 }
 
-int comparePrecedenceOf2_Operator(char operator1, char operator2){
+void pushOperandStack(StackBlock *operandStack, Token *token){
+  pushStack(operandStack, token);
+}
 
-}*/
+void pushOperatorStack(StackBlock *operatorStack, Token *token){
+  pushStack(operatorStack, token);
+}

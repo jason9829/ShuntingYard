@@ -2,7 +2,9 @@
 #define _SHUNTINGYARD_H
 
 #include "Token.h"
+#include "Tokenizer.h"
 #include "Stack.h"
+#include "Arithmetic.h"
 
 // In ascending order
 typedef enum{
@@ -11,7 +13,7 @@ typedef enum{
   UNARY_PLUS_MINUS
 } Presidence;
 
-Token operateOnTokens(StackBlock *operatorStack, StackBlock *operandStack);
-int checkForOperatorPrecedence(StackBlock *operatorStack);
-int comparePrecedenceOf2_Operator(char operator1, char operator2);
+Token *shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack);
+void pushOperandStack(StackBlock *operandStack, Token *token);
+void pushOperatorStack(StackBlock *operatorStack, Token *token);
 #endif // _SHUNTINGYARD_H
