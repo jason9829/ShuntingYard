@@ -10,5 +10,5 @@ struct OperatorPrecedence{
 };
 
 OperatorPrecedence *getTokenPrecedence(Token *token);
-int compareCurrTokenAndNextTokenPrecedence(Tokenizer *tokenizer);
+int comparePrevTokenAndNextTokenPrecedence(Tokenizer *tokenizer, Token *prevToken);
 #endif // _OPERATORPRECEDENCE_WTABLE_H

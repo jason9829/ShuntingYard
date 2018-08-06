@@ -9,7 +9,7 @@
 #define INFIX_TYPE 2
 #define SUFFIX_TYPE 1     // Suffix == Postfix
 
-TokenInfo AffixPossibilities[100] = {
+TokenInfo AffixPossibilities[50] = {
   ['+'] = {.Attribute = PREFIX_TYPE | INFIX_TYPE | SUFFIX_TYPE},
   ['-'] = {.Attribute = PREFIX_TYPE | INFIX_TYPE | SUFFIX_TYPE},
   ['*'] = {.Attribute = INFIX_TYPE},
@@ -131,122 +131,107 @@ int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *n
 }
 
 // The function check the affix of first operator token of tokenizer
-Affix checkTokenAffix(Tokenizer *tokenizer){
-  int  compareWithTableResult;
-  char currOperatorSymbol;
-  char nextOperatorSymbol;
+Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
+  TokenType prevTokenType;
+  int  PossibleAffixCombination;
 
-  Token *currToken = NULL;
+  prevTokenType = prevToken->type;
   Token *nextToken = NULL;
 
-  TokenInfo *currTokenInfo;
-  TokenInfo *nextTokenInfo;
-
   OperatorType currTokenOperatorType;
-  currTokenOperatorType = determinieOperatorType(tokenizer);
-  currToken = getToken(tokenizer);
+  nextToken = getToken(tokenizer);
 
-  if(currToken ->type == TOKEN_OPERATOR_TYPE){
-    currOperatorSymbol = *((OperatorToken*)currToken)->str;
-    nextToken = getToken(tokenizer);
+  // (2)(+) / (2)(-) / (2)(*) / (2)(/)  return operator infix
+  if(prevTokenType == TOKEN_FLOAT_TYPE || prevTokenType == TOKEN_INTEGER_TYPE){
     if(nextToken->type == TOKEN_OPERATOR_TYPE){
-    nextOperatorSymbol = *((OperatorToken*)nextToken)->str;
+        encodeAffix(nextToken, INFIX);
+        pushBackToken(tokenizer, nextToken);
+        return INFIX;
     }
-    currTokenInfo = getTokenInfo(currToken);
+    else{
+      pushBackToken(tokenizer, nextToken);
+      throwSimpleError(ERR_INVALID_AFFIX, "Invalid affix (currentToken and nextToken is not OperatorType)");
+    }
+  }
+  // For example (+)(-) [(+) is preToken and (-) is nextToken]
+  // (-) should be infix
+  else if (prevTokenType == TOKEN_OPERATOR_TYPE){
+    if(nextToken->type == TOKEN_OPERATOR_TYPE){
+      pushBackToken(tokenizer, nextToken);
+      PossibleAffixCombination = checkOperatorsAffixPossibilities(prevToken, tokenizer);
+      if(PossibleAffixCombination == 1){
+          encodeAffix(nextToken, PREFIX);
+          return PREFIX;
+      }
+      else{
+        throwSimpleError(ERR_INVALID_AFFIX, "current operator is valid but nextToken is either '*' or '/'");
+      }
+    } // Example (-)(2) return PREFIX
+    else{
+      encodeAffix(nextToken, PREFIX);
+      pushBackToken(tokenizer, nextToken);
+      return PREFIX;
+    }
 
-    switch (nextToken->type) {
-      case TOKEN_INTEGER_TYPE   : pushBackToken(tokenizer, nextToken);
-                                  pushBackToken(tokenizer, currToken);
-                                  return PREFIX;
-      case TOKEN_FLOAT_TYPE     : pushBackToken(tokenizer, nextToken);
-                                  pushBackToken(tokenizer, currToken);
-                                  return PREFIX;
-      case TOKEN_OPERATOR_TYPE  : nextTokenInfo = getTokenInfo(nextToken);
-                                  compareWithTableResult = compareCurrTokenAndNextTokenWithTable(currTokenInfo, nextTokenInfo);
-                                  if(compareWithTableResult == 1){
-                                    pushBackToken(tokenizer, nextToken);
-                                    pushBackToken(tokenizer, currToken);
-                                    return INFIX;
-                                   }
-                                  else{
-                                    pushBackToken(tokenizer, nextToken);
-                                    pushBackToken(tokenizer, currToken);
-                                    throwSimpleError(ERR_INVALID_AFFIX, "Invalid affix found (nextToken is either '*' or '/') ");
-                                  }
-
-      default:   throwSimpleError(ERR_WRONG_TOKENTYPE, "Tokentype was wrong");
-    }
-  }/*
-  else if (currToken ->type == TOKEN_INTEGER_TYPE || currToken ->type == TOKEN_FLOAT_TYPE){
-    Token *nextNextToken;
-    nextToken = getToken(tokenizer);
-    switch (nextToken->type) {
-      case TOKEN_INTEGER_TYPE   : pushBackToken(nextToken, tokenizer);
-                                  throwSimpleError(ERR_WRONG_TOKENTYPE, "Expected an operator but integer was found");
-      case TOKEN_FLOAT_TYPE     : pushBackToken(nextToken, tokenizer);
-                                  throwSimpleError(ERR_WRONG_TOKENTYPE, "Expected an operator but float was found");
-      case TOKEN_OPERATOR_TYPE  : pushBackToken(nextToken, tokenizer);
-                                  return SUFFIX;
-      default:   throwSimpleError(ERR_WRONG_TOKENTYPE, "Tokentype was wrong");
-    }
-  }*/
+  }
   else{
     throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
   }
 }
 
-OperatorType determinieOperatorType(Tokenizer *tokenizer){
-  Token *token_1;
-  Token *token_2;
-  Token *token_3;
-
-  token_1 = getToken(tokenizer);
-  token_2 = getToken(tokenizer);
-  token_3 = getToken(tokenizer);
-
-  if(token_1 ->type == TOKEN_INTEGER_TYPE || token_1 ->type == TOKEN_FLOAT_TYPE){
-    if(token_2 ->type == TOKEN_OPERATOR_TYPE){
-        if(token_3 ->type != TOKEN_NULL_TYPE){
-        pushBackToken(tokenizer, token_3);
-        }
-        pushBackToken(tokenizer, token_2);
-        pushBackToken(tokenizer, token_1);
-        return BINARY;
-    }
+OperatorType determineOperatorType(Affix tokenAffix){
+  if(tokenAffix == INFIX){
+    return BINARY;
   }
-  else{
-    pushBackToken(tokenizer, token_3);
-    pushBackToken(tokenizer, token_2);
-    pushBackToken(tokenizer, token_1);
+  else if (tokenAffix == PREFIX || tokenAffix == SUFFIX){
     return UNARY;
   }
+  else{
+    throwSimpleError(ERR_INVALID_OPERATOR_TYPE, "No affix founded");
+  }
 }
 
-/*
-int numberOfOperatorTokenInTokenizer(Tokenizer *tokenizer){
-  Token *token = NULL;
-  int numberOfOperatorToken = 0;
-  int pushBackCounter = 0;
-  token = getToken(tokenizer);
-
-  if(token->type == TOKEN_NULL_TYPE){
-    throwSimpleError(ERR_NULL_TOKEN, "Null token detected");
-  }
-  else if(token->type == TOKEN_OPERATOR_TYPE){
-    numberOfOperatorToken++;
-    while(getToken(tokenizer)->type == TOKEN_OPERATOR_TYPE){
-      numberOfOperatorToken++;
+// This function will combine the prefix and the number together
+// For example, (-)(2)---->(-2)
+Token *combinePrefixWithToken(Tokenizer *tokenizer, Token *prefixToken){
+  Token *nextToken;
+  char  prefixSymbol;
+  if(prefixToken->type == TOKEN_OPERATOR_TYPE){
+    prefixSymbol = *((OperatorToken*)prefixToken)->str;
+    nextToken = getToken(tokenizer);
+    if(nextToken->type == TOKEN_INTEGER_TYPE || nextToken->type == TOKEN_FLOAT_TYPE){
+      switch(nextToken->type){
+        case TOKEN_INTEGER_TYPE : if(prefixSymbol == '+'){
+                                    return nextToken;
+                                  }
+                                  else if (prefixSymbol == '-'){
+                                    int operand;
+                                    operand = ((IntegerToken*)nextToken)->value;
+                                    operand = -operand;
+                                    ((IntegerToken*)nextToken)->value = operand;
+                                    return nextToken;
+                                  }
+                                  else{
+                                    throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator to combine (* or / found)");
+                                  }
+        case TOKEN_FLOAT_TYPE    : if(prefixSymbol == '+'){
+                                    return nextToken;
+                                  }
+                                  else if (prefixSymbol == '-'){
+                                    float operand;
+                                    operand = ((FloatToken*)nextToken)->value;
+                                    operand = -operand;
+                                    ((FloatToken*)nextToken)->value = operand;
+                                    return nextToken;
+                                  }
+                                  else{
+                                    throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator to combine (* or / found)");
+                                  }
+          default : throwSimpleError(ERR_INVALID_TOKEN, "Invalid Token to combined");
+      }
     }
-    pushBackCounter = numberOfOperatorToken;
-    while(pushBackCounter !=0){
-      pushBackToken(token, tokenizer);
-    }
-
-    return numberOfOperatorToken;
   }
   else{
-    return 0;
+    throwSimpleError(ERR_INVALID_OPERATOR ,"prefixToken is not an operator, how to combine them?");
   }
-
 }
-*/

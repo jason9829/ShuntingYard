@@ -8,7 +8,7 @@
 #define STRONGEST 2
 #define WEAKEST   1
 
-OperatorPrecedence bindingPower[100] = {
+OperatorPrecedence bindingPower[50] = {
   ['+'] = {.bindingPower = WEAKEST},
   ['-'] = {.bindingPower = WEAKEST},
   ['*'] = {.bindingPower = STRONGEST},
@@ -49,25 +49,23 @@ OperatorPrecedence *getTokenPrecedence(Token *token){
 //   i) next(tail) operator precedence is higher return 0
 //  ii) current(head) operator precedence is higer return 1
 // iii) both operator precedence are same return 2
-int compareCurrTokenAndNextTokenPrecedence(Tokenizer *tokenizer){
-  Token *token_1;
-  Token *token_2;
+int comparePrevTokenAndNextTokenPrecedence(Tokenizer *tokenizer, Token *prevToken){
+  Token *nextToken;
 
-  OperatorPrecedence *precedenceOftoken_1;
-  OperatorPrecedence *precedenceOftoken_2;
+  OperatorPrecedence *precedenceOfprevToken;
+  OperatorPrecedence *precedenceOfnextToken;
 
-  token_1 = getToken(tokenizer);
-  token_2 = getToken(tokenizer);
+  nextToken = getToken(tokenizer);
 
-  precedenceOftoken_1 = getTokenPrecedence(token_1);
-  precedenceOftoken_2 = getTokenPrecedence(token_2);
+  precedenceOfprevToken = getTokenPrecedence(prevToken);
+  precedenceOfnextToken = getTokenPrecedence(nextToken);
 
-  pushBackToken(tokenizer, token_2);
-  pushBackToken(tokenizer, token_1);
-  if((precedenceOftoken_1->bindingPower) > (precedenceOftoken_2)->bindingPower){
+  pushBackToken(tokenizer, nextToken);
+
+  if((precedenceOfprevToken->bindingPower) > (precedenceOfnextToken)->bindingPower){
     return 1;
   }
-  else if ((precedenceOftoken_1->bindingPower) < (precedenceOftoken_2)->bindingPower){
+  else if ((precedenceOfprevToken->bindingPower) < (precedenceOfnextToken)->bindingPower){
     return 0;
   }
   else{

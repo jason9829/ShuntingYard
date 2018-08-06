@@ -42,37 +42,17 @@ void test_operateOnTokens_given_1_plus_2_exptect_3(void){
 
 }
 
-void test_pushBackToken(void){
-  Token *token_1;
-  Token *token_2;
-  Token *token_3;
-
-  Token *token_1_afterPush;
-  Token *token_2_afterPush;
-  Token *token_3_afterPush;
-
+void test_operateOnTokens_given_1_plus_negative2_exptect_1(void){
+  Token *Ans            = NULL;
   Tokenizer *tokenizer  = NULL;
 
-  tokenizer = createTokenizer("1 2 3");
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
 
-  token_1 = getToken(tokenizer);
-  token_2 = getToken(tokenizer);
-  token_3 = getToken(tokenizer);
+  tokenizer = createTokenizer(" 3 + - 2");
 
-  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE, token_1->type);
-  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE, token_2->type);
-  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE, token_3->type);
+  Ans = shuntingYard(tokenizer, &operatorStack, &operandStack);
 
-  pushBackToken(tokenizer, token_3);
-  pushBackToken(tokenizer, token_2);
-  pushBackToken(tokenizer, token_1);
-
-  token_1_afterPush = getToken(tokenizer);
-  token_2_afterPush = getToken(tokenizer);
-  token_3_afterPush = getToken(tokenizer);
-
-  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE, token_1_afterPush->type);
-  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE, token_2_afterPush->type);
-  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE, token_3_afterPush->type);
+  TEST_ASSERT_EQUAL(1, ((IntegerToken*)Ans) ->value);
 
 }
