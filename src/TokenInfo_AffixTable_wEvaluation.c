@@ -40,29 +40,29 @@ TokenInfo *getTokenInfo(Token *token){
 
 // This function will check currrent operator and next operator possibilities
 // The following table show the AffixPossibilities
-//   --------------------------------------------------------
-//  | currOperator | nextOperator| Unary (*)   | Binary (*) | Yes - * / No - Blank
-//   --------------------------------------------------------
-//  |     '+'      |      '+'    |      *      |      *     |
-//  |     '+'      |      '-'    |      *      |      *     |
-//  |     '+'      |      '*'    |             |            |
-//  |     '+'      |      '/'    |             |            |
-//  ---------------------------------------------------------
-//  |     '-'      |      '+'    |      *      |      *      |
-//  |     '-'      |      '-'    |      *      |      *      |
-//  |     '-'      |      '*'    |             |             |
-//  |     '-'      |      '/'    |             |             |
-//  ----------------------------------------------------------
-//  |     '*'      |      '+'    |      *      |             |
-//  |     '*'      |      '-'    |      *      |             |
-//  |     '*'      |      '*'    |             |             |
-//  |     '*'      |      '/'    |             |             |
-//  ---------------------------------------------------------
-//  |     '/'      |      '+'    |      *      |             |
-//  |     '/'      |      '-'    |      *      |             |
-//  |     '/'      |      '*'    |             |             |
-//  |     '/'      |      '/'    |             |             |
-//  ----------------------------------------------------------
+//   ---------------------------------------------
+//  | currOperator | nextOperator| Acceptable (*)| Yes - * / No - Blank
+//   ---------------------------------------------
+//  |     '+'      |      '+'    |       *       |
+//  |     '+'      |      '-'    |       *       |
+//  |     '+'      |      '*'    |               |
+//  |     '+'      |      '/'    |               |
+//  ----------------------------------------------
+//  |     '-'      |      '+'    |       *       |
+//  |     '-'      |      '-'    |       *       |
+//  |     '-'      |      '*'    |               |
+//  |     '-'      |      '/'    |               |
+//  ----------------------------------------------
+//  |     '*'      |      '+'    |       *       |
+//  |     '*'      |      '-'    |       *       |
+//  |     '*'      |      '*'    |               |
+//  |     '*'      |      '/'    |               |
+//  ----------------------------------------------
+//  |     '/'      |      '+'    |       *       |
+//  |     '/'      |      '-'    |       *       |
+//  |     '/'      |      '*'    |               |
+//  |     '/'      |      '/'    |               |
+//  ----------------------------------------------
 int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens){
   int compareWithTableResult;
   Token *nextToken;
@@ -87,18 +87,18 @@ int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens){
         //default : throwSimpleError(ERR_INVALID_ANSWER, "Invalid answer from compareCurrTokenAndNextTokenWithTable");
       }
     }
-    /*
+
     else{
       // getTokenInfo only accept '+', '-', '*', '/'
       // else error already thrown at getTokenInfo
       throwSimpleError(ERR_INVALID_OPERATOR, "nextToken is not an operator");
-    }*/
-  } /*
+    }
+  }
   else{
     // getTokenInfo only accept '+', '-', '*', '/'
     // else error already thrown at getTokenInfo
     throwSimpleError(ERR_INVALID_OPERATOR, "Token is not an operator");
-  }*/
+  }
 
 }
 
@@ -110,7 +110,7 @@ int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *n
       case 2 : return 0;
       // getTokenInfo only give 2 or 7
       // else error already thrown at getTokenInfo
-      //default: throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
+      default: throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
     }
   }
   else if(currTokenInfo->Attribute == 2){
@@ -119,14 +119,14 @@ int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *n
       case 2 : return 0;
       // getTokenInfo only give 2 or 7
       // else error already thrown at getTokenInfo
-      //default: throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
+      default: throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
     }
   }
   // getTokenInfo only give 2 or 7
   // else error already thrown at getTokenInfo
-  //else{
-  //  throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
-  //}
+  else{
+   throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
+  }
 
 }
 

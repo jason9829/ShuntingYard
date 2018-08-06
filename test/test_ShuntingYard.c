@@ -3,6 +3,8 @@
 #include "Stack.h"
 #include "Token.h"
 #include "Tokenizer.h"
+#include "TokenAffix.h"
+#include "TokenInfo_AffixTable_wEvaluation.h"
 #include "Common.h"
 #include "Exception.h"
 #include "Error.h"
@@ -27,7 +29,7 @@ void tearDown(void){}
  *
  */
 
-void test_operateOnTokens_given_1_plus_2_exptect_3(void){
+void test_operateOnTokens_given_1_plus_2_expect_3(void){
   Token *Ans            = NULL;
   Tokenizer *tokenizer  = NULL;
 
@@ -42,7 +44,8 @@ void test_operateOnTokens_given_1_plus_2_exptect_3(void){
 
 }
 
-void test_operateOnTokens_given_1_plus_negative2_exptect_1(void){
+/*
+void test_operateOnTokens_given_1_plus_negative2_expect_1(void){
   Token *Ans            = NULL;
   Tokenizer *tokenizer  = NULL;
 
@@ -55,4 +58,29 @@ void test_operateOnTokens_given_1_plus_negative2_exptect_1(void){
 
   TEST_ASSERT_EQUAL(1, ((IntegerToken*)Ans) ->value);
 
+}
+*/
+
+void test_determineTokenOperatorType_given_2_minus_1_expect_BINARY_2(void){
+  OperatorType tokenOperatorType;
+  Token *token = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer(" 2 - 1");
+  token = getToken(tokenizer);
+
+  tokenOperatorType = determineTokenOperatorType(tokenizer, token);
+  TEST_ASSERT_EQUAL(2, tokenOperatorType);
+}
+
+void test_determineTokenOperatorType_given_minus_2_expect_UNARY_1(void){
+  OperatorType tokenOperatorType;
+  Token *token = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer(" -2");
+  token = getToken(tokenizer);
+
+  tokenOperatorType = determineTokenOperatorType(tokenizer, token);
+  TEST_ASSERT_EQUAL(1, tokenOperatorType);
 }

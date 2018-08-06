@@ -20,5 +20,5 @@
 #define ERR_INVALID_AFFIX        108
 #define ERR_INVALID_OPERATOR_TYPE 109
 #define ERR_INVALID_TOKEN         110
-
+#define ERR_STACK_INSUFFICIENT   111
 #endif // _ERROR_H

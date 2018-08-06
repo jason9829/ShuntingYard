@@ -78,7 +78,6 @@ void test_getTokenInfo_given_abc_expect_ERR_INVALID_OPERATOR(void){
 
 }
 
-
 void test_checkOperatorsAffixPossibilities_given_plus_and_plus_expect_TRUE(void){
   int result;
   Token *token = NULL;
