@@ -196,9 +196,11 @@ OperatorType determineOperatorType(Affix tokenAffix){
 Token *combinePrefixWithToken(Tokenizer *tokenizer, Token *prefixToken){
   Token *nextToken;
   char  prefixSymbol;
+
   if(prefixToken->type == TOKEN_OPERATOR_TYPE){
     prefixSymbol = *((OperatorToken*)prefixToken)->str;
     nextToken = getToken(tokenizer);
+    // If nextToken is numbers then do the operation else throw error
     if(nextToken->type == TOKEN_INTEGER_TYPE || nextToken->type == TOKEN_FLOAT_TYPE){
       switch(nextToken->type){
         case TOKEN_INTEGER_TYPE : if(prefixSymbol == '+'){
