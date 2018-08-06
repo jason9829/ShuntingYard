@@ -19,4 +19,5 @@ Token *operationOnStacks(StackBlock *operatorStack, StackBlock *operandStack);
 void pushOperandStack(StackBlock *operandStack, Token *token);
 void pushOperatorStack(StackBlock *operatorStack, Token *token);
 OperatorType determineTokenOperatorType(Tokenizer *tokenizer, Token *prevToken);
+
 #endif // _SHUNTINGYARD_H

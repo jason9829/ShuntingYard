@@ -55,8 +55,6 @@ Token *shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock 
   }
 }
 
-
-
 Token *operationOnStacks(StackBlock *operatorStack, StackBlock *operandStack){
     StackItem *poppedToken_1;
     StackItem *poppedToken_2;

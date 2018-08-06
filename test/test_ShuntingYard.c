@@ -41,7 +41,6 @@ void test_operateOnTokens_given_1_plus_2_expect_3(void){
   Ans = shuntingYard(tokenizer, &operatorStack, &operandStack);
 
   TEST_ASSERT_EQUAL(3, ((IntegerToken*)Ans) ->value);
-
 }
 
 /*
@@ -60,7 +59,6 @@ void test_operateOnTokens_given_1_plus_negative2_expect_1(void){
 
 }
 */
-
 void test_determineTokenOperatorType_given_2_minus_1_expect_BINARY_2(void){
   OperatorType tokenOperatorType;
   Token *token = NULL;
