@@ -43,6 +43,47 @@ void test_operateOnTokens_given_1_plus_2_expect_3(void){
   TEST_ASSERT_EQUAL(3, ((IntegerToken*)Ans) ->value);
 }
 
+void test_operateOnTokens_given_2point5_multiply_2_expect_5point0(void){
+  Token *Ans            = NULL;
+  Tokenizer *tokenizer  = NULL;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+
+  tokenizer = createTokenizer(" 2.5 * 2 ");
+
+  Ans = shuntingYard(tokenizer, &operatorStack, &operandStack);
+
+  TEST_ASSERT_EQUAL_FLOAT(5.0, ((FloatToken*)Ans) ->value);
+}
+
+void test_operateOnTokens_given_20point5_minus_1point30_expect_19point20(void){
+  Token *Ans            = NULL;
+  Tokenizer *tokenizer  = NULL;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+
+  tokenizer = createTokenizer(" 20.5 - 1.30 ");
+
+  Ans = shuntingYard(tokenizer, &operatorStack, &operandStack);
+
+  TEST_ASSERT_EQUAL_FLOAT(19.20, ((FloatToken*)Ans) ->value);
+}
+
+void test_operateOnTokens_given_20000point5_divide_1point75_expect_11428point86(void){
+  Token *Ans            = NULL;
+  Tokenizer *tokenizer  = NULL;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+
+  tokenizer = createTokenizer(" 2000.5 /1.75 ");
+
+  Ans = shuntingYard(tokenizer, &operatorStack, &operandStack);
+
+  TEST_ASSERT_EQUAL_FLOAT(1143.14, ((FloatToken*)Ans) ->value);
+}
 /*
 void test_operateOnTokens_given_1_plus_negative2_expect_1(void){
   Token *Ans            = NULL;

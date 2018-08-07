@@ -56,7 +56,20 @@ Token *shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock 
     }
   }
 }
-
+/*
+ *    OperandStack
+ *
+ *                +-----+
+ *      tail--->  +  2  + -----> Item1 (token_2)
+ *                +-----+
+ *                +  1  + -----> Item2 (token_1)
+ *                +-----+
+ *         head-----^
+ *  First token that popped is Item2
+ *  Only then Item1
+ *  Thus, token_2 and token_1 position is in reverse
+ *  calculationOnTokens(token_2, token_1, token_operator);
+ */
 Token *operationOnStacks(StackBlock *operatorStack, StackBlock *operandStack){
     StackItem *poppedToken_1;
     StackItem *poppedToken_2;
@@ -74,7 +87,7 @@ Token *operationOnStacks(StackBlock *operatorStack, StackBlock *operandStack){
       token_1 = (Token*)(poppedToken_1->data);
       token_2 = (Token*)(poppedToken_2->data);
       token_operator = (Token*)(poppedToken_operator->data);
-      ans = calculationOnTokens(token_1, token_2, token_operator);
+      ans = calculationOnTokens(token_2, token_1, token_operator);
       pushStack(operandStack, ans);
       return ans;
     }
