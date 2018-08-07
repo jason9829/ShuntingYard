@@ -64,7 +64,7 @@ void test_additionOf2Tokens_given_10point123_plus_10point123_expect_20point246(v
 
   Ans = additionOf2Tokens(token_1, token_2);
 
-  TEST_ASSERT_EQUAL(20.246,((FloatToken*)Ans)->value);
+  TEST_ASSERT_EQUAL_FLOAT(20.246,((FloatToken*)Ans)->value);
   TEST_ASSERT_EQUAL(TOKEN_FLOAT_TYPE,Ans->type);
 
 }
@@ -85,7 +85,7 @@ void test_additionOf2Tokens_given_10point123_plus_10_expect_20point123(void){
 
   Ans = additionOf2Tokens(token_1, token_2);
 
-  TEST_ASSERT_EQUAL(20.123,((FloatToken*)Ans)->value);
+  TEST_ASSERT_EQUAL_FLOAT(20.123,((FloatToken*)Ans)->value);
   TEST_ASSERT_EQUAL(TOKEN_FLOAT_TYPE,Ans->type);
 
 }
@@ -106,7 +106,7 @@ void test_additionOf2Tokens_given_10_plus_10point999_expect_20point999(void){
 
   Ans = additionOf2Tokens(token_1, token_2);
 
-  TEST_ASSERT_EQUAL(20.999,((FloatToken*)Ans)->value);
+  TEST_ASSERT_EQUAL_FLOAT(20.999,((FloatToken*)Ans)->value);
   TEST_ASSERT_EQUAL(TOKEN_FLOAT_TYPE,Ans->type);
 
 }
@@ -194,7 +194,7 @@ void test_subtractionOf2Tokens_given_10point123_minus_10_expect_0point123(void){
 
   Ans = subtractionOf2Tokens(token_1, token_2);
 
-  TEST_ASSERT_EQUAL(0.123,((FloatToken*)Ans)->value);
+  TEST_ASSERT_EQUAL_FLOAT(0.123,((FloatToken*)Ans)->value);
   TEST_ASSERT_EQUAL(TOKEN_FLOAT_TYPE,Ans->type);
 
 }
@@ -215,7 +215,7 @@ void test_additionOf2Tokens_given_10point123_minus_negative_12point123_expect_ne
 
   Ans = subtractionOf2Tokens(token_1, token_2);
 
-  TEST_ASSERT_EQUAL(-2,((FloatToken*)Ans)->value);
+  TEST_ASSERT_EQUAL_FLOAT(-2.000,((FloatToken*)Ans)->value);
   TEST_ASSERT_EQUAL(TOKEN_FLOAT_TYPE,Ans->type);
 
 }
@@ -236,7 +236,7 @@ void test_subtractionOf2Tokens_given_10_minus_1point12_expect_8point88(void){
 
   Ans = subtractionOf2Tokens(token_1, token_2);
 
-  TEST_ASSERT_EQUAL(8.88,((FloatToken*)Ans)->value);
+  TEST_ASSERT_EQUAL_FLOAT(8.88,((FloatToken*)Ans)->value);
   TEST_ASSERT_EQUAL(TOKEN_FLOAT_TYPE,Ans->type);
 
 }
@@ -296,7 +296,7 @@ void test_multiplicationOf2Tokens_given_10point5_multiply_2_expect_21(void){
 
   Ans = multiplicationOf2Tokens(token_1, token_2);
 
-  TEST_ASSERT_EQUAL(21.0,((FloatToken*)Ans)->value);
+  TEST_ASSERT_EQUAL_FLOAT(21.0,((FloatToken*)Ans)->value);
   TEST_ASSERT_EQUAL(TOKEN_FLOAT_TYPE,Ans->type);
 
 }

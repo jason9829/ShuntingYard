@@ -46,6 +46,8 @@ Token *shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock 
         pushBackToken(tokenizer, token);
         tokenOperatorType = determineTokenOperatorType(tokenizer, prevToken);
         token = getToken(tokenizer);
+        // TokenType was encoded during determineTokenOperatorType
+        // needed to set it back else pop operator Stack will cause invalid type
         operatorType = getTokenType(token);
         token->type = operatorType;
         pushOperatorStack(operatorStack, token);
