@@ -129,7 +129,7 @@ int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *n
   }
 
 }
-
+// If infix pop two TOKEN prefix pop one token
 // The function check the affix of first operator token of tokenizer
 Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
   TokenType prevTokenType;
@@ -178,7 +178,7 @@ Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
     throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
   }
 }
-
+// No need
 OperatorType determineOperatorType(Affix tokenAffix){
   if(tokenAffix == INFIX){
     return BINARY;
