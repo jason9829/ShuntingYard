@@ -11,8 +11,9 @@
 #include "OperatorPrecedence_wTable.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
-Token *shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
+void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
   StackItem *poppedToken_1;
   StackItem *poppedToken_2;
   StackItem *poppedToken_operator;
@@ -21,10 +22,10 @@ Token *shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock 
   Affix operatorAffix;
   Token *token;
   Token *prevToken;
-  Token *token_1;
-  Token *token_2;
-  Token *token_operator;
   Token *ans;
+  Token *combinedPrefixWithNumber;
+  Token *token_operator;
+  Token *prefixToken;
   TokenType operatorType;
 
   token = getToken(tokenizer);
@@ -37,15 +38,41 @@ Token *shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock 
       else if(tokenOperatorType == BINARY){
         pushOperandStack(operandStack, token);
         ans = operationOnStacks(operatorStack, operandStack);
-        return ans;
+        pushOperandStack(operandStack, ans);
+        //freeToken(prevToken);
+        token = getToken(tokenizer);
+      }
+      else if (tokenOperatorType == UNARY){
+        pushBackToken(tokenizer, token);
+        combinedPrefixWithNumber = combinePrefixWithToken(tokenizer, prefixToken);
+        pushBackToken(tokenizer, combinedPrefixWithNumber);
+        popStack(operatorStack);
+        token = getToken(tokenizer);
+        tokenOperatorType = BINARY;
       }
     }
     else{
-      if(operandStack->head != NULL){
+      if(operatorStack->head == NULL){
         prevToken = (Token*)(operandStack->head->data);
         pushBackToken(tokenizer, token);
         tokenOperatorType = determineTokenOperatorType(tokenizer, prevToken);
         token = getToken(tokenizer);
+
+        // TokenType was encoded during determineTokenOperatorType
+        // needed to set it back else pop operator Stack will cause invalid type
+        operatorType = getTokenType(token);
+        token->type = operatorType;
+        pushOperatorStack(operatorStack, token);
+        token = getToken(tokenizer);
+      }
+      else{
+        prevToken = (Token*)(operatorStack->head->data);
+        pushBackToken(tokenizer, token);
+        tokenOperatorType = determineTokenOperatorType(tokenizer, prevToken);
+        token = getToken(tokenizer);
+        if(tokenOperatorType == UNARY){
+          prefixToken = token;
+        }
         // TokenType was encoded during determineTokenOperatorType
         // needed to set it back else pop operator Stack will cause invalid type
         operatorType = getTokenType(token);
@@ -88,7 +115,10 @@ Token *operationOnStacks(StackBlock *operatorStack, StackBlock *operandStack){
       token_2 = (Token*)(poppedToken_2->data);
       token_operator = (Token*)(poppedToken_operator->data);
       ans = calculationOnTokens(token_2, token_1, token_operator);
-      pushStack(operandStack, ans);
+      freeToken(token_1);
+      freeToken(token_2);
+      freeToken(token_operator);
+      //pushStack(operandStack, ans);
       return ans;
     }
     else{

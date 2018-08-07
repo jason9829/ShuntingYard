@@ -11,6 +11,9 @@
 void setUp(void){}
 void tearDown(void){}
 
+// 3++4
+// 3+*4
+// 3 + - + 5
 void test_getTokenInfo_given_plus_sign_expect_attribute_7(void){
   Token *token = NULL;
   Tokenizer *tokenizer = NULL;
