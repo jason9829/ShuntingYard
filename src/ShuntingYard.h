@@ -7,6 +7,7 @@
 #include "Arithmetic.h"
 #include "TokenInfo_AffixTable_wEvaluation.h"
 
+void pushTokensToRespectiveStack(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack);
 void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack);
 Token *operationOnStacksIfOperatorIsInfix(StackBlock *operatorStack, StackBlock *operandStack);
 void pushOperandStack(StackBlock *operandStack, Token *token);

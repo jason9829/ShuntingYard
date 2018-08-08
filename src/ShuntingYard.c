@@ -13,6 +13,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void pushTokensToRespectiveStack(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
+  Token *token ;
+  Token *prevToken;
+
+  token = getToken(tokenizer);
+  while(token-> type != TOKEN_NULL_TYPE){
+    if(token->type == TOKEN_FLOAT_TYPE || token->type == TOKEN_INTEGER_TYPE){
+      pushOperandStack(operandStack, token);
+      prevToken = token;
+      token = getToken(tokenizer);
+    }
+    else if(token->type == TOKEN_OPERATOR_TYPE){
+      pushBackToken(tokenizer, token); // In the function need to get OperatorToken from tokenizer to compare
+      checkTokenAffixAndEncodeAffix(tokenizer, prevToken);  // In the function pushBack so need to get again
+      token = getToken(tokenizer);
+      pushOperatorStack(operatorStack, token);
+      prevToken = token;
+      token = getToken(tokenizer);
+    }
+  }
+
+}
 void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
   Affix currOperatorAffix;
   Token *token;

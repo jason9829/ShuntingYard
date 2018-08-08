@@ -10,10 +10,12 @@
 #define SUFFIX_TYPE 1     // Suffix == Postfix
 
 TokenInfo AffixPossibilities[50] = {
-  ['+'] = {.Attribute = PREFIX_TYPE | INFIX_TYPE | SUFFIX_TYPE},
-  ['-'] = {.Attribute = PREFIX_TYPE | INFIX_TYPE | SUFFIX_TYPE},
-  ['*'] = {.Attribute = INFIX_TYPE},
-  ['/'] = {.Attribute = INFIX_TYPE},
+  ['+'] = {.Attribute = PREFIX_TYPE | INFIX_TYPE | SUFFIX_TYPE}, // 7
+  ['-'] = {.Attribute = PREFIX_TYPE | INFIX_TYPE | SUFFIX_TYPE}, // 7
+  ['*'] = {.Attribute = INFIX_TYPE}, // 2
+  ['/'] = {.Attribute = INFIX_TYPE},  // 2
+  ['('] = {.Attribute = PREFIX_TYPE}, // 4
+  [')'] = {.Attribute = SUFFIX_TYPE}, // 1
 };
 // If operator is '+', '-' , '*' or '/' return the
 // affix possibilities (in int) else throw error
@@ -32,6 +34,12 @@ TokenInfo *getTokenInfo(Token *token){
   }
   else if(operatorSymbol == '/'){
     return &AffixPossibilities['/'];
+  }
+  else if(operatorSymbol == '('){
+    return &AffixPossibilities['('];
+  }
+  else if(operatorSymbol == ')'){
+    return &AffixPossibilities[')'];
   }
   else{
     throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator detected");
@@ -107,20 +115,46 @@ int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *n
   if(currTokenInfo->Attribute == 7){         // 4 | 2 | 1 = 7  (refer to #define)
     switch (nextTokenInfo->Attribute) {
       case 7 : return 1;
+      case 4 : return 1;
       case 2 : return 0;
+      case 1 : return 0;
       // getTokenInfo only give 2 or 7
       // else error already thrown at getTokenInfo
       default: throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
     }
   }
-  else if(currTokenInfo->Attribute == 2){
+  else if(currTokenInfo->Attribute == 4){
     switch (nextTokenInfo->Attribute) {
       case 7 : return 1;
+      case 4 : return 1;
       case 2 : return 0;
+      case 1 : return 0;
       // getTokenInfo only give 2 or 7
       // else error already thrown at getTokenInfo
       default: throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
     }
+}
+  else if(currTokenInfo->Attribute == 2){
+    switch (nextTokenInfo->Attribute) {
+      case 7 : return 1;
+      case 4 : return 1;
+      case 2 : return 0;
+      case 1 : return 0;
+      // getTokenInfo only give 2 or 7
+      // else error already thrown at getTokenInfo
+      default: throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
+    }
+  }
+    else if(currTokenInfo->Attribute == 1){
+      switch (nextTokenInfo->Attribute) {
+        case 7 : return 1;
+        case 4 : return 0;
+        case 2 : return 0;
+        case 1 : return 1;
+        // getTokenInfo only give 2 or 7
+        // else error already thrown at getTokenInfo
+        default: throwSimpleError(ERR_INVALID_TOKENINFO, "Invalid attribute from TokenInfo");
+      }
   }
   // getTokenInfo only give 2 or 7
   // else error already thrown at getTokenInfo
@@ -136,26 +170,34 @@ int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *n
 Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
   TokenType prevTokenType;
   int  PossibleAffixCombination;
+  char operatorSymbol;
 
   prevTokenType = prevToken->type;
   Token *nextToken = NULL;
 
   OperatorType currTokenOperatorType;
   nextToken = getToken(tokenizer);
+  operatorSymbol = ((OperatorToken*)nextToken) -> str;
 
   // (2)(+) / (2)(-) / (2)(*) / (2)(/)  return operator infix
   if(prevTokenType == TOKEN_FLOAT_TYPE || prevTokenType == TOKEN_INTEGER_TYPE){
     if(nextToken->type == TOKEN_OPERATOR_TYPE){
+      if(operatorSymbol == ')'){
+        encodeAffix(nextToken, SUFFIX);
+        pushBackToken(tokenizer, nextToken);
+        return SUFFIX;
+      }
+      else{
         encodeAffix(nextToken, INFIX);
         pushBackToken(tokenizer, nextToken);
         return INFIX;
+      }
     }
     else{
       pushBackToken(tokenizer, nextToken);
       throwSimpleError(ERR_INVALID_AFFIX, "Invalid affix (currentToken and nextToken is not OperatorType)");
     }
   }
-
   // For example (+)(-) [(+) is preToken and (-) is nextToken]
   // (-) should be infix
   else if (prevTokenType == TOKEN_OPERATOR_TYPE){
@@ -163,6 +205,10 @@ Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
       pushBackToken(tokenizer, nextToken);
       PossibleAffixCombination = checkOperatorsAffixPossibilities(prevToken, tokenizer);
       if(PossibleAffixCombination == 1){
+          if(operatorSymbol == ')'){
+            encodeAffix(nextToken, SUFFIX);
+            return SUFFIX;
+          }
           encodeAffix(nextToken, PREFIX);
           return PREFIX;
       }

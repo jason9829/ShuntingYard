@@ -16,6 +16,36 @@
 void setUp(void){}
 void tearDown(void){}
 
+void test_pushTokensToRespectiveStack_given_3_plus_2_expect_push_all_tones_to_Stack(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *poppedOperand_1_token;
+  Token *poppedOperand_2_token;
+  Token *poppedOperator_1_token;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedOperand_1;
+  StackItem *poppedOperand_2;
+  StackItem *poppedOperator_1;
+
+  tokenizer = createTokenizer(" 3 + 2 ");
+
+  pushTokensToRespectiveStack(tokenizer,&operatorStack, &operandStack);
+
+  poppedOperand_1 = popStack(&operandStack);
+  poppedOperand_1_token = (Token*)(poppedOperand_1->data);
+  //TEST_ASSERT_EQUAL(3, ((IntegerToken*)poppedOperand_1_token)->value);
+
+  poppedOperand_2 = popStack(&operandStack);
+  poppedOperand_2_token = (Token*)(poppedOperand_1->data);
+  TEST_ASSERT_EQUAL(2, ((IntegerToken*)poppedOperand_2_token)->value);
+
+  poppedOperator_1 = popStack(&operatorStack);
+  poppedOperator_1_token = (Token*)(poppedOperand_1->data);
+  TEST_ASSERT_EQUAL('+', ((OperatorToken*)poppedOperator_1_token)->str);
+
+
+}
 /* Starting from empty stack then push to the tokens to respective Stack
  * Then expect both operand popped and operator popped then do the Arithmetic
  *
