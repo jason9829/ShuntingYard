@@ -129,6 +129,8 @@ int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *n
   }
 
 }
+
+
 // If infix pop two TOKEN prefix pop one token
 // The function check the affix of first operator token of tokenizer
 Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
@@ -153,6 +155,7 @@ Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
       throwSimpleError(ERR_INVALID_AFFIX, "Invalid affix (currentToken and nextToken is not OperatorType)");
     }
   }
+
   // For example (+)(-) [(+) is preToken and (-) is nextToken]
   // (-) should be infix
   else if (prevTokenType == TOKEN_OPERATOR_TYPE){
@@ -178,7 +181,56 @@ Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
     throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
   }
 }
+
+// check next Token affix and encode it
+// needed to decode it later (getAffixType)
+void checkTokenAffixAndEncodeAffix(Tokenizer *tokenizer, Token *prevToken){
+  TokenType prevTokenType;
+  int  PossibleAffixCombination;
+
+  prevTokenType = prevToken->type;
+  Token *nextToken = NULL;
+
+  OperatorType currTokenOperatorType;
+  nextToken = getToken(tokenizer);
+
+  // (2)(+) / (2)(-) / (2)(*) / (2)(/)  return operator infix
+  if(prevTokenType == TOKEN_FLOAT_TYPE || prevTokenType == TOKEN_INTEGER_TYPE){
+    if(nextToken->type == TOKEN_OPERATOR_TYPE){
+        encodeAffix(nextToken, INFIX);
+        pushBackToken(tokenizer, nextToken);
+    }
+    else{
+      pushBackToken(tokenizer, nextToken);
+      throwSimpleError(ERR_INVALID_AFFIX, "Invalid affix (currentToken and nextToken is not OperatorType)");
+    }
+  }
+
+  // For example (+)(-) [(+) is preToken and (-) is nextToken]
+  // (-) should be infix
+  else if (prevTokenType == TOKEN_OPERATOR_TYPE){
+    if(nextToken->type == TOKEN_OPERATOR_TYPE){
+      pushBackToken(tokenizer, nextToken);
+      PossibleAffixCombination = checkOperatorsAffixPossibilities(prevToken, tokenizer);
+      if(PossibleAffixCombination == 1){
+          encodeAffix(nextToken, PREFIX);
+      }
+      else{
+        throwSimpleError(ERR_INVALID_AFFIX, "current operator is valid but nextToken is either '*' or '/'");
+      }
+    } // Example (-)(2) return PREFIX
+    else{
+      encodeAffix(nextToken, PREFIX);
+      pushBackToken(tokenizer, nextToken);
+    }
+
+  }
+  else{
+    throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
+  }
+}
 // No need
+/*
 OperatorType determineOperatorType(Affix tokenAffix){
   if(tokenAffix == INFIX){
     return BINARY;
@@ -190,6 +242,8 @@ OperatorType determineOperatorType(Affix tokenAffix){
     throwSimpleError(ERR_INVALID_OPERATOR_TYPE, "No affix founded");
   }
 }
+*/
+
 
 // This function will combine the prefix and the number together
 // For example, (-)(2)---->(-2)

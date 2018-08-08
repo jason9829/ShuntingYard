@@ -346,126 +346,92 @@ void test_checkTokenAffix_given_minus_sign_and_minus_sign_expect_PREFIX(void){
   TEST_ASSERT_EQUAL(PREFIX, getAffix_ans);
 }
 
-/*
-void test_checkTokenAffix_given_minus_sign_and_2point123_expect_PREFIX(void){
+void test_checkTokenAffixAndEncodeAffix_given_2_plus_3_expect_infix(void){
   Affix affix;
+  Token *token = NULL;
+  Token *encodedToken = NULL;
   Tokenizer *tokenizer = NULL;
 
-  tokenizer = createTokenizer("-2.123");
+  tokenizer = createTokenizer("2 + 3");
+  token = getToken(tokenizer);
 
-  affix = checkTokenAffix(tokenizer);
+  checkTokenAffixAndEncodeAffix(tokenizer, token);
+  encodedToken = getToken(tokenizer);
+  affix = getAffix(encodedToken);
+  TEST_ASSERT_EQUAL(INFIX, affix);
+
+}
+
+void test_checkTokenAffixAndEncodeAffix_given_minus_2_expect_prefix(void){
+  Affix affix;
+  Token *token = NULL;
+  Token *encodedToken = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer("-2");
+  token = getToken(tokenizer);
+
+  checkTokenAffixAndEncodeAffix(tokenizer, token);
+  encodedToken = getToken(tokenizer);
+  affix = getAffix(encodedToken);
+  TEST_ASSERT_EQUAL(PREFIX, affix);
+
+}
+
+void test_checkTokenAffixAndEncodeAffix_given_2_plus_minus_3_expect_plus_infix_minus_prefix(void){
+  Affix affix;
+  Token *token = NULL;
+  Token *encodedToken = NULL;
+  Token *encodedToken_next = NULL;
+  Tokenizer *tokenizer = NULL;
+  TokenType encodedTokenType;
+
+  tokenizer = createTokenizer("2 +- 3");
+  token = getToken(tokenizer);
+
+  checkTokenAffixAndEncodeAffix(tokenizer, token);
+  encodedToken = getToken(tokenizer);
+  affix = getAffix(encodedToken);
+  TEST_ASSERT_EQUAL(INFIX, affix);
+
+  // now the encodedToken -> type is encoded with affix and TokenType
+  // so need to decode it
+  encodedTokenType = getTokenType(encodedToken);
+  encodedToken->type = encodedTokenType;
+  checkTokenAffixAndEncodeAffix(tokenizer, encodedToken);
+  encodedToken_next = getToken(tokenizer);
+  affix = getAffix(encodedToken_next);
   TEST_ASSERT_EQUAL(PREFIX, affix);
 }
 
-void test_checkTokenAffix_given_minus_sign_and_minus_expect_INFIX(void){
+void test_checkTokenAffixAndEncodeAffix_given_2_plus_multiply_3_expect_plus_infix_ERR_INVALID_AFFIX(void){
+  CEXCEPTION_T e;
   Affix affix;
+  Token *token = NULL;
+  Token *encodedToken = NULL;
+  Token *encodedToken_next = NULL;
   Tokenizer *tokenizer = NULL;
+  TokenType encodedTokenType;
 
-  tokenizer = createTokenizer("--");
+  tokenizer = createTokenizer("2 + * 3");
+  token = getToken(tokenizer);
 
-  affix = checkTokenAffix(tokenizer);
+  checkTokenAffixAndEncodeAffix(tokenizer, token);
+  encodedToken = getToken(tokenizer);
+  affix = getAffix(encodedToken);
   TEST_ASSERT_EQUAL(INFIX, affix);
-}
 
-void test_checkTokenAffix_given_abc_expect_ERR_INVALID_OPERATOR(void){
-  CEXCEPTION_T e;
-  Affix affix;
-  Tokenizer *tokenizer = NULL;
-
-  tokenizer = createTokenizer("abc");
-
-
+  // now the encodedToken -> type is encoded with affix and TokenType
+  // so need to decode it
+  encodedTokenType = getTokenType(encodedToken);
+  encodedToken->type = encodedTokenType;
   Try{
-    affix = checkTokenAffix(tokenizer);
-    TEST_FAIL_MESSAGE("Expect ERR_INVALID_OPERATOR. But no exception thrown.");
-  }
-  Catch(e){
-    printf(e->errorMsg);
-    TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
-    freeError(e);
-  }
-}
-
-void test_checkTokenAffix_given_plus_and_ddd_expect_ERR_WRONG_TOKENTYPE(void){
-  CEXCEPTION_T e;
-  Affix affix;
-  Tokenizer *tokenizer = NULL;
-
-  tokenizer = createTokenizer("+ddd");
-
-
-  Try{
-    affix = checkTokenAffix(tokenizer);
-    TEST_FAIL_MESSAGE("Expect ERR_WRONG_TOKENTYPE. But no exception thrown.");
-  }
-  Catch(e){
-    printf(e->errorMsg);
-    TEST_ASSERT_EQUAL(ERR_WRONG_TOKENTYPE, e->errorCode);
-    freeError(e);
-  }
-}
-
-void test_checkTokenAffix_given_plus_and_multiply_expect_ERR_INVALID_AFFIX(void){
-  CEXCEPTION_T e;
-  Affix affix;
-
-  Tokenizer *tokenizer = NULL;
-
-  // Expected 0x5A5A5A5A Was 0x02771D50. Unhandled Exception!
-  // if there is no spacing this error was thrown
-  tokenizer = createTokenizer("+*");
-
-  Try{
-    affix = checkTokenAffix(tokenizer);
-    TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
+      checkTokenAffixAndEncodeAffix(tokenizer, encodedToken);
+      TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
   }
   Catch(e){
     printf(e->errorMsg);
     TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
-    freeError(e);
-  }
-}*/
-
-void test_determineOperatorType_given_INFIX_expect_2_BINARY(void){
-  Affix tokenAffix;
-  tokenAffix = INFIX;
-  OperatorType ans;
-  ans = determineOperatorType(tokenAffix);
-
-  TEST_ASSERT_EQUAL(2, ans);
-}
-
-void test_determineOperatorType_given_PREFIX_expect_1_UNARY(void){
-  Affix tokenAffix;
-  tokenAffix = PREFIX;
-  OperatorType ans;
-
-  ans = determineOperatorType(tokenAffix);
-  TEST_ASSERT_EQUAL(1, ans);
-}
-
-void test_determineOperatorType_given_SUFFIX_expect_1_UNARY(void){
-  Affix tokenAffix;
-  tokenAffix = SUFFIX;
-  OperatorType ans;
-
-  ans = determineOperatorType(tokenAffix);
-  TEST_ASSERT_EQUAL(1, ans);
-}
-
-void test_determineOperatorType_given_NULL_expect_ERR_INVALID_OPERATOR_TYPE(void){
-  CEXCEPTION_T e;
-  Affix tokenAffix;
-  tokenAffix = NO_AFFIX;
-  OperatorType ans;
-
-  Try{
-    ans = determineOperatorType(tokenAffix);
-    TEST_FAIL_MESSAGE("Expect ERR_INVALID_OPERATOR_TYPE. But no exception thrown.");
-  }
-  Catch(e){
-    printf(e->errorMsg);
-    TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR_TYPE, e->errorCode);
     freeError(e);
   }
 }
