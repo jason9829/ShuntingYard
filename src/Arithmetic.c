@@ -6,6 +6,7 @@
 #include "Common.h"
 #include "Exception.h"
 #include "Error.h"
+#include <malloc.h>
 
 Token *calculationOnTokens(Token *token_1, Token *token_2, Token *token_operator){
   //Token *Ans;
@@ -30,7 +31,7 @@ Token *calculationOnTokens(Token *token_1, Token *token_2, Token *token_operator
     Ans = divisionOf2Tokens(token_1, token_2);
     return Ans;
     break;
-    default: throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator detected");
+    default: throwException(ERR_INVALID_OPERATOR, NULL , "Operator '%c' is invalid,operation");
   }
 
 }
@@ -75,7 +76,7 @@ Token *additionOf2Tokens(Token *token_1, Token *token_2){
     return Answer;
   }
   else{
-  throwSimpleError(ERR_INVALID_OPERAND,"Operand type is invalid");
+  throwException(ERR_INVALID_OPERAND, NULL, "token_1 or token_2 is invalid");
   }
 }
 
@@ -119,7 +120,7 @@ Token *subtractionOf2Tokens(Token *token_1, Token *token_2){
     return Answer;
   }
   else{
-  throwSimpleError(ERR_INVALID_OPERAND,"Operand type is invalid");
+  throwException(ERR_INVALID_OPERAND, NULL, "token_1 or token_2 is invalid");
   }
 
 }
@@ -165,7 +166,7 @@ Token *multiplicationOf2Tokens(Token *token_1, Token *token_2){
     return Answer;
   }
   else{
-  throwSimpleError(ERR_INVALID_OPERAND,"Operand type is invalid");
+  throwException(ERR_INVALID_OPERAND, NULL, "token_1 or token_2 is invalid");
   }
 
 }
@@ -211,7 +212,7 @@ Token *divisionOf2Tokens(Token *token_1, Token *token_2){
     return Answer;
   }
   else{
-  throwSimpleError(ERR_INVALID_OPERAND,"Operand type is invalid");
+  throwException(ERR_INVALID_OPERAND, NULL, "token_1 or token_2 is invalid");
   }
 
 }

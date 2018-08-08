@@ -19,5 +19,5 @@ int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *n
 Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken);
 void checkTokenAffixAndEncodeAffix(Tokenizer *tokenizer, Token *prevToken);
 OperatorType determineOperatorType(Affix tokenAffix);
-Token *combinePrefixWithToken(Tokenizer *tokenizer, Token *prefixToken);
+Token *combinePrefixWithOperandToken(Token *prefixToken, Token *operandToken);
 #endif // _TOKENINFO_AFFIXTABLE_WEVALUATION_H

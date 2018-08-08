@@ -8,7 +8,7 @@
 int *LinkedListAddToHead_wNewLinkedListAddress(LinkedList *List, void *data){
 
   if(*(int*)(data) == NULL){
-    throwSimpleError(ERR_INVALID_DATA,"Data trying to add is NULL");
+    throwException(ERR_INVALID_DATA,(int*)(data),"Data trying to add is '%d',(int*)(data)");
   }
   else{
     ListItem *newLinkedList = (struct ListItem*)malloc (sizeof(struct ListItem));
@@ -34,7 +34,7 @@ int *LinkedListAddToHead_wNewLinkedListAddress(LinkedList *List, void *data){
 
 void LinkedListAddToHead(LinkedList *List,void *data){
   if(*(int*)(data) == NULL){
-    throwSimpleError(ERR_INVALID_DATA,"Data trying to add is NULL");
+    throwException(ERR_INVALID_DATA,(int*)(data),"Data trying to add is '%d',(int*)(data)");
   }
   else{
     ListItem *newLinkedList = (struct ListItem*)malloc (sizeof(struct ListItem));
@@ -58,7 +58,7 @@ void LinkedListAddToHead(LinkedList *List,void *data){
 }
 ListItem *LinkedListRemoveFromHead(LinkedList *List){
   if(List->head == NULL){
-    throwSimpleError(ERR_LINKEDLIST_NULL,"Empty linkedlist detected");
+    throwException(ERR_LINKEDLIST_NULL,NULL ,"The List is empty");
   }
   else{
     ListItem *removedLinkedList = (struct ListItem*)malloc (sizeof(struct ListItem));

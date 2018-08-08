@@ -33,9 +33,8 @@ void test_LinkedListAddToHead_given_empty_linked_list_add_NULL_expect_ERR_DATA_N
     TEST_FAIL_MESSAGE("Expect ERR_DATA_NULL. But no exception thrown.");
   }
   Catch(e){
-    printf(e->errorMsg);
+    dumpTokenErrorMessage(e, 1);
     TEST_ASSERT_EQUAL(ERR_INVALID_DATA, e->errorCode);
-    freeError(e);
   }
 
 }
@@ -134,9 +133,8 @@ void test_LinkedListRemoveFromHead_given_empty_linked_list_remove_expect_ERR_LIN
     TEST_FAIL_MESSAGE("Expect ERR_LINKEDLIST_NULL. But no exception thrown.");
   }
   Catch(e){
-    printf(e->errorMsg);
+    dumpTokenErrorMessage(e, 1);
     TEST_ASSERT_EQUAL(ERR_LINKEDLIST_NULL, e->errorCode);
-    freeError(e);
   }
 
   TEST_ASSERT_EQUAL(NULL,List.head);

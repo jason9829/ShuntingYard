@@ -76,7 +76,7 @@ void pushStack(StackBlock *List,void *data){
   token = ((Token*)(data));
 
   if(token->type == TOKEN_NULL_TYPE){
-      throwSimpleError(ERR_NULL_TOKEN,"Token is NULL");
+      throwException(ERR_NULL_TOKEN, (Token*)token ,"Token is NULL");
   }
   StackItem *newStackItem = (struct StackItem*)malloc (sizeof(struct StackItem));
   if(List->head == NULL){
@@ -133,7 +133,7 @@ void pushStack(StackBlock *List,void *data){
 
 StackItem *popStack(StackBlock *List){
   if(List->head == NULL){
-    throwSimpleError(ERR_LINKEDLIST_NULL,"Empty linkedlist detected");
+    throwException(ERR_LINKEDLIST_NULL,NULL ,"The Stack is empty");
   }
   else{
     StackItem *poppedStack = (struct StackItem*)malloc (sizeof(struct StackItem));

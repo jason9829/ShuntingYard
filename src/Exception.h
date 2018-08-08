@@ -1,24 +1,21 @@
-#ifndef _EXCEPTION_H
-#define _EXCEPTION_H
 
-#include "Exception.h"
+#ifndef Exception_H
+#define Exception_H
 
-/*typedef struct {        C++ can't compile
-  int   errorCode;
-  char *errorMsg;
-}Exception;
-*/
-//**********This********  Equal this
 typedef struct Exception Exception;
-struct Exception{
-  int   errorCode;
-  char *errorMsg;
+typedef Exception* ExceptionPtr;
+struct Exception {
+  char *msg;
+  int  errorCode;
+  void *data;
 };
 
-//void throwError(int errorCode,char *format,...);
-void throwSimpleError (int errorCode, char *errorMsg);
-void freeError(Exception *ex);
+Exception *createException(char *msg, int errorCode);
+void freeException(Exception *e);
+void dumpException(Exception *e);
 
+void throwException(int errorCode, void *data, char *message, ...);
 
+int add(int numOfItems, ...);
 
-#endif // _EXCEPTION_H
+#endif // Exception_H

@@ -132,9 +132,9 @@ void test_additionOf2Tokens_given_abcd_and_4124aa_expect_ERR_INVALID_OPERAND(voi
       TEST_FAIL_MESSAGE("Expect ERR_INVALID_OPERAND. But no exception thrown.");
   }
   Catch(e){
-    printf(e->errorMsg);
+    dumpTokenErrorMessage(e, 1);
     TEST_ASSERT_EQUAL(ERR_INVALID_OPERAND, e->errorCode);
-    freeError(e);
+
   }
 
 }
@@ -465,9 +465,8 @@ void test_calculationOnTokens_given_invalid_operator_expect_ERR_INVALID_OPERATOR
       TEST_FAIL_MESSAGE("Expect ERR_INVALID_OPERATOR. But no exception thrown.");
   }
   Catch(e){
-    printf(e->errorMsg);
+    dumpTokenErrorMessage(e, 1);
     TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
-    freeError(e);
   }
 
 }

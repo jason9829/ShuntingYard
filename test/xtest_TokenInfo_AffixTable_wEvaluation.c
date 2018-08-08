@@ -59,6 +59,30 @@ void test_getTokenInfo_given_divide_sign_expect_attribute_7(void){
   TEST_ASSERT_EQUAL(2, affix->Attribute);
 }
 
+void test_getTokenInfo_given_open_bracket_sign_expect_attribute_4(void){
+  Token *token = NULL;
+  Tokenizer *tokenizer = NULL;
+  TokenInfo *affix = NULL;
+
+  tokenizer = createTokenizer("(");
+  token = getToken(tokenizer);
+  affix = getTokenInfo(token);
+
+  TEST_ASSERT_EQUAL(4, affix->Attribute);
+}
+
+void test_getTokenInfo_given_close_bracket_sign_expect_attribute_1(void){
+  Token *token = NULL;
+  Tokenizer *tokenizer = NULL;
+  TokenInfo *affix = NULL;
+
+  tokenizer = createTokenizer(")");
+  token = getToken(tokenizer);
+  affix = getTokenInfo(token);
+
+  TEST_ASSERT_EQUAL(1, affix->Attribute);
+}
+
 void test_getTokenInfo_given_abc_expect_ERR_INVALID_OPERATOR(void){
   CEXCEPTION_T e;
   Token *token = NULL;
@@ -74,12 +98,24 @@ void test_getTokenInfo_given_abc_expect_ERR_INVALID_OPERATOR(void){
     TEST_FAIL_MESSAGE("Expect ERR_INVALID_OPERATOR. But no exception thrown.");
   }
   Catch(e){
-    printf(e->errorMsg);
+    dumpTokenErrorMessage(e, 1);
     TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
-    freeError(e);
   }
 
 }
+
+void test_checkOperatorsAffixPossibilities_given_open_bracket_and_multiply_expect_ERR_INVALID_OPERATOR(void){
+  int result;
+  Token *token = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer("(*");
+  token = getToken(tokenizer);
+
+  result = checkOperatorsAffixPossibilities(token, tokenizer);
+  TEST_ASSERT_EQUAL(0, result);
+}
+
 
 void test_checkOperatorsAffixPossibilities_given_plus_and_plus_expect_TRUE(void){
   int result;
@@ -177,6 +213,40 @@ void test_checkOperatorsAffixPossibilities_given_multiply_and_divide_expect_FALS
   TEST_ASSERT_EQUAL(0, result);
 }
 
+void test_checkOperatorsAffixPossibilities_given_multiply_and_open_bracket_expect_TRUE(void){
+  int result;
+  Token *token = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer("* (");
+  token = getToken(tokenizer);
+
+  result = checkOperatorsAffixPossibilities(token, tokenizer);
+  TEST_ASSERT_EQUAL(1, result);
+}
+
+void test_checkOperatorsAffixPossibilities_given_multiply_and_close_bracket_expect_FALSE(void){
+  int result;
+  Token *token = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer("* )");
+  token = getToken(tokenizer);
+
+  result = checkOperatorsAffixPossibilities(token, tokenizer);
+  TEST_ASSERT_EQUAL(0, result);
+}
+void test_checkOperatorsAffixPossibilities_given_open_bracket_and_minus_expect_TRUE(void){
+  int result;
+  Token *token = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer("( - ");
+  token = getToken(tokenizer);
+
+  result = checkOperatorsAffixPossibilities(token, tokenizer);
+  TEST_ASSERT_EQUAL(1, result);
+}
 // TokenInfo = (7) -------------> PREFIX_TYPE | INFIX_TYPE | SUFFIX_TYPE = 7
 void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_7_and_7_expect_TRUE_1(void){
   int result;
@@ -301,9 +371,8 @@ void test_checkTokenAffix_given_12_and_12point1_expect_ERR_INVALID_AFFIX(void){
   TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
   }
   Catch(e){
-  printf(e->errorMsg);
+  dumpTokenErrorMessage(e, 1);
   TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
-  freeError(e);
   }
 }
 
@@ -321,9 +390,8 @@ void test_checkTokenAffix_given_minus_and_divide_expect_ERR_INVALID_AFFIX(void){
   TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
   }
   Catch(e){
-  printf(e->errorMsg);
-  TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
-  freeError(e);
+  dumpTokenErrorMessage(e, 1);
+  TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);;
   }
 }
 
@@ -404,6 +472,73 @@ void test_checkTokenAffixAndEncodeAffix_given_2_plus_minus_3_expect_plus_infix_m
   TEST_ASSERT_EQUAL(PREFIX, affix);
 }
 
+void test_checkTokenAffixAndEncodeAffix_given_2_plus_open_bracket_minus_3_close_bracket_expect_plus_infix_open_bracket_prefix_minus_prefix_close_bracket_suffix(void){
+  Affix affix;
+  Token *token = NULL;
+  Token *encodedToken = NULL;
+  Token *encodedToken_next = NULL;
+  Tokenizer *tokenizer = NULL;
+  TokenType encodedTokenType;
+
+  tokenizer = createTokenizer("2 + (-3)");
+  token = getToken(tokenizer);
+
+  // for '+'
+  checkTokenAffixAndEncodeAffix(tokenizer, token);
+  encodedToken = getToken(tokenizer);
+  affix = getAffix(encodedToken);
+  TEST_ASSERT_EQUAL(INFIX, affix);
+
+  // now the encodedToken -> type is encoded with affix and TokenType
+  // so need to decode it
+  // for '('
+  encodedTokenType = getTokenType(encodedToken);
+  encodedToken->type = encodedTokenType;
+  checkTokenAffixAndEncodeAffix(tokenizer, encodedToken);
+  encodedToken_next = getToken(tokenizer);
+  affix = getAffix(encodedToken_next);
+  TEST_ASSERT_EQUAL(PREFIX, affix);
+
+  // for '-'
+  encodedTokenType = getTokenType(encodedToken);
+  encodedToken->type = encodedTokenType;
+  checkTokenAffixAndEncodeAffix(tokenizer, encodedToken);
+  encodedToken_next = getToken(tokenizer);
+  affix = getAffix(encodedToken_next);
+  TEST_ASSERT_EQUAL(PREFIX, affix);
+
+  // for ')'
+  encodedTokenType = getTokenType(encodedToken);
+  encodedToken->type = encodedTokenType;
+  token = getToken(tokenizer);  // get '3'
+  checkTokenAffixAndEncodeAffix(tokenizer, token);
+  encodedToken_next = getToken(tokenizer);
+  affix = getAffix(encodedToken_next);
+  TEST_ASSERT_EQUAL(SUFFIX, affix);
+}
+
+void test_checkTokenAffixAndEncodeAffix_given_2_open_bracket_3__close_bracket_expect_plus_infix_ERR_INVALID_AFFIX(void){
+  CEXCEPTION_T e;
+  Affix affix;
+  Token *token = NULL;
+  Token *encodedToken = NULL;
+  Token *encodedToken_next = NULL;
+  Tokenizer *tokenizer = NULL;
+  TokenType encodedTokenType;
+
+  tokenizer = createTokenizer("2 (3)");
+  token = getToken(tokenizer);
+
+
+  Try{
+      checkTokenAffixAndEncodeAffix(tokenizer, token);
+      TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e, 1);
+    TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
+  }
+}
 void test_checkTokenAffixAndEncodeAffix_given_2_plus_multiply_3_expect_plus_infix_ERR_INVALID_AFFIX(void){
   CEXCEPTION_T e;
   Affix affix;
@@ -430,76 +565,84 @@ void test_checkTokenAffixAndEncodeAffix_given_2_plus_multiply_3_expect_plus_infi
       TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
   }
   Catch(e){
-    printf(e->errorMsg);
+    dumpTokenErrorMessage(e, 1);
     TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
-    freeError(e);
   }
 }
 
 void test_combinePrefixWithToken_given_minus_2_expect_minus2_in_a_token(void){
-  Token *token = NULL;
+  Token *prefixToken = NULL;
+  Token *operandToken = NULL;
   Token *Ans;
   Tokenizer *tokenizer = NULL;
 
   tokenizer = createTokenizer("-2");
-  token = getToken(tokenizer);
+  prefixToken = getToken(tokenizer);
+  operandToken = getToken(tokenizer);
 
-  Ans = combinePrefixWithToken(tokenizer, token);
+  Ans = combinePrefixWithOperandToken(prefixToken, operandToken);
   TEST_ASSERT_EQUAL(-2,((IntegerToken*)Ans)->value);
 }
 
 void test_combinePrefixWithToken_given_minus_2point123_expect_minus2point123_in_a_token(void){
-  Token *token = NULL;
+  Token *prefixToken = NULL;
+  Token *operandToken = NULL;
   Token *Ans;
   Tokenizer *tokenizer = NULL;
 
   tokenizer = createTokenizer("-2.123");
-  token = getToken(tokenizer);
+  prefixToken = getToken(tokenizer);
+  operandToken = getToken(tokenizer);
 
-  Ans = combinePrefixWithToken(tokenizer, token);
+  Ans = combinePrefixWithOperandToken(prefixToken, operandToken);
   TEST_ASSERT_EQUAL(-2.123,((FloatToken*)Ans)->value);
 }
 
 void test_combinePrefixWithToken_given_plus_2_expect_2_in_a_token(void){
-  Token *token = NULL;
+  Token *prefixToken = NULL;
+  Token *operandToken = NULL;
   Token *Ans;
   Tokenizer *tokenizer = NULL;
 
   tokenizer = createTokenizer("+2");
-  token = getToken(tokenizer);
+  prefixToken = getToken(tokenizer);
+  operandToken = getToken(tokenizer);
 
-  Ans = combinePrefixWithToken(tokenizer, token);
+  Ans = combinePrefixWithOperandToken(prefixToken, operandToken);
   TEST_ASSERT_EQUAL(2,((IntegerToken*)Ans)->value);
 }
 
 void test_combinePrefixWithToken_given_plus_2point123_expect_2point123_in_a_token(void){
-  Token *token = NULL;
+  Token *prefixToken = NULL;
+  Token *operandToken = NULL;
   Token *Ans;
   Tokenizer *tokenizer = NULL;
 
   tokenizer = createTokenizer("+2.123");
-  token = getToken(tokenizer);
+  prefixToken = getToken(tokenizer);
+  operandToken = getToken(tokenizer);
 
-  Ans = combinePrefixWithToken(tokenizer, token);
+  Ans = combinePrefixWithOperandToken(prefixToken, operandToken);
   TEST_ASSERT_EQUAL(2.123,((FloatToken*)Ans)->value);
 }
 
 void test_combinePrefixWithToken_given_2_and_3_expect_ERR_INVALID_OPERATOR(void){
   CEXCEPTION_T e;
-  Token *token = NULL;
+  Token *prefixToken = NULL;
+  Token *operandToken = NULL;
   Token *Ans;
   Tokenizer *tokenizer = NULL;
 
   tokenizer = createTokenizer("2 3");
-  token = getToken(tokenizer);
+  prefixToken = getToken(tokenizer);
+  operandToken = getToken(tokenizer);
 
   Try{
-    Ans = combinePrefixWithToken(tokenizer, token);
+    Ans = combinePrefixWithOperandToken(prefixToken, operandToken);
     TEST_FAIL_MESSAGE("Expect ERR_INVALID_OPERATOR. But no exception thrown.");
   }
   Catch(e){
-    printf(e->errorMsg);
+    dumpTokenErrorMessage(e, 1);
     TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
-    freeError(e);
   }
 }
