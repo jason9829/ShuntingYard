@@ -167,7 +167,7 @@ Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
           return PREFIX;
       }
       else{
-        throwSimpleError(ERR_INVALID_AFFIX, "current operator is valid but nextToken is either '*' or '/'");
+        throwSimpleError(ERR_INVALID_AFFIX, "current operator is valid (INFIX or PREFIX) but nextToken is either '*' or '/' (INFIX)");
       }
     } // Example (-)(2) return PREFIX
     else{
@@ -216,7 +216,7 @@ void checkTokenAffixAndEncodeAffix(Tokenizer *tokenizer, Token *prevToken){
           encodeAffix(nextToken, PREFIX);
       }
       else{
-        throwSimpleError(ERR_INVALID_AFFIX, "current operator is valid but nextToken is either '*' or '/'");
+        throwSimpleError(ERR_INVALID_AFFIX, "current operator is valid (INFIX or PREFIX) but nextToken is either '*' or '/' (INFIX)");
       }
     } // Example (-)(2) return PREFIX
     else{
@@ -288,6 +288,6 @@ Token *combinePrefixWithToken(Tokenizer *tokenizer, Token *prefixToken){
     }
   }
   else{
-    throwSimpleError(ERR_INVALID_OPERATOR ,"prefixToken is not an operator, how to combine them?");
+    throwSimpleError(ERR_INVALID_OPERATOR ,"prefixToken is not an operator");
   }
 }

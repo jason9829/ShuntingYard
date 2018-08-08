@@ -49,7 +49,7 @@ void test_operateOnTokens_given_1_plus_2_expect_3(void){
   TEST_ASSERT_EQUAL(NULL, operandStack.head);
   TEST_ASSERT_EQUAL(NULL, operandStack.tail);
 }
-
+/*
 void test_operateOnTokens_given_2point5_multiply_2_expect_5point0(void){
   Tokenizer *tokenizer  = NULL;
   Token *answerToken;
@@ -223,7 +223,82 @@ void test_operateOnTokens_given_10_multiply_minus_1point5_expect_minus_15point0(
   TEST_ASSERT_EQUAL(NULL, operandStack.tail);
 
 }
+*/
+void test_operationOnStacksIfOperatorIsInfix_given_2_plus_10_expect_12(void){
+    StackBlock operatorStack = { NULL, NULL, 0};
+    StackBlock operandStack  = { NULL, NULL, 0};
 
+    Token *token = NULL;
+    Token *ans = NULL;
+    Tokenizer *tokenizer = NULL;
+
+    tokenizer = createTokenizer(" 2 + 10");
+    token = getToken(tokenizer);
+    pushOperandStack(&operandStack, token);
+
+    token = getToken(tokenizer);
+    pushOperatorStack(&operatorStack, token);
+
+    token = getToken(tokenizer);
+    pushOperandStack(&operandStack, token);
+
+    ans = operationOnStacksIfOperatorIsInfix(&operatorStack, &operandStack);
+
+    TEST_ASSERT_EQUAL(12, ((IntegerToken*)ans)->value);
+}
+
+void test_operationOnStacksIfOperatorIsInfix_given_2_multiply_10point5_expect_21point0(void){
+    StackBlock operatorStack = { NULL, NULL, 0};
+    StackBlock operandStack  = { NULL, NULL, 0};
+
+    Token *token = NULL;
+    Token *ans = NULL;
+    Tokenizer *tokenizer = NULL;
+
+    tokenizer = createTokenizer(" 2 * 10.5");
+    token = getToken(tokenizer);
+    pushOperandStack(&operandStack, token);
+
+    token = getToken(tokenizer);
+    pushOperatorStack(&operatorStack, token);
+
+    token = getToken(tokenizer);
+    pushOperandStack(&operandStack, token);
+
+    ans = operationOnStacksIfOperatorIsInfix(&operatorStack, &operandStack);
+
+    TEST_ASSERT_EQUAL_FLOAT(21.0, ((FloatToken*)ans)->value);
+}
+
+void test_operationOnStacksIfOperatorIsInfix_given_2_multiply_expect_ERR_STACK_INSUFFICIENT(void){
+  CEXCEPTION_T e;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+
+  Token *token = NULL;
+  Token *ans = NULL;
+  Tokenizer *tokenizer = NULL;
+
+  tokenizer = createTokenizer(" 2 *");
+  token = getToken(tokenizer);
+  pushOperandStack(&operandStack, token);
+
+  token = getToken(tokenizer);
+  pushOperatorStack(&operatorStack, token);
+  Try{
+  ans = operationOnStacksIfOperatorIsInfix(&operatorStack, &operandStack);
+  TEST_FAIL_MESSAGE("Expect ERR_STACK_INSUFFICIENT. But no exception thrown.");
+  }
+  Catch(e){
+  printf(e->errorMsg);
+  TEST_ASSERT_EQUAL(ERR_STACK_INSUFFICIENT, e->errorCode);
+  freeError(e);
+  }
+
+
+}
+/*
 void test_determineTokenOperatorType_given_2_minus_1_expect_BINARY_2(void){
   OperatorType tokenOperatorType;
   Token *token = NULL;
@@ -235,7 +310,7 @@ void test_determineTokenOperatorType_given_2_minus_1_expect_BINARY_2(void){
   tokenOperatorType = determineTokenOperatorType(tokenizer, token);
   TEST_ASSERT_EQUAL(2, tokenOperatorType);
 }
-
+/*
 void test_determineTokenOperatorType_given_minus_2_expect_UNARY_1(void){
   OperatorType tokenOperatorType;
   Token *token = NULL;
@@ -247,3 +322,4 @@ void test_determineTokenOperatorType_given_minus_2_expect_UNARY_1(void){
   tokenOperatorType = determineTokenOperatorType(tokenizer, token);
   TEST_ASSERT_EQUAL(1, tokenOperatorType);
 }
+*/

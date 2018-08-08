@@ -14,6 +14,49 @@
 #include <stdlib.h>
 
 void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
+  Affix currOperatorAffix;
+  Token *token;
+  Token *prevToken;
+  Token *ans;
+  Token *combinedPrefixWithNumber;
+  Token *token_operator;
+  Token *prefixToken;
+  TokenType tokenType;
+
+  token = getToken(tokenizer);
+  while(token-> type != TOKEN_NULL_TYPE){
+    if(token->type == TOKEN_INTEGER_TYPE || token->type == TOKEN_FLOAT_TYPE){
+      if(operandStack->count == 0){
+        pushOperandStack(operandStack, token);
+        prevToken = token;
+        token = getToken(tokenizer);
+      }
+      else if(currOperatorAffix == INFIX){
+        pushOperandStack(operandStack, token);
+        prevToken = token;
+        ans = operationOnStacksIfOperatorIsInfix(operatorStack, operandStack);
+        pushOperandStack(operandStack, ans);
+        prevToken = token;
+        token = getToken(tokenizer);
+
+      }
+    }
+      else if(token->type == TOKEN_OPERATOR_TYPE){
+        pushBackToken(tokenizer, token);
+        checkTokenAffixAndEncodeAffix(tokenizer, prevToken);
+        token = getToken(tokenizer);
+        currOperatorAffix = getAffix(token);
+        tokenType = getTokenType(token);
+        token->type = tokenType;
+        prevToken = token;
+        pushOperatorStack(operatorStack, token);
+        token = getToken(tokenizer);
+      }
+  }
+}
+
+/*
+void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
   StackItem *poppedToken_1;
   StackItem *poppedToken_2;
   StackItem *poppedToken_operator;
@@ -97,7 +140,7 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
  *  Thus, token_2 and token_1 position is in reverse
  *  calculationOnTokens(token_2, token_1, token_operator);
  */
-Token *operationOnStacks(StackBlock *operatorStack, StackBlock *operandStack){
+Token *operationOnStacksIfOperatorIsInfix(StackBlock *operatorStack, StackBlock *operandStack){
     StackItem *poppedToken_1;
     StackItem *poppedToken_2;
     StackItem *poppedToken_operator;
@@ -134,6 +177,8 @@ void pushOperatorStack(StackBlock *operatorStack, Token *token){
   pushStack(operatorStack, token);
 }
 
+
+/*
 OperatorType determineTokenOperatorType(Tokenizer *tokenizer, Token *prevToken){
   Affix tokenAffix;
   OperatorType tokenOperatorType;
@@ -142,3 +187,4 @@ OperatorType determineTokenOperatorType(Tokenizer *tokenizer, Token *prevToken){
   tokenOperatorType = determineOperatorType(tokenAffix);
   return tokenOperatorType;
 }
+*/
