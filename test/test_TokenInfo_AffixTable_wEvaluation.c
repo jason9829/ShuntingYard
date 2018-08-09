@@ -525,16 +525,16 @@ void test_checkTokenAffixAndEncodeAffix_given_2_open_bracket_3__close_bracket_ex
   Affix affix;
   Token *token ;
   Token *encodedToken ;
-  Token *encodedToken_next ;
   Tokenizer *tokenizer ;
   TokenType encodedTokenType;
 
   tokenizer = createTokenizer("2 (3)");
   token = getToken(tokenizer);
-  token = getToken(tokenizer);
+  encodedToken = getToken(tokenizer);
+  encodedTokenType = TOKEN_INTEGER_TYPE;
 
   Try{
-      checkTokenAffixAndEncodeAffix(token, tokenizer,encodedTokenType);
+      checkTokenAffixAndEncodeAffix(encodedToken, tokenizer,encodedTokenType);
       TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
   }
   Catch(e){
@@ -552,20 +552,15 @@ void test_checkTokenAffixAndEncodeAffix_given_2_plus_multiply_3_expect_plus_infi
   Tokenizer *tokenizer ;
   TokenType encodedTokenType;
 
+  // for '+'
   tokenizer = createTokenizer("2 + * 3");
   token = getToken(tokenizer);
+  encodedToken = getToken(tokenizer);
   encodedTokenType = TOKEN_INTEGER_TYPE;
 
-  token = getToken(tokenizer);
-  checkTokenAffixAndEncodeAffix(token, tokenizer,encodedTokenType);
-  affix = getAffix(token);
-  TEST_ASSERT_EQUAL(INFIX, affix);
-
-  encodedTokenType = TOKEN_OPERATOR_TYPE;
-  token = getToken(tokenizer);
 
   Try{
-      checkTokenAffixAndEncodeAffix(token, tokenizer,encodedTokenType);
+    checkTokenAffixAndEncodeAffix(encodedToken, tokenizer,encodedTokenType);
       TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
   }
   Catch(e){

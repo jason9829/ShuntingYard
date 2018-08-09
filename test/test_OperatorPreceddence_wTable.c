@@ -2,7 +2,7 @@
 #include "OperatorPrecedence_wTable.h"
 #include "Token.h"
 #include "Tokenizer.h"
-#include "TokenAffix.hv"
+#include "TokenAffix.h"
 #include "Common.h"
 #include "Exception.h"
 #include "CException.h"

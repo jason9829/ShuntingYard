@@ -99,7 +99,8 @@ int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens){
       }
     }
     else if(nextToken->type == TOKEN_INTEGER_TYPE || nextToken->type == TOKEN_FLOAT_TYPE){
-      return 1 ;
+		    pushBackToken(nextTokens, nextToken);
+		    return 1 ;
     }
 
     else{
@@ -322,9 +323,16 @@ void checkTokenAffixAndEncodeAffix(Token *token, Tokenizer *tokenizer,TokenType 
         throwException(ERR_INVALID_AFFIX, token,"Affix of '%s' is invalid because previous token type is 'TOKEN_FLOAT_TYPE' or 'TOKEN_INTEGER_TYPE' ", token->str);
       }
       else{
-        encodeAffix(token, INFIX);
+        PossibleAffixCombination = checkOperatorsAffixPossibilities(token, tokenizer);
+          if(PossibleAffixCombination == 1){
+            encodeAffix(token, INFIX);
+          }
+          else{
+            throwException(ERR_INVALID_AFFIX, token,"Affix of '%s' is invalid", token->str);
+          }
       }
     }
+
     else{
       throwException(ERR_INVALID_AFFIX, token,"Affix of '%s' and '%s' is invalid because previous token type is 'TOKEN_FLOAT_TYPE' or 'TOKEN_INTEGER_TYPE' ", token->str);
     }
