@@ -14,15 +14,138 @@
 #include <stdlib.h>
 
 #define START 1
-#define FINISHED 0
-
+#define STOP 0
+/*
 void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
   Token *token;
+  TokenType prevTokenType;
+  OperatorPrecedence tokenPrecedence;
+  prevTokenType = TOKEN_NULL_TYPE;
   int condition = START;
 
   while(condition == START){
+    token = getToken(tokenizer);
+    if(token->type == TOKEN_NULL_TYPE){
+      condition = STOP;
+    }
+    else{
+      if(isTokenValid(token, prevTokenType)){
 
+        if(token->type == TOKEN_INTEGER_TYPE || token->type == TOKEN_FLOAT_TYPE){
+          pushOperandStack(operandStack, token);
+          continue;
+        }
+        else{
+          checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
+          tokenPrecedence = getTokenPrecedence(token);
+          if(operatorStack->count == 0){
+            pushOperatorStack(operatorStack, token);
+          }
+          else{     // compare the precedence of operatorStack token and currentToken
+            if(comparePrevTokenAndNextTokenPrecedence(token, (Token*)(operatorStack->head->data))){
+
+            }
+          }
+        }
+      }
+      else{
+        throwException(ERR_INVALID_TOKEN, token, "Token '%s' is invalid compare to '%s'", token->str, prevTokenType)
+      }
+    }
   }
+}
+*/
+int isTokenValid(Token *token, TokenType lastTokenType){
+
+  if(token->type == TOKEN_FLOAT_TYPE || token->type == TOKEN_INTEGER_TYPE){
+    switch (lastTokenType) {
+      case TOKEN_NULL_TYPE     : return 1;
+      case TOKEN_OPERATOR_TYPE : return 1;
+      default : return 0;
+    }
+  }
+  else if (token->type == TOKEN_OPERATOR_TYPE){
+    switch (lastTokenType) {
+      case TOKEN_INTEGER_TYPE   : return 1;
+      case TOKEN_FLOAT_TYPE     : return 1;
+      case TOKEN_OPERATOR_TYPE  : return 1;
+      default : return 0;
+    }
+  }
+  else{
+    throwException(ERR_INVALID_TOKEN, token, "Current token type is '%s' and previous token type is '%s'", token->type, lastTokenType);
+  }
+}
+void operateOnStacksDependOnAffix(StackBlock *operatorStack, StackBlock *operandStack, Affix affix){
+  Token *ans;
+  switch (affix) {
+    case INFIX  : ans = operationOnStacksIfOperatorIsInfix(operatorStack,  operandStack);
+                  pushOperandStack(operandStack, ans);
+                  break;
+    case PREFIX : ans = operationOnStacksIfOperatorIsPrefix(operatorStack, operandStack);
+                  pushOperandStack(operandStack, ans);
+                  break;
+  }
+}
+
+Token *operationOnStacksIfOperatorIsPrefix(StackBlock *operatorStack, StackBlock *operandStack){
+  StackItem *poppedToken_1;
+  StackItem *poppedToken_operator;
+
+  Token *token_1;
+  Token *token_operator;
+  Token *ans;
+
+  if(operatorStack->count >=1 && operandStack->count >=1){
+    poppedToken_1 = popStack(operandStack);
+    poppedToken_operator = popStack(operatorStack);
+    token_1 = (Token*)(poppedToken_1->data);
+    token_operator = (Token*)(poppedToken_operator->data);
+    ans = combinePrefixWithOperandToken(token_operator, token_1);
+    freeToken(token_1);
+    freeToken(token_operator);
+    return ans;
+  }
+  else{
+    throwException(ERR_STACK_INSUFFICIENT, operandStack->head->data, "The count in operatorStack is '%d' and count in operandStack is'%d", operatorStack->count, operandStack->count);
+  }
+
+}
+Token *operationOnStacksIfOperatorIsInfix(StackBlock *operatorStack, StackBlock *operandStack){
+    StackItem *poppedToken_1;
+    StackItem *poppedToken_2;
+    StackItem *poppedToken_operator;
+
+    Token *token_1;
+    Token *token_2;
+    Token *token_operator;
+    Token *ans;
+
+    if(operatorStack->count >=1 && operandStack->count >=2){
+      poppedToken_1 = popStack(operandStack);
+      poppedToken_2 = popStack(operandStack);
+      poppedToken_operator = popStack(operatorStack);
+      token_1 = (Token*)(poppedToken_1->data);
+      token_2 = (Token*)(poppedToken_2->data);
+      token_operator = (Token*)(poppedToken_operator->data);
+      ans = calculationOnTokens(token_2, token_1, token_operator);
+      freeToken(token_1);
+      freeToken(token_2);
+      freeToken(token_operator);
+      //pushStack(operandStack, ans);
+      return ans;
+    }
+    else{
+      throwException(ERR_STACK_INSUFFICIENT, operandStack->head->data, "The count in operatorStack is '%d' and count in operandStack is'%d", operatorStack->count, operandStack->count);
+    }
+}
+
+void pushOperandStack(StackBlock *operandStack, Token *token){
+  pushStack(operandStack, token);
+}
+
+void pushOperatorStack(StackBlock *operatorStack, Token *token){
+  pushStack(operatorStack, token);
 }
 
 /*
@@ -123,89 +246,6 @@ void pushTokensToRespectiveStack(Tokenizer *tokenizer, StackBlock *operatorStack
 
 }
 */
-int isTokenValid(Token *token, TokenType lastTokenType){
-
-  if(token->type == TOKEN_FLOAT_TYPE || token->type == TOKEN_INTEGER_TYPE){
-    switch (lastTokenType) {
-      case TOKEN_NULL_TYPE     : return 1;
-      case TOKEN_OPERATOR_TYPE : return 1;
-      default : return 0;
-    }
-  }
-  else if (token->type == TOKEN_OPERATOR_TYPE){
-    switch (lastTokenType) {
-      case TOKEN_INTEGER_TYPE   : return 1;
-      case TOKEN_FLOAT_TYPE     : return 1;
-      case TOKEN_OPERATOR_TYPE  : return 1;
-      default : return 0;
-    }
-  }
-  else{
-    throwException(ERR_INVALID_TOKEN, token, "Current token type is '%s' and previous token type is '%s'", token->type, lastTokenType);
-  }
-}
-
-Token *operationOnStacksIfOperatorIsPrefix(StackBlock *operatorStack, StackBlock *operandStack){
-  StackItem *poppedToken_1;
-  StackItem *poppedToken_operator;
-
-  Token *token_1;
-  Token *token_operator;
-  Token *ans;
-
-  if(operatorStack->count >=1 && operandStack->count >=1){
-    poppedToken_1 = popStack(operandStack);
-    poppedToken_operator = popStack(operatorStack);
-    token_1 = (Token*)(poppedToken_1->data);
-    token_operator = (Token*)(poppedToken_operator->data);
-    ans = combinePrefixWithOperandToken(token_operator, token_1);
-    freeToken(token_1);
-    freeToken(token_operator);
-    //pushStack(operandStack, ans);
-    return ans;
-  }
-  else{
-    throwException(ERR_STACK_INSUFFICIENT, operandStack->head->data, "The count in operatorStack is '%d' and count in operandStack is'%d", operatorStack->count, operandStack->count);
-  }
-
-}
-Token *operationOnStacksIfOperatorIsInfix(StackBlock *operatorStack, StackBlock *operandStack){
-    StackItem *poppedToken_1;
-    StackItem *poppedToken_2;
-    StackItem *poppedToken_operator;
-
-    Token *token_1;
-    Token *token_2;
-    Token *token_operator;
-    Token *ans;
-
-    if(operatorStack->count >=1 && operandStack->count >=2){
-      poppedToken_1 = popStack(operandStack);
-      poppedToken_2 = popStack(operandStack);
-      poppedToken_operator = popStack(operatorStack);
-      token_1 = (Token*)(poppedToken_1->data);
-      token_2 = (Token*)(poppedToken_2->data);
-      token_operator = (Token*)(poppedToken_operator->data);
-      ans = calculationOnTokens(token_2, token_1, token_operator);
-      freeToken(token_1);
-      freeToken(token_2);
-      freeToken(token_operator);
-      //pushStack(operandStack, ans);
-      return ans;
-    }
-    else{
-      throwException(ERR_STACK_INSUFFICIENT, operandStack->head->data, "The count in operatorStack is '%d' and count in operandStack is'%d", operatorStack->count, operandStack->count);
-    }
-}
-
-void pushOperandStack(StackBlock *operandStack, Token *token){
-  pushStack(operandStack, token);
-}
-
-void pushOperatorStack(StackBlock *operatorStack, Token *token){
-  pushStack(operatorStack, token);
-}
-
 /*
 void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
   Affix currOperatorAffix;

@@ -14,7 +14,7 @@ typedef enum{
   PREFIX_MINUS,
   OPEN_BRACKET,
   CLOSE_BRACKET,
-}operatorWithAffix;
+} operatorWithAffix;
 
 typedef struct OperatorPrecedence OperatorPrecedence;
 struct OperatorPrecedence{

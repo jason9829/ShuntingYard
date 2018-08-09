@@ -121,6 +121,125 @@ void test_operationOnStacksIfOperatorIsPrefix_given_minus_2_expect_ans_minus_2(v
   TEST_ASSERT_EQUAL(NULL, operandStack.tail);
 }
 
+void test_operateOnStacksDependOnAffix_given_2_plus_10_expect_12(void){
+  Affix affix;
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken;
+  Token *operandToken_1;
+  Token *operandToken_2;
+
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  tokenizer = createTokenizer(" 2 + 10 ");
+  operandToken_1 = getToken(tokenizer);
+  pushOperandStack(&operandStack, operandToken_1);
+
+  operatorToken = getToken(tokenizer);
+  pushOperatorStack(&operatorStack, operatorToken);
+
+  operandToken_2 = getToken(tokenizer);
+  pushOperandStack(&operandStack, operandToken_2);
+
+  affix = INFIX;
+  operateOnStacksDependOnAffix(&operatorStack, &operandStack, affix);
+
+  poppedStackItem = popStack(&operandStack);
+  answerToken = (Token*)(poppedStackItem->data);
+
+
+  TEST_ASSERT_EQUAL(12, ((IntegerToken*)answerToken)->value);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+}
+
+void test_operateOnStacksDependOnAffix_given_minus_5_expect_negative5(void){
+  Affix affix;
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken;
+  Token *operandToken_1;
+  Token *operandToken_2;
+
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  tokenizer = createTokenizer(" -5");
+
+  operatorToken = getToken(tokenizer);
+  pushOperatorStack(&operatorStack, operatorToken);
+
+  operandToken_1 = getToken(tokenizer);
+  pushOperandStack(&operandStack, operandToken_1);
+  
+  affix = PREFIX;
+  operateOnStacksDependOnAffix(&operatorStack, &operandStack, affix);
+
+  poppedStackItem = popStack(&operandStack);
+  answerToken = (Token*)(poppedStackItem->data);
+
+
+  TEST_ASSERT_EQUAL(-5, ((IntegerToken*)answerToken)->value);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+}
+/*
+void xtest_shuntingYard_given_2_plus_3_expect_ans_5(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken;
+  Token *operandToken;
+  StackItem *poppedAns;
+
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  tokenizer = createTokenizer(" 2 + 3 ");
+
+  shuntingYard(tokenizer, &operatorStack, &operandStack);
+  poppedAns = popStack(&operandStack);
+  answerToken = (Token*)(poppedAns->data);
+
+  TEST_ASSERT_EQUAL(5, ((IntegerToken*)answerToken)->value);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+
+}
+
+void xtest_shuntingYard_given_2_2_plus_3_expect_ERR_INVALID_TOKEN(void){
+  CEXCEPTION_T e;
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken;
+  Token *operandToken;
+  StackItem *poppedAns;
+
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  tokenizer = createTokenizer(" 2 2 + 3 ");
+  Try{
+    shuntingYard(tokenizer, &operatorStack, &operandStack);
+
+    TEST_FAIL_MESSAGE("Expect ERR_INVALID_TOKEN. But no exception thrown.");
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e, 1);
+    TEST_ASSERT_EQUAL(ERR_INVALID_TOKEN, e->errorCode);
+  }
+
+
+}
+
 void test_operationOnStacksIfOperatorIsPrefix_given_plus_2point123_expect_ans_2point123(void){
   Tokenizer *tokenizer  = NULL;
   Token *operatorToken;

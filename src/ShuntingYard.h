@@ -10,6 +10,7 @@
 int isTokenValid(Token *token, TokenType lastTokenType);
 void pushTokensToRespectiveStack(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack);
 void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack);
+void operateOnStacksDependOnAffix(StackBlock *operatorStack, StackBlock *operandStack, Affix affix);
 Token *operationOnStacksIfOperatorIsInfix(StackBlock *operatorStack, StackBlock *operandStack);
 Token *operationOnStacksIfOperatorIsPrefix(StackBlock *operatorStack, StackBlock *operandStack);
 void pushOperandStack(StackBlock *operandStack, Token *token);
