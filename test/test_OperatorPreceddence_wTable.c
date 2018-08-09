@@ -2,6 +2,7 @@
 #include "OperatorPrecedence_wTable.h"
 #include "Token.h"
 #include "Tokenizer.h"
+#include "TokenAffix.hv"
 #include "Common.h"
 #include "Exception.h"
 #include "CException.h"
@@ -18,6 +19,20 @@ void test_getTokenPrecedence_given_plus_sign_expect_1(void){
 
   tokenizer = createTokenizer("+");
   token = getToken(tokenizer);
+  precedence = getTokenPrecedence(token);
+
+  TEST_ASSERT_EQUAL(1, precedence->bindingPower);
+}
+
+void test_getTokenPrecedence_given_plus_1_expect_1(void){
+  Token *token = NULL;
+  Token *nextToken = NULL;
+  Tokenizer *tokenizer = NULL;
+  OperatorPrecedence *precedence = NULL;
+
+  tokenizer = createTokenizer("+1");
+  token = getToken(tokenizer);
+
   precedence = getTokenPrecedence(token);
 
   TEST_ASSERT_EQUAL(1, precedence->bindingPower);
@@ -78,7 +93,7 @@ void test_comparePrevTokenAndNextTokenPrecedence_given_divide_and_minus_expect_1
   int ans;
   Token *token = NULL;
   Token *nextToken = NULL;
-  
+
   Tokenizer *tokenizer = NULL;
   tokenizer = createTokenizer("/-");
 

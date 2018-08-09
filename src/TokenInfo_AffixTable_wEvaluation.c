@@ -98,6 +98,9 @@ int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens){
         //default : throwSimpleError(ERR_INVALID_ANSWER, "Invalid answer from compareCurrTokenAndNextTokenWithTable");
       }
     }
+    else if(nextToken->type == TOKEN_INTEGER_TYPE || nextToken->type == TOKEN_FLOAT_TYPE){
+      return 1 ;
+    }
 
     else{
       // getTokenInfo only accept '+', '-', '*', '/'
@@ -239,6 +242,7 @@ Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
 
 // check next Token affix and encode it
 // needed to decode it later (getAffixType)
+/*
 void checkTokenAffixAndEncodeAffix(Tokenizer *tokenizer, Token *prevToken){
   TokenType prevTokenType;
   int  PossibleAffixCombination;
@@ -299,6 +303,57 @@ void checkTokenAffixAndEncodeAffix(Tokenizer *tokenizer, Token *prevToken){
   else{
     //throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
     throwException(ERR_INVALID_OPERATOR, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
+  }
+}*/
+
+void checkTokenAffixAndEncodeAffix(Token *token, Tokenizer *tokenizer,TokenType prevTokenType){
+  int  PossibleAffixCombination;
+  char operatorSymbol;
+
+  operatorSymbol = *((OperatorToken*)token) -> str;
+
+  // (2)(+) / (2)(-) / (2)(*) / (2)(/)  return operator infix
+  if(prevTokenType == TOKEN_FLOAT_TYPE || prevTokenType == TOKEN_INTEGER_TYPE){
+    if(token->type == TOKEN_OPERATOR_TYPE){
+      if(operatorSymbol == ')'){
+        encodeAffix(token, SUFFIX);
+      }
+      else if(operatorSymbol == '('){
+        throwException(ERR_INVALID_AFFIX, token,"Affix of '%s' is invalid because previous token type is 'TOKEN_FLOAT_TYPE' or 'TOKEN_INTEGER_TYPE' ", token->str);
+      }
+      else{
+        encodeAffix(token, INFIX);
+      }
+    }
+    else{
+      throwException(ERR_INVALID_AFFIX, token,"Affix of '%s' and '%s' is invalid because previous token type is 'TOKEN_FLOAT_TYPE' or 'TOKEN_INTEGER_TYPE' ", token->str);
+    }
+  }
+  // For example (+)(-) [(+) is preToken and (-) is nextToken]
+  // (-) should be infix
+  else if (prevTokenType == TOKEN_OPERATOR_TYPE){
+    if(token->type == TOKEN_OPERATOR_TYPE){
+      PossibleAffixCombination = checkOperatorsAffixPossibilities(token, tokenizer);
+      if(PossibleAffixCombination == 1){
+          if(operatorSymbol == ')'){
+            encodeAffix(token, SUFFIX);
+          }
+          else{
+            encodeAffix(token, PREFIX);
+          }
+      }
+      else{
+        throwException(ERR_INVALID_AFFIX, token,"Affix of '%s' is invalid", token->str);
+      }
+    } // Example (-)(2) return PREFIX
+    else{
+      encodeAffix(token, PREFIX);
+    }
+
+  }
+  else{
+    //throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
+    throwException(ERR_INVALID_OPERATOR, token,"Affix of '%s' is invalid", token->str);
   }
 }
 // No need

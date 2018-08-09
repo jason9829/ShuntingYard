@@ -13,7 +13,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define START 1
+#define FINISHED 0
 
+void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
+  Token *token;
+  int condition = START;
+
+  while(condition == START){
+
+  }
+}
+
+/*
 void pushTokensToRespectiveStack(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
   Token *token ;
   Token *prevToken;
@@ -110,7 +122,7 @@ void pushTokensToRespectiveStack(Tokenizer *tokenizer, StackBlock *operatorStack
   }
 
 }
-
+*/
 int isTokenValid(Token *token, TokenType lastTokenType){
 
   if(token->type == TOKEN_FLOAT_TYPE || token->type == TOKEN_INTEGER_TYPE){

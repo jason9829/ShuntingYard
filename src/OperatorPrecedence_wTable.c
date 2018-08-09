@@ -16,25 +16,32 @@ OperatorPrecedence bindingPower[50] = {
 };
 
 OperatorPrecedence *getTokenPrecedence(Token *token){
+  Affix tokenAffix;
+  tokenAffix = getAffix(token);
   char operatorSymbol;
   operatorSymbol = *((OperatorToken*)token)->str;
 
-  if(operatorSymbol == '+'){
-    return &bindingPower['+'];
+  switch(tokenAffix){
+    case INFIX :   if(operatorSymbol == '+'){
+                    return &bindingPower['+'];
+                  }
+                  else if(operatorSymbol == '-'){
+                    return &bindingPower['-'];
+                  }
+                  else if(operatorSymbol == '*'){
+                    return &bindingPower['*'];
+                  }
+                  else if(operatorSymbol == '/'){
+                    return &bindingPower['/'];
+                  }
+      else{
+        throwException(ERR_INVALID_OPERATOR, token, "Do not accept '%c' operator", operatorSymbol);
+      }
   }
-  else if(operatorSymbol == '-'){
-    return &bindingPower['-'];
-  }
-  else if(operatorSymbol == '*'){
-    return &bindingPower['*'];
-  }
-  else if(operatorSymbol == '/'){
-    return &bindingPower['/'];
-  }
-  else{
-    throwException(ERR_INVALID_OPERATOR, token, "Do not accept '%c' operator", operatorSymbol);
-  }
+
+
 }
+
 
 // Example
 //
