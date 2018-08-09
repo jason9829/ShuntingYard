@@ -16,9 +16,17 @@
 void pushTokensToRespectiveStack(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
   Token *token ;
   Token *prevToken;
+
+  Affix prevTokenAffix;
+  Affix currTokenAffix;
+
+  OperatorPrecedence *prevTokenPrecedence;
+  OperatorPrecedence *currTokenPrecedence;
+
   TokenType operatorType;
 
   token = getToken(tokenizer);
+
   while(token-> type != TOKEN_NULL_TYPE){
     if(token->type == TOKEN_FLOAT_TYPE || token->type == TOKEN_INTEGER_TYPE){
       pushOperandStack(operandStack, token);
@@ -26,16 +34,24 @@ void pushTokensToRespectiveStack(Tokenizer *tokenizer, StackBlock *operatorStack
       token = getToken(tokenizer);
     }
     else if(token->type == TOKEN_OPERATOR_TYPE){
-      pushBackToken(tokenizer, token); // In the function need to get OperatorToken from tokenizer to compare
-      checkTokenAffixAndEncodeAffix(tokenizer, prevToken);  // In the function pushBack so need to get again
-      token = getToken(tokenizer);
-      pushOperatorStack(operatorStack, token);
-      prevToken = token;
-      token = getToken(tokenizer);
+      if(prevToken->type == TOKEN_OPERATOR_TYPE){
+
+
+      }
+      else{
+        pushBackToken(tokenizer, token); // In the function need to get OperatorToken from tokenizer to compare
+        checkTokenAffixAndEncodeAffix(tokenizer, prevToken);  // In the function pushBack so need to get again
+        token = getToken(tokenizer);
+        pushOperatorStack(operatorStack, token);
+        prevToken = token;
+        token = getToken(tokenizer);
+      }
+
     }
   }
 
 }
+
 void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
   Affix currOperatorAffix;
   Token *token;

@@ -61,11 +61,15 @@ void test_getTokenPrecedence_given_a_expect_ERR_INVALID_OPERATOR(void){
 void test_comparePrevTokenAndNextTokenPrecedence_given_plus_and_multiply_expect_0(void){
   int ans;
   Token *token = NULL;
+  Token *nextToken = NULL;
+
   Tokenizer *tokenizer = NULL;
   tokenizer = createTokenizer("+*");
-  token = getToken(tokenizer);
 
-  ans = comparePrevTokenAndNextTokenPrecedence(tokenizer, token);
+  token = getToken(tokenizer);
+  nextToken = getToken(tokenizer);
+
+  ans = comparePrevTokenAndNextTokenPrecedence(nextToken, token);
 
   TEST_ASSERT_EQUAL(0, ans);
 }
@@ -73,11 +77,14 @@ void test_comparePrevTokenAndNextTokenPrecedence_given_plus_and_multiply_expect_
 void test_comparePrevTokenAndNextTokenPrecedence_given_divide_and_minus_expect_1(void){
   int ans;
   Token *token = NULL;
+  Token *nextToken = NULL;
+  
   Tokenizer *tokenizer = NULL;
   tokenizer = createTokenizer("/-");
-  token = getToken(tokenizer);
 
-  ans = comparePrevTokenAndNextTokenPrecedence(tokenizer, token);
+  token = getToken(tokenizer);
+  nextToken = getToken(tokenizer);
+  ans = comparePrevTokenAndNextTokenPrecedence(nextToken, token);
 
   TEST_ASSERT_EQUAL(1, ans);
 }
@@ -85,11 +92,14 @@ void test_comparePrevTokenAndNextTokenPrecedence_given_divide_and_minus_expect_1
 void test_comparePrevTokenAndNextTokenPrecedence_given_plus_and_plus_expect_2(void){
   int ans;
   Token *token = NULL;
+  Token *nextToken = NULL;
+
   Tokenizer *tokenizer = NULL;
   tokenizer = createTokenizer("++");
-  token = getToken(tokenizer);
 
-  ans = comparePrevTokenAndNextTokenPrecedence(tokenizer, token);
+  token = getToken(tokenizer);
+  nextToken = getToken(tokenizer);
+  ans = comparePrevTokenAndNextTokenPrecedence(nextToken, token);
 
   TEST_ASSERT_EQUAL(2, ans);
 }

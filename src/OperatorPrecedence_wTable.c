@@ -49,23 +49,20 @@ OperatorPrecedence *getTokenPrecedence(Token *token){
 //   i) next(tail) operator precedence is higher return 0
 //  ii) current(head) operator precedence is higer return 1
 // iii) both operator precedence are same return 2
-int comparePrevTokenAndNextTokenPrecedence(Tokenizer *tokenizer, Token *prevToken){
-  Token *nextToken;
+int comparePrevTokenAndNextTokenPrecedence(Token *currToken, Token *prevToken){
 
   OperatorPrecedence *precedenceOfprevToken;
-  OperatorPrecedence *precedenceOfnextToken;
+  OperatorPrecedence *precedenceOfcurrToken;
 
-  nextToken = getToken(tokenizer);
 
   precedenceOfprevToken = getTokenPrecedence(prevToken);
-  precedenceOfnextToken = getTokenPrecedence(nextToken);
+  precedenceOfcurrToken = getTokenPrecedence(currToken);
 
-  pushBackToken(tokenizer, nextToken);
 
-  if((precedenceOfprevToken->bindingPower) > (precedenceOfnextToken)->bindingPower){
+  if((precedenceOfprevToken->bindingPower) > (precedenceOfcurrToken)->bindingPower){
     return 1;
   }
-  else if ((precedenceOfprevToken->bindingPower) < (precedenceOfnextToken)->bindingPower){
+  else if ((precedenceOfprevToken->bindingPower) < (precedenceOfcurrToken)->bindingPower){
     return 0;
   }
   else{

@@ -165,8 +165,6 @@ void xtest_operateOnTokens_given_5_plus_minus_minus_3_expect_8(void){
   TEST_ASSERT_EQUAL(NULL, operandStack.tail);
 }
 
-
-
 void test_operateOnTokens_given_2point5_multiply_2_expect_5point0(void){
   Tokenizer *tokenizer  = NULL;
   Token *answerToken;
