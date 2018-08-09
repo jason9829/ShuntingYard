@@ -18,6 +18,136 @@
 void setUp(void){}
 void tearDown(void){}
 
+// (+)(2)  valid
+void test_isTokenValid_given_plus_and_2_expect_true(void){
+  Tokenizer *tokenizer  = NULL;
+  Token * prevToken = NULL;
+  Token *token;
+  TokenType prevTokenType;
+
+  int ans;
+
+  tokenizer = createTokenizer(" + 2 ");
+  prevToken = getToken(tokenizer);
+  prevTokenType = getTokenType(prevToken);
+  // token is 2
+  token = getToken(tokenizer);
+  ans = isTokenValid(token, prevTokenType);
+
+  TEST_ASSERT_EQUAL(1, ans);
+}
+
+//(+)(+)  valid
+void test_isTokenValid_given_plus_and_plus_expect_true(void){
+  Tokenizer *tokenizer  = NULL;
+  Token * prevToken = NULL;
+  Token *token;
+  TokenType prevTokenType;
+
+  int ans;
+
+  tokenizer = createTokenizer(" + + ");
+  prevToken = getToken(tokenizer);
+  prevTokenType = getTokenType(prevToken);
+  // token is 2
+  token = getToken(tokenizer);
+  ans = isTokenValid(token, prevTokenType);
+
+  TEST_ASSERT_EQUAL(1, ans);
+}
+
+// (2)(2) valid
+void test_isTokenValid_given_two_and_plus_expect_true(void){
+  Tokenizer *tokenizer  = NULL;
+  Token * prevToken = NULL;
+  Token *token;
+  TokenType prevTokenType;
+
+  int ans;
+
+  tokenizer = createTokenizer(" 2.112 + ");
+  prevToken = getToken(tokenizer);
+  prevTokenType = getTokenType(prevToken);
+  // token is 2
+  token = getToken(tokenizer);
+  ans = isTokenValid(token, prevTokenType);
+
+  TEST_ASSERT_EQUAL(1, ans);
+}
+
+// (2)(2) invalid
+void test_isTokenValid_given_two_and_two_expect_true(void){
+  Tokenizer *tokenizer  = NULL;
+  Token * prevToken = NULL;
+  Token *token;
+  TokenType prevTokenType;
+
+  int ans;
+
+  tokenizer = createTokenizer(" 2 2 ");
+  prevToken = getToken(tokenizer);
+  prevTokenType = getTokenType(prevToken);
+  // token is 2
+  token = getToken(tokenizer);
+  ans = isTokenValid(token, prevTokenType);
+
+  TEST_ASSERT_EQUAL(0, ans);
+}
+
+void test_operationOnStacksIfOperatorIsPrefix_given_minus_2_expect_ans_minus_2(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken;
+  Token *operandToken;
+
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  tokenizer = createTokenizer(" -2 ");
+  operatorToken = getToken(tokenizer);
+  operandToken = getToken(tokenizer);
+
+  pushOperandStack(&operandStack, operandToken);
+  pushOperatorStack(&operatorStack, operatorToken);
+
+  answerToken = operationOnStacksIfOperatorIsPrefix(&operatorStack, &operandStack);
+
+  TEST_ASSERT_EQUAL(-2, ((IntegerToken*)answerToken)->value);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+  TEST_ASSERT_EQUAL(NULL, operandStack.head);
+  TEST_ASSERT_EQUAL(NULL, operandStack.tail);
+}
+
+void test_operationOnStacksIfOperatorIsPrefix_given_plus_2point123_expect_ans_2point123(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken;
+  Token *operandToken;
+
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  tokenizer = createTokenizer(" +2.123 ");
+  operatorToken = getToken(tokenizer);
+  operandToken = getToken(tokenizer);
+
+  pushOperandStack(&operandStack, operandToken);
+  pushOperatorStack(&operatorStack, operatorToken);
+
+  answerToken = operationOnStacksIfOperatorIsPrefix(&operatorStack, &operandStack);
+
+  TEST_ASSERT_EQUAL_FLOAT(2.123, ((FloatToken*)answerToken)->value);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+  TEST_ASSERT_EQUAL(NULL, operandStack.head);
+  TEST_ASSERT_EQUAL(NULL, operandStack.tail);
+}
+/*
 void test_pushTokensToRespectiveStack_given_3_plus_2_expect_push_all_tones_to_Stack(void){
   Tokenizer *tokenizer  = NULL;
   Token * ansToken = NULL;
@@ -59,7 +189,9 @@ void test_pushTokensToRespectiveStack_given_3_plus__minus_minus_2_expect_push_al
   ans = popStack(&operandStack);
   ansToken = (Token*)(ans->data);
   TEST_ASSERT_EQUAL(1, ((IntegerToken*)ansToken)->value);
-
+  TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+  TEST_ASSERT_EQUAL(0, operatorStack.count);
 }
 /* Starting from empty stack then push to the tokens to respective Stack
  * Then expect both operand popped and operator popped then do the Arithmetic

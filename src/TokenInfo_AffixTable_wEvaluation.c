@@ -76,8 +76,11 @@ int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens){
   Token *nextToken;
   TokenInfo *currTokenInfo;
   TokenInfo *nextTokenInfo;
+  TokenType currTokenType;
 
-  if(currToken->type == TOKEN_OPERATOR_TYPE){
+  currTokenType = getTokenType(currToken);
+
+  if(currTokenType == TOKEN_OPERATOR_TYPE){
     currTokenInfo = getTokenInfo(currToken);
     nextToken = getToken(nextTokens);
 
@@ -241,7 +244,7 @@ void checkTokenAffixAndEncodeAffix(Tokenizer *tokenizer, Token *prevToken){
   int  PossibleAffixCombination;
   char operatorSymbol;
 
-  prevTokenType = prevToken->type;
+  prevTokenType = getTokenType(prevToken);
   Token *nextToken = NULL;
 
   OperatorType currTokenOperatorType;
