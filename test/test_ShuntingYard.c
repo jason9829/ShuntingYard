@@ -5,6 +5,7 @@
 #include "Tokenizer.h"
 #include "TokenAffix.h"
 #include "TokenInfo_AffixTable_wEvaluation.h"
+#include "OperatorPrecedence_wTable.h"
 #include "Common.h"
 #include "Exception.h"
 #include "Error.h"
@@ -19,12 +20,8 @@ void tearDown(void){}
 
 void test_pushTokensToRespectiveStack_given_3_plus_2_expect_push_all_tones_to_Stack(void){
   Tokenizer *tokenizer  = NULL;
-  Token *poppedOperand_1_token;
-  Token *poppedOperand_2_token;
-  Token *poppedOperator_1_token;
-
-  Affix Operator_1_affix ;
-  TokenType poppedOperator_1_type;
+  Token * ansToken = NULL;
+  StackItem *ans;
 
   StackBlock operatorStack = { NULL, NULL, 0};
   StackBlock operandStack  = { NULL, NULL, 0};
@@ -37,78 +34,32 @@ void test_pushTokensToRespectiveStack_given_3_plus_2_expect_push_all_tones_to_St
 
   pushTokensToRespectiveStack(tokenizer,&operatorStack, &operandStack);
 
-  poppedOperand_1 = popStack(&operandStack);
-  poppedOperand_1_token = (Token*)(poppedOperand_1->data);
-  TEST_ASSERT_EQUAL(2, ((IntegerToken*)poppedOperand_1_token)->value);
+  ans = popStack(&operandStack);
+  ansToken = (Token*)(ans->data);
+  TEST_ASSERT_EQUAL(5, ((IntegerToken*)ansToken)->value);
 
-  poppedOperand_2 = popStack(&operandStack);
-  poppedOperand_2_token = (Token*)(poppedOperand_2->data);
-  TEST_ASSERT_EQUAL(3, ((IntegerToken*)poppedOperand_2_token)->value);
-
-  poppedOperator_1 = popStack(&operatorStack);
-  poppedOperator_1_token = (Token*)(poppedOperator_1->data);
-  Operator_1_affix = getAffix(poppedOperator_1_token);
-  poppedOperator_1_type = getTokenType(poppedOperator_1_token);
-  TEST_ASSERT_EQUAL(TOKEN_OPERATOR_TYPE, poppedOperator_1_type);
-  TEST_ASSERT_EQUAL(INFIX, Operator_1_affix);
 }
 
-void xtest_pushTokensToRespectiveStack_given_3_plus__minus_minus_2_expect_push_all_tones_to_Stack(void){
+void test_pushTokensToRespectiveStack_given_3_plus__minus_minus_2_expect_push_all_tones_to_Stack(void){
   Tokenizer *tokenizer  = NULL;
-  Token *poppedOperand_1_token;
-  Token *poppedOperand_2_token;
-  Token *poppedOperator_1_token;
-  Token *poppedOperator_2_token;
-  Token *poppedOperator_3_token;
-
-  Affix Operator_1_affix ;
-  TokenType poppedOperator_1_type;
-  Affix Operator_2_affix ;
-  TokenType poppedOperator_2_type;
-  Affix Operator_3_affix ;
-  TokenType poppedOperator_3_type;
+  Token * ansToken = NULL;
+  StackItem *ans;
 
   StackBlock operatorStack = { NULL, NULL, 0};
   StackBlock operandStack  = { NULL, NULL, 0};
   StackItem *poppedOperand_1;
   StackItem *poppedOperand_2;
   StackItem *poppedOperator_1;
-  StackItem *poppedOperator_2;
-  StackItem *poppedOperator_3;
 
   //char operatorSymbol;
-  tokenizer = createTokenizer(" 3 +-- 2 ");
+  tokenizer = createTokenizer(" 3 + - 2 ");
 
   pushTokensToRespectiveStack(tokenizer,&operatorStack, &operandStack);
 
-  poppedOperand_1 = popStack(&operandStack);
-  poppedOperand_1_token = (Token*)(poppedOperand_1->data);
-  TEST_ASSERT_EQUAL(2, ((IntegerToken*)poppedOperand_1_token)->value);
+  ans = popStack(&operandStack);
+  ansToken = (Token*)(ans->data);
+  TEST_ASSERT_EQUAL(1, ((IntegerToken*)ansToken)->value);
 
-  poppedOperand_2 = popStack(&operandStack);
-  poppedOperand_2_token = (Token*)(poppedOperand_2->data);
-  TEST_ASSERT_EQUAL(3, ((IntegerToken*)poppedOperand_2_token)->value);
-
-  poppedOperator_1 = popStack(&operatorStack);
-  poppedOperator_1_token = (Token*)(poppedOperator_1->data);
-  Operator_1_affix = getAffix(poppedOperator_1_token);
-  poppedOperator_1_type = getTokenType(poppedOperator_1_token);
-  TEST_ASSERT_EQUAL(TOKEN_OPERATOR_TYPE, poppedOperator_1_type);
-  TEST_ASSERT_EQUAL(INFIX, Operator_1_affix);
-
-  poppedOperator_2 = popStack(&operatorStack);
-  poppedOperator_2_token = (Token*)(poppedOperator_2->data);
-  Operator_2_affix = getAffix(poppedOperator_2_token);
-  poppedOperator_2_type = getTokenType(poppedOperator_2_token);
-  TEST_ASSERT_EQUAL(TOKEN_OPERATOR_TYPE, poppedOperator_2_type);
-  TEST_ASSERT_EQUAL(PREFIX, Operator_2_affix);
-
-  poppedOperator_3 = popStack(&operatorStack);
-  poppedOperator_3_token = (Token*)(poppedOperator_3->data);
-  Operator_3_affix = getAffix(poppedOperator_3_token);
-  poppedOperator_3_type = getTokenType(poppedOperator_3_token);
-  TEST_ASSERT_EQUAL(TOKEN_OPERATOR_TYPE, poppedOperator_3_type);
-  TEST_ASSERT_EQUAL(PREFIX, Operator_3_affix);
 }
 /* Starting from empty stack then push to the tokens to respective Stack
  * Then expect both operand popped and operator popped then do the Arithmetic
@@ -122,8 +73,8 @@ void xtest_pushTokensToRespectiveStack_given_3_plus__minus_minus_2_expect_push_a
  *          head---^
  *
  */
-
-void xtest_xoperateOnTokens_given_1_plus_2_expect_3(void){
+/*
+void xtest_operateOnTokens_given_1_plus_2_expect_3(void){
   Tokenizer *tokenizer  = NULL;
   Token *answerToken;
 
@@ -338,7 +289,7 @@ void test_operateOnTokens_given_10_multiply_minus_1point5_expect_minus_15point0(
   TEST_ASSERT_EQUAL(NULL, operandStack.tail);
 
 }
-*/
+
 void test_operationOnStacksIfOperatorIsInfix_given_2_plus_10_expect_12(void){
     StackBlock operatorStack = { NULL, NULL, 0};
     StackBlock operandStack  = { NULL, NULL, 0};

@@ -54,14 +54,13 @@ int comparePrevTokenAndNextTokenPrecedence(Token *currToken, Token *prevToken){
   OperatorPrecedence *precedenceOfprevToken;
   OperatorPrecedence *precedenceOfcurrToken;
 
-
   precedenceOfprevToken = getTokenPrecedence(prevToken);
   precedenceOfcurrToken = getTokenPrecedence(currToken);
 
-
+  // operator->addtoHead > token
   if((precedenceOfprevToken->bindingPower) > (precedenceOfcurrToken)->bindingPower){
     return 1;
-  }
+  } // operator->addtoHead < token
   else if ((precedenceOfprevToken->bindingPower) < (precedenceOfcurrToken)->bindingPower){
     return 0;
   }
