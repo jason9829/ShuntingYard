@@ -4,6 +4,18 @@
 #include "Token.h"
 #include "Tokenizer.h"
 
+
+typedef enum{
+  INFIX_PLUS,
+  INFIX_MINUS,
+  INFIX_MULTIPLY,
+  INFIX_DIVIDE,
+  PREFIX_PLUS,
+  PREFIX_MINUS,
+  OPEN_BRACKET,
+  CLOSE_BRACKET,
+}operatorWithAffix;
+
 typedef struct OperatorPrecedence OperatorPrecedence;
 struct OperatorPrecedence{
   int bindingPower;

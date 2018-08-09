@@ -117,6 +117,50 @@ int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens){
 
 }
 
+int checkOperatorTokensAffixPossibilities(Token *currToken, Token *nextToken){
+  int compareWithTableResult;
+  TokenInfo *currTokenInfo;
+  TokenInfo *nextTokenInfo;
+  TokenType currTokenType;
+  TokenType nextTokenType;
+
+  currTokenType = getTokenType(currToken);
+  nextTokenType = getTokenType(nextToken);
+
+  if(currTokenType == TOKEN_OPERATOR_TYPE){
+    currTokenInfo = getTokenInfo(currToken);
+
+    if(nextTokenType == TOKEN_OPERATOR_TYPE){
+      nextTokenInfo = getTokenInfo(nextToken);
+      compareWithTableResult = compareCurrTokenAndNextTokenWithTable(currTokenInfo, nextTokenInfo);
+
+      switch (compareWithTableResult) {
+        case 0 :
+                 return 0;
+        case 1 :
+                 return 1;
+        // compareCurrTokenAndNextTokenWithTable only return 1 or 0
+        // else error will be thrown in getTokenInfo
+        //default : throwSimpleError(ERR_INVALID_ANSWER, "Invalid answer from compareCurrTokenAndNextTokenWithTable");
+      }
+    }
+    else if(nextTokenType == TOKEN_INTEGER_TYPE || nextTokenType == TOKEN_FLOAT_TYPE){
+		    return 1 ;
+    }
+
+    else{
+      // getTokenInfo only accept '+', '-', '*', '/'
+      // else error already thrown at getTokenInfo
+      throwException(ERR_INVALID_OPERATOR, nextToken ,"'%s' is not an operator", nextToken->str);
+    }
+  }
+  else{
+    // getTokenInfo only accept '+', '-', '*', '/'
+    // else error already thrown at getTokenInfo
+    throwException(ERR_INVALID_OPERATOR, currToken ,"'%s' is not an operator", nextToken->str);
+  }
+
+}
 // This function will compare currOperator and nextOperator the Attribute from AffixPossibilities
 int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *nextTokenInfo){
   if(currTokenInfo->Attribute == 7){         // 4 | 2 | 1 = 7  (refer to #define)

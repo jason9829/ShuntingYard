@@ -1,18 +1,25 @@
 #include "OperatorPrecedence_wTable.h"
+#include "TokenInfo_AffixTable_wEvaluation.h"
 #include "Token.h"
 #include "Tokenizer.h"
+#include "TokenAffix.h"
 #include "Stack.h"
 #include "Exception.h"
 #include "Error.h"
 
-#define STRONGEST 2
-#define WEAKEST   1
+#define STRONG 3
+#define MEDIUM 2
+#define WEAK   1
 
 OperatorPrecedence bindingPower[50] = {
-  ['+'] = {.bindingPower = WEAKEST},
-  ['-'] = {.bindingPower = WEAKEST},
-  ['*'] = {.bindingPower = STRONGEST},
-  ['/'] = {.bindingPower = STRONGEST}
+  [INFIX_PLUS] = {.bindingPower = WEAK},
+  [INFIX_MINUS] = {.bindingPower = WEAK},
+  [INFIX_MULTIPLY] = {.bindingPower = MEDIUM},
+  [INFIX_DIVIDE] = {.bindingPower = MEDIUM},
+  [PREFIX_PLUS] = {.bindingPower = STRONG},
+  [PREFIX_MINUS] = {.bindingPower = STRONG},
+  [OPEN_BRACKET] = {.bindingPower = WEAK},
+  [CLOSE_BRACKET] = {.bindingPower = WEAK},
 };
 
 OperatorPrecedence *getTokenPrecedence(Token *token){
@@ -22,23 +29,30 @@ OperatorPrecedence *getTokenPrecedence(Token *token){
   operatorSymbol = *((OperatorToken*)token)->str;
 
   switch(tokenAffix){
-    case INFIX :   if(operatorSymbol == '+'){
-                    return &bindingPower['+'];
-                  }
-                  else if(operatorSymbol == '-'){
-                    return &bindingPower['-'];
-                  }
-                  else if(operatorSymbol == '*'){
-                    return &bindingPower['*'];
-                  }
-                  else if(operatorSymbol == '/'){
-                    return &bindingPower['/'];
-                  }
-      else{
-        throwException(ERR_INVALID_OPERATOR, token, "Do not accept '%c' operator", operatorSymbol);
-      }
-  }
+    case PREFIX :    if(operatorSymbol == '+'){
+                      return &bindingPower[PREFIX_PLUS];
+                     }
+                     else if(operatorSymbol == '-'){
+                      return &bindingPower[PREFIX_MINUS];
+                     }
 
+    case SUFFIX :
+    case INFIX  :    if(operatorSymbol == '+'){
+                      return &bindingPower[INFIX_PLUS];
+                     }
+                     else if(operatorSymbol == '-'){
+                      return &bindingPower[INFIX_MINUS];
+                     }
+                     else if(operatorSymbol == '*'){
+                      return &bindingPower[INFIX_MULTIPLY];
+                     }
+                     else if(operatorSymbol == '/'){
+                      return &bindingPower[INFIX_DIVIDE];
+                     }
+
+      default:  throwException(ERR_INVALID_OPERATOR, token, "Invalid affix of '%c' operator", operatorSymbol);
+
+  }
 
 }
 
@@ -57,21 +71,30 @@ OperatorPrecedence *getTokenPrecedence(Token *token){
 //  ii) current(head) operator precedence is higer return 1
 // iii) both operator precedence are same return 2
 int comparePrevTokenAndNextTokenPrecedence(Token *currToken, Token *prevToken){
+  int compareAffixPossibilities;
 
-  OperatorPrecedence *precedenceOfprevToken;
-  OperatorPrecedence *precedenceOfcurrToken;
+  compareAffixPossibilities = checkOperatorTokensAffixPossibilities(prevToken, currToken);
 
-  precedenceOfprevToken = getTokenPrecedence(prevToken);
-  precedenceOfcurrToken = getTokenPrecedence(currToken);
+  if(compareAffixPossibilities){
+    OperatorPrecedence *precedenceOfprevToken;
+    OperatorPrecedence *precedenceOfcurrToken;
 
-  // operator->addtoHead > token
-  if((precedenceOfprevToken->bindingPower) > (precedenceOfcurrToken)->bindingPower){
-    return 1;
-  } // operator->addtoHead < token
-  else if ((precedenceOfprevToken->bindingPower) < (precedenceOfcurrToken)->bindingPower){
-    return 0;
+    precedenceOfprevToken = getTokenPrecedence(prevToken);
+    precedenceOfcurrToken = getTokenPrecedence(currToken);
+
+    // operator->addtoHead > token
+    if((precedenceOfprevToken->bindingPower) > (precedenceOfcurrToken)->bindingPower){
+      return 1;
+    } // operator->addtoHead < token
+    else if ((precedenceOfprevToken->bindingPower) < (precedenceOfcurrToken)->bindingPower){
+      return 0;
+    }
+    else{
+      return 2;
+    }
   }
   else{
-    return 2;
+    throwException(ERR_INVALID_OPERATOR, currToken ,"'%s' is not an operator", currToken->str);
   }
+
 }
