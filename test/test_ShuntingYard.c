@@ -166,7 +166,7 @@ void xtest_operateOnTokens_given_5_plus_minus_minus_3_expect_8(void){
 }
 
 
-/*
+
 void test_operateOnTokens_given_2point5_multiply_2_expect_5point0(void){
   Tokenizer *tokenizer  = NULL;
   Token *answerToken;
@@ -229,7 +229,7 @@ void test_operateOnTokens_given_20000point5_divide_1point75_expect_11428point86(
   TEST_ASSERT_EQUAL(NULL, operandStack.head);
   TEST_ASSERT_EQUAL(NULL, operandStack.tail);
 }
-
+/*
 void test_operateOnTokens_given_3_plus_negative2_expect_1(void){
   Tokenizer *tokenizer  = NULL;
   Token *answerToken;
@@ -413,6 +413,7 @@ void test_operationOnStacksIfOperatorIsInfix_given_2_multiply_expect_ERR_STACK_I
     TEST_ASSERT_EQUAL(ERR_STACK_INSUFFICIENT, e->errorCode);
   }
 }
+
 /*
 void test_determineTokenOperatorType_given_2_minus_1_expect_BINARY_2(void){
   OperatorType tokenOperatorType;

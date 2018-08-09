@@ -188,7 +188,7 @@ Token *operationOnStacksIfOperatorIsInfix(StackBlock *operatorStack, StackBlock 
       return ans;
     }
     else{
-      throwException(ERR_STACK_INSUFFICIENT, operandStack->tail , "The count in operatorStack is '%d' and count in operandStack is'%d", operatorStack->count, operandStack->count);
+      throwException(ERR_STACK_INSUFFICIENT, operandStack->head->data, "The count in operatorStack is '%d' and count in operandStack is'%d", operatorStack->count, operandStack->count);
     }
 }
 
