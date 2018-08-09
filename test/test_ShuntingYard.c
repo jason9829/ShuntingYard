@@ -9,6 +9,7 @@
 #include "Exception.h"
 #include "Error.h"
 #include "Arithmetic.h"
+#include "CException.h"
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -16,7 +17,7 @@
 void setUp(void){}
 void tearDown(void){}
 
-void xtest_pushTokensToRespectiveStack_given_3_plus_2_expect_push_all_tones_to_Stack(void){
+void test_pushTokensToRespectiveStack_given_3_plus_2_expect_push_all_tones_to_Stack(void){
   Tokenizer *tokenizer  = NULL;
   Token *poppedOperand_1_token;
   Token *poppedOperand_2_token;
@@ -385,7 +386,7 @@ void test_operationOnStacksIfOperatorIsInfix_given_2_multiply_10point5_expect_21
 
     TEST_ASSERT_EQUAL_FLOAT(21.0, ((FloatToken*)ans)->value);
 }
-/*
+
 void test_operationOnStacksIfOperatorIsInfix_given_2_multiply_expect_ERR_STACK_INSUFFICIENT(void){
   CEXCEPTION_T e;
 
@@ -402,18 +403,16 @@ void test_operationOnStacksIfOperatorIsInfix_given_2_multiply_expect_ERR_STACK_I
 
   token = getToken(tokenizer);
   pushOperatorStack(&operatorStack, token);
+
   Try{
-  ans = operationOnStacksIfOperatorIsInfix(&operatorStack, &operandStack);
-  TEST_FAIL_MESSAGE("Expect ERR_STACK_INSUFFICIENT. But no exception thrown.");
+    ans = operationOnStacksIfOperatorIsInfix(&operatorStack, &operandStack);
+    TEST_FAIL_MESSAGE("Expect ERR_STACK_INSUFFICIENT. But no exception thrown.");
   }
   Catch(e){
-  printf(e->errorMsg);
-  TEST_ASSERT_EQUAL(ERR_STACK_INSUFFICIENT, e->errorCode);
-  freeError(e);
+    dumpTokenErrorMessage(e, 1);
+    TEST_ASSERT_EQUAL(ERR_STACK_INSUFFICIENT, e->errorCode);
   }
-
-
-}*/
+}
 /*
 void test_determineTokenOperatorType_given_2_minus_1_expect_BINARY_2(void){
   OperatorType tokenOperatorType;
