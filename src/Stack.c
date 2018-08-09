@@ -11,8 +11,8 @@ int *pushStack_wNewStackAddress(StackBlock *List,void *data){
   Token *token = (struct Token*)malloc(sizeof(struct Token));
   token = (Token*)(data);
 
-  if(*(int*)(data) == NULL){
-    throwSimpleError(ERR_INVALID_DATA,"Data trying to add is NULL");
+  if(token->type == TOKEN_NULL_TYPE){
+      throwException(ERR_NULL_TOKEN, List ,"Token is NULL", token->str);
   }
     else{
       StackItem *newStackItem = (struct StackItem*)malloc (sizeof(struct StackItem));
@@ -76,7 +76,7 @@ void pushStack(StackBlock *List,void *data){
   token = ((Token*)(data));
 
   if(token->type == TOKEN_NULL_TYPE){
-      throwException(ERR_NULL_TOKEN, (Token*)token ,"Token is NULL");
+      throwException(ERR_NULL_TOKEN, List ,"Token is '%s'", token->str);
   }
   StackItem *newStackItem = (struct StackItem*)malloc (sizeof(struct StackItem));
   if(List->head == NULL){
@@ -95,8 +95,9 @@ void pushStack(StackBlock *List,void *data){
       else if (token->type == TOKEN_STRING_TYPE){
         newStackItem->data = (StringToken*)(data);
       }
-      else{
-        newStackItem->data = *(int*)(data);
+      else{ // encodedToken
+        //newStackItem->data = *(int*)(data);
+        newStackItem->data = (Token*)(data);
       }
         newStackItem->next = NULL;
         List->count++;
@@ -119,8 +120,9 @@ void pushStack(StackBlock *List,void *data){
     else if (token->type == TOKEN_STRING_TYPE){
       newStackItem->data = (StringToken*)(data);
     }
-    else{
-      newStackItem->data = *(int*)(data);
+    else{ // encodedToken
+      //newStackItem->data = *(int*)(data);
+      newStackItem->data = (Token*)(data);
     }
     newStackItem->next = List->head;     // Take previous node as next
     if(List->count == 1){     // if 2 block (head->newLinkedList) take previous as tail else tail remain the same
@@ -133,7 +135,7 @@ void pushStack(StackBlock *List,void *data){
 
 StackItem *popStack(StackBlock *List){
   if(List->head == NULL){
-    throwException(ERR_LINKEDLIST_NULL,NULL ,"The Stack is empty");
+    throwException(ERR_LINKEDLIST_NULL,List ,"The Stack is empty");
   }
   else{
     StackItem *poppedStack = (struct StackItem*)malloc (sizeof(struct StackItem));

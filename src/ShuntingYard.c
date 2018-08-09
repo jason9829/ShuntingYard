@@ -16,6 +16,7 @@
 void pushTokensToRespectiveStack(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
   Token *token ;
   Token *prevToken;
+  TokenType operatorType;
 
   token = getToken(tokenizer);
   while(token-> type != TOKEN_NULL_TYPE){
@@ -186,9 +187,9 @@ Token *operationOnStacksIfOperatorIsInfix(StackBlock *operatorStack, StackBlock 
       //pushStack(operandStack, ans);
       return ans;
     }
-    else{
-      throwSimpleError(ERR_STACK_INSUFFICIENT, "Either count in operatorStack or operandStack is insufficient to operate");
-    }
+    //else{
+    //  throwSimpleError(ERR_STACK_INSUFFICIENT, "Either count in operatorStack or operandStack is insufficient to operate");
+    //}
 }
 
 void pushOperandStack(StackBlock *operandStack, Token *token){

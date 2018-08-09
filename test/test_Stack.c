@@ -130,12 +130,11 @@ void test_pushStack_given_nullToken_expect_ERR_NULL_TOKEN(void){
    token = getToken(tokenizer);
    Try{
      pushStack(&Stack,token);
-     TEST_FAIL_MESSAGE("Expect ERR_DATA_NULL. But no exception thrown.");
+     TEST_FAIL_MESSAGE("Expect ERR_NULL_TOKEN. But no exception thrown.");
    }
    Catch(e){
-     printf(e->errorMsg);
-     TEST_ASSERT_EQUAL(ERR_NULL_TOKEN, e->errorCode);
-     freeError(e);
+   dumpTokenErrorMessage(e, 1);
+   TEST_ASSERT_EQUAL(ERR_NULL_TOKEN, e->errorCode);
    }
      TEST_ASSERT_NOT_NULL(token);
 }

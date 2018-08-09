@@ -31,9 +31,31 @@ void test_getTokenPrecedence_given_divide_sign_expect_2(void){
 
   tokenizer = createTokenizer("/");
   token = getToken(tokenizer);
-  precedence = getTokenPrecedence(token);
 
+
+  precedence = getTokenPrecedence(token);
   TEST_ASSERT_EQUAL(2, precedence->bindingPower);
+
+}
+
+void test_getTokenPrecedence_given_a_expect_ERR_INVALID_OPERATOR(void){
+  CEXCEPTION_T e;
+  Token *token = NULL;
+  Tokenizer *tokenizer = NULL;
+  OperatorPrecedence *precedence = NULL;
+
+  tokenizer = createTokenizer("a");
+  token = getToken(tokenizer);
+
+  Try{
+      precedence = getTokenPrecedence(token);
+      TEST_FAIL_MESSAGE("Expect ERR_INVALID_OPERATOR. But no exception thrown.");
+    }
+      Catch(e){
+      dumpTokenErrorMessage(e, 1);
+      TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
+    }
+
 }
 
 void test_comparePrevTokenAndNextTokenPrecedence_given_plus_and_multiply_expect_0(void){

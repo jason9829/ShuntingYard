@@ -32,7 +32,7 @@ OperatorPrecedence *getTokenPrecedence(Token *token){
     return &bindingPower['/'];
   }
   else{
-    throwException(ERR_INVALID_OPERATOR, NULL, "Do not accept '%c' operator", operatorSymbol);
+    throwException(ERR_INVALID_OPERATOR, token, "Do not accept '%c' operator", operatorSymbol);
   }
 }
 

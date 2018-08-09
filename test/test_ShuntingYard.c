@@ -16,11 +16,14 @@
 void setUp(void){}
 void tearDown(void){}
 
-void test_pushTokensToRespectiveStack_given_3_plus_2_expect_push_all_tones_to_Stack(void){
+void xtest_pushTokensToRespectiveStack_given_3_plus_2_expect_push_all_tones_to_Stack(void){
   Tokenizer *tokenizer  = NULL;
   Token *poppedOperand_1_token;
   Token *poppedOperand_2_token;
   Token *poppedOperator_1_token;
+
+  Affix Operator_1_affix ;
+  TokenType poppedOperator_1_type;
 
   StackBlock operatorStack = { NULL, NULL, 0};
   StackBlock operandStack  = { NULL, NULL, 0};
@@ -42,12 +45,70 @@ void test_pushTokensToRespectiveStack_given_3_plus_2_expect_push_all_tones_to_St
   TEST_ASSERT_EQUAL(3, ((IntegerToken*)poppedOperand_2_token)->value);
 
   poppedOperator_1 = popStack(&operatorStack);
-  poppedOperator_1_token = (Token*)(poppedOperand_1->data);
-  //operatorSymbol = *((OperatorToken*)poppedOperator_1_token)->str;
-  //TEST_ASSERT_EQUAL_STRING("+",operatorSymbol);
-  TEST_ASSERT_EQUAL(TOKEN_OPERATOR_TYPE, poppedOperator_1_token->type);
+  poppedOperator_1_token = (Token*)(poppedOperator_1->data);
+  Operator_1_affix = getAffix(poppedOperator_1_token);
+  poppedOperator_1_type = getTokenType(poppedOperator_1_token);
+  TEST_ASSERT_EQUAL(TOKEN_OPERATOR_TYPE, poppedOperator_1_type);
+  TEST_ASSERT_EQUAL(INFIX, Operator_1_affix);
 }
 
+void xtest_pushTokensToRespectiveStack_given_3_plus__minus_minus_2_expect_push_all_tones_to_Stack(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *poppedOperand_1_token;
+  Token *poppedOperand_2_token;
+  Token *poppedOperator_1_token;
+  Token *poppedOperator_2_token;
+  Token *poppedOperator_3_token;
+
+  Affix Operator_1_affix ;
+  TokenType poppedOperator_1_type;
+  Affix Operator_2_affix ;
+  TokenType poppedOperator_2_type;
+  Affix Operator_3_affix ;
+  TokenType poppedOperator_3_type;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedOperand_1;
+  StackItem *poppedOperand_2;
+  StackItem *poppedOperator_1;
+  StackItem *poppedOperator_2;
+  StackItem *poppedOperator_3;
+
+  //char operatorSymbol;
+  tokenizer = createTokenizer(" 3 +-- 2 ");
+
+  pushTokensToRespectiveStack(tokenizer,&operatorStack, &operandStack);
+
+  poppedOperand_1 = popStack(&operandStack);
+  poppedOperand_1_token = (Token*)(poppedOperand_1->data);
+  TEST_ASSERT_EQUAL(2, ((IntegerToken*)poppedOperand_1_token)->value);
+
+  poppedOperand_2 = popStack(&operandStack);
+  poppedOperand_2_token = (Token*)(poppedOperand_2->data);
+  TEST_ASSERT_EQUAL(3, ((IntegerToken*)poppedOperand_2_token)->value);
+
+  poppedOperator_1 = popStack(&operatorStack);
+  poppedOperator_1_token = (Token*)(poppedOperator_1->data);
+  Operator_1_affix = getAffix(poppedOperator_1_token);
+  poppedOperator_1_type = getTokenType(poppedOperator_1_token);
+  TEST_ASSERT_EQUAL(TOKEN_OPERATOR_TYPE, poppedOperator_1_type);
+  TEST_ASSERT_EQUAL(INFIX, Operator_1_affix);
+
+  poppedOperator_2 = popStack(&operatorStack);
+  poppedOperator_2_token = (Token*)(poppedOperator_2->data);
+  Operator_2_affix = getAffix(poppedOperator_2_token);
+  poppedOperator_2_type = getTokenType(poppedOperator_2_token);
+  TEST_ASSERT_EQUAL(TOKEN_OPERATOR_TYPE, poppedOperator_2_type);
+  TEST_ASSERT_EQUAL(PREFIX, Operator_2_affix);
+
+  poppedOperator_3 = popStack(&operatorStack);
+  poppedOperator_3_token = (Token*)(poppedOperator_3->data);
+  Operator_3_affix = getAffix(poppedOperator_3_token);
+  poppedOperator_3_type = getTokenType(poppedOperator_3_token);
+  TEST_ASSERT_EQUAL(TOKEN_OPERATOR_TYPE, poppedOperator_3_type);
+  TEST_ASSERT_EQUAL(PREFIX, Operator_3_affix);
+}
 /* Starting from empty stack then push to the tokens to respective Stack
  * Then expect both operand popped and operator popped then do the Arithmetic
  *
@@ -61,7 +122,7 @@ void test_pushTokensToRespectiveStack_given_3_plus_2_expect_push_all_tones_to_St
  *
  */
 
-void test_operateOnTokens_given_1_plus_2_expect_3(void){
+void xtest_xoperateOnTokens_given_1_plus_2_expect_3(void){
   Tokenizer *tokenizer  = NULL;
   Token *answerToken;
 
@@ -81,6 +142,29 @@ void test_operateOnTokens_given_1_plus_2_expect_3(void){
   TEST_ASSERT_EQUAL(NULL, operandStack.head);
   TEST_ASSERT_EQUAL(NULL, operandStack.tail);
 }
+
+void xtest_operateOnTokens_given_5_plus_minus_minus_3_expect_8(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  tokenizer = createTokenizer(" 5 + --3 ");
+
+  shuntingYard(tokenizer, &operatorStack, &operandStack);
+  poppedStackItem = popStack(&operandStack);
+  answerToken = (Token*)(poppedStackItem->data);
+
+  TEST_ASSERT_EQUAL_FLOAT(5.0, ((FloatToken*)answerToken)->value);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+  TEST_ASSERT_EQUAL(NULL, operandStack.head);
+  TEST_ASSERT_EQUAL(NULL, operandStack.tail);
+}
+
+
 /*
 void test_operateOnTokens_given_2point5_multiply_2_expect_5point0(void){
   Tokenizer *tokenizer  = NULL;
@@ -301,7 +385,7 @@ void test_operationOnStacksIfOperatorIsInfix_given_2_multiply_10point5_expect_21
 
     TEST_ASSERT_EQUAL_FLOAT(21.0, ((FloatToken*)ans)->value);
 }
-
+/*
 void test_operationOnStacksIfOperatorIsInfix_given_2_multiply_expect_ERR_STACK_INSUFFICIENT(void){
   CEXCEPTION_T e;
 
@@ -329,7 +413,7 @@ void test_operationOnStacksIfOperatorIsInfix_given_2_multiply_expect_ERR_STACK_I
   }
 
 
-}
+}*/
 /*
 void test_determineTokenOperatorType_given_2_minus_1_expect_BINARY_2(void){
   OperatorType tokenOperatorType;

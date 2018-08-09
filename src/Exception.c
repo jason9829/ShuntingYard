@@ -5,6 +5,7 @@
 #include <malloc.h>
 #include <stdio.h>
 
+/*
 void throwSimpleError(int errorCode, char *errorMsg) {
   Exception *ex = (Exception *)malloc(sizeof(Exception));
 	ex->errorCode = errorCode;
@@ -18,3 +19,4 @@ void freeError(Exception *ex){
     free(ex);
   }
 }
+*/

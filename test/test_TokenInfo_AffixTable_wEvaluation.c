@@ -14,10 +14,11 @@ void tearDown(void){}
 // 3++4
 // 3+*4
 // 3 + - + 5
+
 void test_getTokenInfo_given_plus_sign_expect_attribute_7(void){
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
-  TokenInfo *affix = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
+  TokenInfo *affix ;
 
   tokenizer = createTokenizer("+");
   token = getToken(tokenizer);
@@ -26,9 +27,9 @@ void test_getTokenInfo_given_plus_sign_expect_attribute_7(void){
   TEST_ASSERT_EQUAL(7, affix->Attribute);
 }
 void test_getTokenInfo_given_minus_sign_expect_attribute_7(void){
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
-  TokenInfo *affix = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
+  TokenInfo *affix ;
 
   tokenizer = createTokenizer("-");
   token = getToken(tokenizer);
@@ -37,9 +38,9 @@ void test_getTokenInfo_given_minus_sign_expect_attribute_7(void){
   TEST_ASSERT_EQUAL(7, affix->Attribute);
 }
 void test_getTokenInfo_given_multiply_sign_expect_attribute_7(void){
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
-  TokenInfo *affix = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
+  TokenInfo *affix ;
 
   tokenizer = createTokenizer("*");
   token = getToken(tokenizer);
@@ -48,9 +49,9 @@ void test_getTokenInfo_given_multiply_sign_expect_attribute_7(void){
   TEST_ASSERT_EQUAL(2, affix->Attribute);
 }
 void test_getTokenInfo_given_divide_sign_expect_attribute_7(void){
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
-  TokenInfo *affix = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
+  TokenInfo *affix ;
 
   tokenizer = createTokenizer("/");
   token = getToken(tokenizer);
@@ -60,9 +61,9 @@ void test_getTokenInfo_given_divide_sign_expect_attribute_7(void){
 }
 
 void test_getTokenInfo_given_open_bracket_sign_expect_attribute_4(void){
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
-  TokenInfo *affix = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
+  TokenInfo *affix ;
 
   tokenizer = createTokenizer("(");
   token = getToken(tokenizer);
@@ -72,9 +73,9 @@ void test_getTokenInfo_given_open_bracket_sign_expect_attribute_4(void){
 }
 
 void test_getTokenInfo_given_close_bracket_sign_expect_attribute_1(void){
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
-  TokenInfo *affix = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
+  TokenInfo *affix ;
 
   tokenizer = createTokenizer(")");
   token = getToken(tokenizer);
@@ -83,11 +84,12 @@ void test_getTokenInfo_given_close_bracket_sign_expect_attribute_1(void){
   TEST_ASSERT_EQUAL(1, affix->Attribute);
 }
 
+
 void test_getTokenInfo_given_abc_expect_ERR_INVALID_OPERATOR(void){
   CEXCEPTION_T e;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
-  TokenInfo *affix = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
+  TokenInfo *affix ;
 
   tokenizer = createTokenizer("abc");
   token = getToken(tokenizer);
@@ -104,10 +106,11 @@ void test_getTokenInfo_given_abc_expect_ERR_INVALID_OPERATOR(void){
 
 }
 
+
 void test_checkOperatorsAffixPossibilities_given_open_bracket_and_multiply_expect_ERR_INVALID_OPERATOR(void){
   int result;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("(*");
   token = getToken(tokenizer);
@@ -119,8 +122,8 @@ void test_checkOperatorsAffixPossibilities_given_open_bracket_and_multiply_expec
 
 void test_checkOperatorsAffixPossibilities_given_plus_and_plus_expect_TRUE(void){
   int result;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("+ +");
   token = getToken(tokenizer);
@@ -131,8 +134,8 @@ void test_checkOperatorsAffixPossibilities_given_plus_and_plus_expect_TRUE(void)
 
 void test_checkOperatorsAffixPossibilities_given_plus_and_multiply_expect_TRUE(void){
   int result;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("+ -");
   token = getToken(tokenizer);
@@ -143,8 +146,8 @@ void test_checkOperatorsAffixPossibilities_given_plus_and_multiply_expect_TRUE(v
 
 void test_checkOperatorsAffixPossibilities_given_plus_and_minus_expect_FALSE(void){
   int result;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("+ *");
   token = getToken(tokenizer);
@@ -155,8 +158,8 @@ void test_checkOperatorsAffixPossibilities_given_plus_and_minus_expect_FALSE(voi
 
 void test_checkOperatorsAffixPossibilities_given_plus_and_divide_expect_FALSE(void){
   int result;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("+ /");
   token = getToken(tokenizer);
@@ -167,8 +170,8 @@ void test_checkOperatorsAffixPossibilities_given_plus_and_divide_expect_FALSE(vo
 
 void test_checkOperatorsAffixPossibilities_given_multiply_and_plus_expect_TRUE(void){
   int result;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("* +");
   token = getToken(tokenizer);
@@ -179,8 +182,8 @@ void test_checkOperatorsAffixPossibilities_given_multiply_and_plus_expect_TRUE(v
 
 void test_checkOperatorsAffixPossibilities_given_multiply_and_minus_expect_TRUE(void){
   int result;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("* -");
   token = getToken(tokenizer);
@@ -191,8 +194,8 @@ void test_checkOperatorsAffixPossibilities_given_multiply_and_minus_expect_TRUE(
 
 void test_checkOperatorsAffixPossibilities_given_multiply_and_multiply_expect_FALSE(void){
   int result;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("* *");
   token = getToken(tokenizer);
@@ -203,8 +206,8 @@ void test_checkOperatorsAffixPossibilities_given_multiply_and_multiply_expect_FA
 
 void test_checkOperatorsAffixPossibilities_given_multiply_and_divide_expect_FALSE(void){
   int result;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("* /");
   token = getToken(tokenizer);
@@ -215,8 +218,8 @@ void test_checkOperatorsAffixPossibilities_given_multiply_and_divide_expect_FALS
 
 void test_checkOperatorsAffixPossibilities_given_multiply_and_open_bracket_expect_TRUE(void){
   int result;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("* (");
   token = getToken(tokenizer);
@@ -227,8 +230,8 @@ void test_checkOperatorsAffixPossibilities_given_multiply_and_open_bracket_expec
 
 void test_checkOperatorsAffixPossibilities_given_multiply_and_close_bracket_expect_FALSE(void){
   int result;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("* )");
   token = getToken(tokenizer);
@@ -238,8 +241,8 @@ void test_checkOperatorsAffixPossibilities_given_multiply_and_close_bracket_expe
 }
 void test_checkOperatorsAffixPossibilities_given_open_bracket_and_minus_expect_TRUE(void){
   int result;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("( - ");
   token = getToken(tokenizer);
@@ -250,11 +253,11 @@ void test_checkOperatorsAffixPossibilities_given_open_bracket_and_minus_expect_T
 // TokenInfo = (7) -------------> PREFIX_TYPE | INFIX_TYPE | SUFFIX_TYPE = 7
 void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_7_and_7_expect_TRUE_1(void){
   int result;
-  Token *token_1 = NULL;
-  Token *token_2 = NULL;
-  TokenInfo *tokenInfo_1 = NULL;
-  TokenInfo *tokenInfo_2 = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token_1 ;
+  Token *token_2 ;
+  TokenInfo *tokenInfo_1 ;
+  TokenInfo *tokenInfo_2 ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("+ +");
   token_1 = getToken(tokenizer);
@@ -268,11 +271,11 @@ void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_7_and_7_expect_T
 
 void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_7_and_2_expect_FALSE_0(void){
   int result;
-  Token *token_1 = NULL;
-  Token *token_2 = NULL;
-  TokenInfo *tokenInfo_1 = NULL;
-  TokenInfo *tokenInfo_2 = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token_1 ;
+  Token *token_2 ;
+  TokenInfo *tokenInfo_1 ;
+  TokenInfo *tokenInfo_2 ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("+ /");
   token_1 = getToken(tokenizer);
@@ -286,11 +289,11 @@ void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_7_and_2_expect_F
 
 void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_2_and_7_expect_TRUE_1(void){
   int result;
-  Token *token_1 = NULL;
-  Token *token_2 = NULL;
-  TokenInfo *tokenInfo_1 = NULL;
-  TokenInfo *tokenInfo_2 = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token_1 ;
+  Token *token_2 ;
+  TokenInfo *tokenInfo_1 ;
+  TokenInfo *tokenInfo_2 ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("*-");
   token_1 = getToken(tokenizer);
@@ -304,11 +307,11 @@ void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_2_and_7_expect_T
 
 void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_2_and_2_expect_FALSE_0(void){
   int result;
-  Token *token_1 = NULL;
-  Token *token_2 = NULL;
-  TokenInfo *tokenInfo_1 = NULL;
-  TokenInfo *tokenInfo_2 = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token_1 ;
+  Token *token_2 ;
+  TokenInfo *tokenInfo_1 ;
+  TokenInfo *tokenInfo_2 ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("/*");
   token_1 = getToken(tokenizer);
@@ -323,9 +326,9 @@ void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_2_and_2_expect_F
 void test_checkTokenAffix_given_2_and_minus_sign_expect_INFIX(void){
   Affix affix;
   Affix getAffix_ans;
-  Token *token = NULL;
+  Token *token ;
   TokenType prevTokenType;
-  Tokenizer *tokenizer = NULL;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("2-");
   token = getToken(tokenizer);
@@ -341,9 +344,9 @@ void test_checkTokenAffix_given_2_and_minus_sign_expect_INFIX(void){
 void test_checkTokenAffix_given_minus_sign_and_two_expect_PREFIX(void){
   Affix affix;
   Affix getAffix_ans;
-  Token *token = NULL;
+  Token *token ;
   TokenType prevTokenType;
-  Tokenizer *tokenizer = NULL;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("-2");
   token = getToken(tokenizer);
@@ -360,8 +363,8 @@ void test_checkTokenAffix_given_minus_sign_and_two_expect_PREFIX(void){
 void test_checkTokenAffix_given_12_and_12point1_expect_ERR_INVALID_AFFIX(void){
   CEXCEPTION_T e;
   Affix affix;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token;
+  Tokenizer *tokenizer;
 
   tokenizer = createTokenizer("12 12.1");
   token = getToken(tokenizer);
@@ -379,8 +382,8 @@ void test_checkTokenAffix_given_12_and_12point1_expect_ERR_INVALID_AFFIX(void){
 void test_checkTokenAffix_given_minus_and_divide_expect_ERR_INVALID_AFFIX(void){
   CEXCEPTION_T e;
   Affix affix;
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("- /");
   token = getToken(tokenizer);
@@ -398,9 +401,9 @@ void test_checkTokenAffix_given_minus_and_divide_expect_ERR_INVALID_AFFIX(void){
 void test_checkTokenAffix_given_minus_sign_and_minus_sign_expect_PREFIX(void){
   Affix affix;
   Affix getAffix_ans;
-  Token *token = NULL;
+  Token *token ;
   TokenType prevTokenType;
-  Tokenizer *tokenizer = NULL;
+  Tokenizer *tokenizer ;
 
   // prevToken is INFIX so nextToken should be prefix
   tokenizer = createTokenizer("++");
@@ -416,9 +419,9 @@ void test_checkTokenAffix_given_minus_sign_and_minus_sign_expect_PREFIX(void){
 
 void test_checkTokenAffixAndEncodeAffix_given_2_plus_3_expect_infix(void){
   Affix affix;
-  Token *token = NULL;
-  Token *encodedToken = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Token *encodedToken ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("2 + 3");
   token = getToken(tokenizer);
@@ -432,9 +435,9 @@ void test_checkTokenAffixAndEncodeAffix_given_2_plus_3_expect_infix(void){
 
 void test_checkTokenAffixAndEncodeAffix_given_minus_2_expect_prefix(void){
   Affix affix;
-  Token *token = NULL;
-  Token *encodedToken = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Token *encodedToken ;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("-2");
   token = getToken(tokenizer);
@@ -448,10 +451,10 @@ void test_checkTokenAffixAndEncodeAffix_given_minus_2_expect_prefix(void){
 
 void test_checkTokenAffixAndEncodeAffix_given_2_plus_minus_3_expect_plus_infix_minus_prefix(void){
   Affix affix;
-  Token *token = NULL;
-  Token *encodedToken = NULL;
-  Token *encodedToken_next = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Token *encodedToken ;
+  Token *encodedToken_next ;
+  Tokenizer *tokenizer ;
   TokenType encodedTokenType;
 
   tokenizer = createTokenizer("2 +- 3");
@@ -474,10 +477,10 @@ void test_checkTokenAffixAndEncodeAffix_given_2_plus_minus_3_expect_plus_infix_m
 
 void test_checkTokenAffixAndEncodeAffix_given_2_plus_open_bracket_minus_3_close_bracket_expect_plus_infix_open_bracket_prefix_minus_prefix_close_bracket_suffix(void){
   Affix affix;
-  Token *token = NULL;
-  Token *encodedToken = NULL;
-  Token *encodedToken_next = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Token *encodedToken ;
+  Token *encodedToken_next ;
+  Tokenizer *tokenizer ;
   TokenType encodedTokenType;
 
   tokenizer = createTokenizer("2 + (-3)");
@@ -520,10 +523,10 @@ void test_checkTokenAffixAndEncodeAffix_given_2_plus_open_bracket_minus_3_close_
 void test_checkTokenAffixAndEncodeAffix_given_2_open_bracket_3__close_bracket_expect_plus_infix_ERR_INVALID_AFFIX(void){
   CEXCEPTION_T e;
   Affix affix;
-  Token *token = NULL;
-  Token *encodedToken = NULL;
-  Token *encodedToken_next = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Token *encodedToken ;
+  Token *encodedToken_next ;
+  Tokenizer *tokenizer ;
   TokenType encodedTokenType;
 
   tokenizer = createTokenizer("2 (3)");
@@ -539,13 +542,14 @@ void test_checkTokenAffixAndEncodeAffix_given_2_open_bracket_3__close_bracket_ex
     TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
   }
 }
+
 void test_checkTokenAffixAndEncodeAffix_given_2_plus_multiply_3_expect_plus_infix_ERR_INVALID_AFFIX(void){
   CEXCEPTION_T e;
   Affix affix;
-  Token *token = NULL;
-  Token *encodedToken = NULL;
-  Token *encodedToken_next = NULL;
-  Tokenizer *tokenizer = NULL;
+  Token *token ;
+  Token *encodedToken ;
+  Token *encodedToken_next ;
+  Tokenizer *tokenizer ;
   TokenType encodedTokenType;
 
   tokenizer = createTokenizer("2 + * 3");
@@ -571,10 +575,10 @@ void test_checkTokenAffixAndEncodeAffix_given_2_plus_multiply_3_expect_plus_infi
 }
 
 void test_combinePrefixWithToken_given_minus_2_expect_minus2_in_a_token(void){
-  Token *prefixToken = NULL;
-  Token *operandToken = NULL;
+  Token *prefixToken ;
+  Token *operandToken ;
   Token *Ans;
-  Tokenizer *tokenizer = NULL;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("-2");
   prefixToken = getToken(tokenizer);
@@ -585,10 +589,10 @@ void test_combinePrefixWithToken_given_minus_2_expect_minus2_in_a_token(void){
 }
 
 void test_combinePrefixWithToken_given_minus_2point123_expect_minus2point123_in_a_token(void){
-  Token *prefixToken = NULL;
-  Token *operandToken = NULL;
+  Token *prefixToken ;
+  Token *operandToken ;
   Token *Ans;
-  Tokenizer *tokenizer = NULL;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("-2.123");
   prefixToken = getToken(tokenizer);
@@ -599,10 +603,10 @@ void test_combinePrefixWithToken_given_minus_2point123_expect_minus2point123_in_
 }
 
 void test_combinePrefixWithToken_given_plus_2_expect_2_in_a_token(void){
-  Token *prefixToken = NULL;
-  Token *operandToken = NULL;
+  Token *prefixToken ;
+  Token *operandToken ;
   Token *Ans;
-  Tokenizer *tokenizer = NULL;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("+2");
   prefixToken = getToken(tokenizer);
@@ -613,10 +617,10 @@ void test_combinePrefixWithToken_given_plus_2_expect_2_in_a_token(void){
 }
 
 void test_combinePrefixWithToken_given_plus_2point123_expect_2point123_in_a_token(void){
-  Token *prefixToken = NULL;
-  Token *operandToken = NULL;
+  Token *prefixToken ;
+  Token *operandToken ;
   Token *Ans;
-  Tokenizer *tokenizer = NULL;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("+2.123");
   prefixToken = getToken(tokenizer);
@@ -628,10 +632,10 @@ void test_combinePrefixWithToken_given_plus_2point123_expect_2point123_in_a_toke
 
 void test_combinePrefixWithToken_given_2_and_3_expect_ERR_INVALID_OPERATOR(void){
   CEXCEPTION_T e;
-  Token *prefixToken = NULL;
-  Token *operandToken = NULL;
+  Token *prefixToken ;
+  Token *operandToken ;
   Token *Ans;
-  Tokenizer *tokenizer = NULL;
+  Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("2 3");
   prefixToken = getToken(tokenizer);
