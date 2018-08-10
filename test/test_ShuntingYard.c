@@ -27,21 +27,18 @@ void test_pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence_given_headToken_i
   Token *operandToken_2;
 
   StackBlock operatorStack = { NULL, NULL, 0};
-  StackBlock operandStack  = { NULL, NULL, 0};
   StackItem *poppedStackItem;
 
   tokenizer = createTokenizer(" 2 + - 2 ");
   operandToken_1 = getToken(tokenizer);
   operatorToken_1 = getToken(tokenizer);
   operatorToken_2 = getToken(tokenizer);
-  operandToken_2 = getToken(tokenizer);
   affix = INFIX;
 
   encodeAffix(operatorToken_1, affix);
 
-  pushOperandStack(&operandStack, operandToken_1);
   pushOperatorStack(&operatorStack, operatorToken_1);
-  pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(&operatorStack, operatorToken_2);
+  pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(&operatorStack,tokenizer, operatorToken_2);
 
   TEST_ASSERT_EQUAL(2, operatorStack.count);
 
@@ -53,10 +50,9 @@ void test_pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence_given_headToken_i
   Token *operatorToken_1;
   Token *operandToken_1;
   Token *operatorToken_2;
-  Token *operandToken_2;
+  Token *temp;
 
   StackBlock operatorStack = { NULL, NULL, 0};
-  StackBlock operandStack  = { NULL, NULL, 0};
   StackItem *poppedStackItem;
 
   // fake '+' as prefix
@@ -64,18 +60,171 @@ void test_pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence_given_headToken_i
   operandToken_1 = getToken(tokenizer);
   operatorToken_1 = getToken(tokenizer);
   operatorToken_2 = getToken(tokenizer);
-  operandToken_2 = getToken(tokenizer);
+  temp = operatorToken_2;
   affix = PREFIX;
 
   encodeAffix(operatorToken_1, affix);
 
-  pushOperandStack(&operandStack, operandToken_1);
   pushOperatorStack(&operatorStack, operatorToken_1);
-  pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(&operatorStack, operatorToken_2);
+  pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(&operatorStack, tokenizer, operatorToken_2);
+
+  TEST_ASSERT_EQUAL(1, operatorStack.count);
+  TEST_ASSERT_EQUAL(temp, operatorToken_2);
+}
+
+void test_pushIfOperatorStackIsEmpty_given_empty_stack_and_an_operator_expect_pushed(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken_1;
+  Token *operandToken_1;
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  // fake '+' as prefix
+  tokenizer = createTokenizer(" 2 + 3 ");
+  operandToken_1 = getToken(tokenizer);
+  operatorToken_1 = getToken(tokenizer);
+
+
+  pushIfOperatorStackIsEmpty(&operatorStack, operatorToken_1, tokenizer);
 
   TEST_ASSERT_EQUAL(1, operatorStack.count);
 
 }
+
+void test_pushIfOperatorStackIsEmpty_given_not_empty_stack_an_operator_expect_didnt_pushed(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken_1;
+  Token *operatorToken_2;
+  Token *operandToken_1;
+  Token *temp;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  // fake '+' as prefix
+  tokenizer = createTokenizer(" 2 +- 3 ");
+  operandToken_1 = getToken(tokenizer);
+  operatorToken_1 = getToken(tokenizer);
+  operatorToken_2 = getToken(tokenizer);
+  temp = operatorToken_2;
+
+  pushOperatorStack(&operatorStack, operatorToken_1);
+  pushIfOperatorStackIsEmpty(&operatorStack, operatorToken_2, tokenizer);
+
+  TEST_ASSERT_EQUAL(1, operatorStack.count);;
+  TEST_ASSERT_EQUAL(temp, operatorToken_2);
+
+}
+
+void test_pushIfOperandStackIsEmpty_given_empty_stack_and_an_operand_expect_pushed(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken_1;
+  Token *operandToken_1;
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  // fake '+' as prefix
+  tokenizer = createTokenizer(" 2 + 3 ");
+  operandToken_1 = getToken(tokenizer);
+  operatorToken_1 = getToken(tokenizer);
+
+
+  pushIfOperandStackIsEmpty(&operatorStack, operandToken_1);
+
+  TEST_ASSERT_EQUAL(1, operatorStack.count);
+
+}
+
+
+void test_pushIfOperandStackIsEmpty_given_not_empty_stack_an_operand_expect_didnt_pushed(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken_1;
+  Token *operatorToken_2;
+  Token *operandToken_1;
+
+  Token *temp;
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  // fake '+' as prefix
+  tokenizer = createTokenizer(" 2 +- 3 ");
+  operandToken_1 = getToken(tokenizer);
+  operatorToken_1 = getToken(tokenizer);
+  operatorToken_2 = getToken(tokenizer);
+  temp = operatorToken_2;
+
+  pushOperandStack(&operatorStack, operatorToken_1);
+  pushIfOperatorStackIsEmpty(&operatorStack, operatorToken_2, tokenizer);
+
+  TEST_ASSERT_EQUAL(1, operatorStack.count);
+  TEST_ASSERT_EQUAL(temp, operatorToken_2);
+
+}
+
+void test_operateIfHeadTokenOfStackIsHigherPrecedence_given_3_multiply_2_then_add_compare_expect_six_push_back(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken_1;
+  Token *operatorToken_2;
+  Token *operandToken_1;
+  Token *operandToken_2;
+  Token *calculatedToken;
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  // fake '+' as prefix
+  tokenizer = createTokenizer(" 3 * 2 + ");
+  operandToken_1 = getToken(tokenizer);
+  operatorToken_1 = getToken(tokenizer);
+  operandToken_2 = getToken(tokenizer);
+  operatorToken_2 = getToken(tokenizer);
+
+  encodeAffix(operatorToken_1,INFIX);
+  encodeAffix(operatorToken_2,INFIX);
+  pushOperandStack(&operandStack,operandToken_1);
+  pushOperandStack(&operandStack,operandToken_2);
+  pushOperatorStack(&operatorStack, operatorToken_1);
+
+  operateIfHeadTokenOfStackIsHigherPrecedence(&operatorStack, &operandStack, operatorToken_2);
+
+  calculatedToken = (Token*)(operandStack.head->data);
+  TEST_ASSERT_EQUAL(6, ((IntegerToken*)calculatedToken)->value);
+
+}
+
+void test_ifNullTokenOperateUntilOperatorStackIsEmpty_given_3_minus_2__expect_1_push_back(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken_1;
+  Token *operandToken_1;
+  Token *operandToken_2;
+  Token *nullToken;
+  Token *calculatedToken;
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  // fake '+' as prefix
+  tokenizer = createTokenizer(" 3 - 2 ");
+  operandToken_1 = getToken(tokenizer);
+  operatorToken_1 = getToken(tokenizer);
+  operandToken_2 = getToken(tokenizer);
+  nullToken = getToken(tokenizer);
+
+  encodeAffix(operatorToken_1,INFIX);
+  pushOperandStack(&operandStack,operandToken_1);
+  pushOperandStack(&operandStack,operandToken_2);
+  pushOperatorStack(&operatorStack, operatorToken_1);
+
+  ifNullTokenOperateUntilOperatorStackIsEmpty(&operatorStack, &operandStack, nullToken);
+
+  calculatedToken = (Token*)(operandStack.head->data);
+  TEST_ASSERT_EQUAL(1, ((IntegerToken*)calculatedToken)->value);
+
+}
+
 /*
 // (+)(2)  valid
 void test_isTokenValid_given_plus_and_2_expect_true(void){

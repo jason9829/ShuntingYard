@@ -82,19 +82,58 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
 
   }
 }
-
-
-void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorStack, Token *token){
-  Affix affixOfHeadOperatorToken;
+void ifNullTokenOperateUntilOperatorStackIsEmpty(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
+  Affix headOperatorAffix;
   Token *headOperatorToken;
+  headOperatorToken = (Token*)operatorStack->head->data;
 
-  headOperatorToken = (Token*)(operatorStack->head->data);
-  // HeadTokenIsInfix
-  if(!operatorStackHeadIsPrefix(operatorStack)){
+  if(token->type == TOKEN_NULL_TYPE){
+    while(operatorStack->count !=0){
+      headOperatorAffix = getAffix(headOperatorToken);
+      operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
+    }
+  }
+
+}
+void operateIfHeadTokenOfStackIsHigherPrecedence(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
+  Token *headOperatorToken;
+  Affix headOperatorAffix;
+  headOperatorToken = (Token*)operatorStack->head->data;
+  if(comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken)){
+    headOperatorAffix = getAffix(headOperatorToken);
+    operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
+  }
+}
+
+void pushIfOperatorStackIsEmpty(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer){
+  if(operatorStack->count == 0){
+    TokenType prevTokenType;
+    prevTokenType = TOKEN_NULL_TYPE;
+    checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
     pushOperatorStack(operatorStack, token);
   }
 }
 
+void pushIfOperandStackIsEmpty(StackBlock *operandStack, Token *token){
+  if(operandStack->count == 0){
+    pushOperandStack(operandStack, token);
+  }
+}
+
+
+void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorStack, Tokenizer *tokenizer, Token *token){
+  Affix affixOfHeadOperatorToken;
+  Token *headOperatorToken;
+  TokenType prevTokenType;
+
+  headOperatorToken = (Token*)(operatorStack->head->data);
+  prevTokenType = getTokenType(headOperatorToken);
+  // HeadTokenIsInfix
+  if(!operatorStackHeadIsPrefix(operatorStack)){
+    checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
+    pushOperatorStack(operatorStack, token);
+  }
+}
 
 int operatorStackHeadIsPrefix(StackBlock *operatorStack){
   Affix affixOfHeadOperatorToken;

@@ -278,6 +278,13 @@ Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
     }
 
   }
+  else if(prevTokenType == TOKEN_NULL_TYPE){
+    if(nextToken->type == TOKEN_OPERATOR_TYPE){
+      pushBackToken(tokenizer, nextToken);
+      encodeAffix(nextToken, PREFIX);
+      return PREFIX;
+    }
+  }
   else{
     //throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
     throwException(ERR_INVALID_OPERATOR, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
@@ -338,9 +345,14 @@ void checkTokenAffixAndEncodeAffix(Token *token, Tokenizer *tokenizer,TokenType 
     }
 
   }
-  else{
-    //throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
-    throwException(ERR_INVALID_OPERATOR, token,"Affix of '%s' is invalid", token->str);
+  else if(prevTokenType == TOKEN_NULL_TYPE){
+    if(token->type == TOKEN_OPERATOR_TYPE){
+      encodeAffix(token, PREFIX);
+    }
+    else{
+      //throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
+      throwException(ERR_INVALID_OPERATOR, token,"Affix of '%s' is invalid", token->str);
+    }
   }
 }
 // No need
