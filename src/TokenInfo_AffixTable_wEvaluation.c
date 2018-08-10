@@ -285,71 +285,6 @@ Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
 
 }
 
-// check next Token affix and encode it
-// needed to decode it later (getAffixType)
-/*
-void checkTokenAffixAndEncodeAffix(Tokenizer *tokenizer, Token *prevToken){
-  TokenType prevTokenType;
-  int  PossibleAffixCombination;
-  char operatorSymbol;
-
-  prevTokenType = getTokenType(prevToken);
-  Token *nextToken = NULL;
-
-  OperatorType currTokenOperatorType;
-  nextToken = getToken(tokenizer);
-  operatorSymbol = *((OperatorToken*)nextToken) -> str;
-
-  // (2)(+) / (2)(-) / (2)(*) / (2)(/)  return operator infix
-  if(prevTokenType == TOKEN_FLOAT_TYPE || prevTokenType == TOKEN_INTEGER_TYPE){
-    if(nextToken->type == TOKEN_OPERATOR_TYPE){
-      if(operatorSymbol == ')'){
-        encodeAffix(nextToken, SUFFIX);
-        pushBackToken(tokenizer, nextToken);
-      }
-      else if(operatorSymbol == '('){
-        throwException(ERR_INVALID_AFFIX, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
-      }
-      else{
-        encodeAffix(nextToken, INFIX);
-        pushBackToken(tokenizer, nextToken);
-      }
-    }
-    else{
-      pushBackToken(tokenizer, nextToken);
-    //  throwSimpleError(ERR_INVALID_AFFIX, "Invalid affix (currentToken and nextToken is not OperatorType)");
-      throwException(ERR_INVALID_AFFIX, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
-    }
-  }
-  // For example (+)(-) [(+) is preToken and (-) is nextToken]
-  // (-) should be infix
-  else if (prevTokenType == TOKEN_OPERATOR_TYPE){
-    if(nextToken->type == TOKEN_OPERATOR_TYPE){
-      pushBackToken(tokenizer, nextToken);
-      PossibleAffixCombination = checkOperatorsAffixPossibilities(prevToken, tokenizer);
-      if(PossibleAffixCombination == 1){
-          if(operatorSymbol == ')'){
-            encodeAffix(nextToken, SUFFIX);
-          }
-          else{
-            encodeAffix(nextToken, PREFIX);
-          }
-      }
-      else{
-        throwException(ERR_INVALID_AFFIX, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
-      }
-    } // Example (-)(2) return PREFIX
-    else{
-      encodeAffix(nextToken, PREFIX);
-      pushBackToken(tokenizer, nextToken);
-    }
-
-  }
-  else{
-    //throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
-    throwException(ERR_INVALID_OPERATOR, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
-  }
-}*/
 
 void checkTokenAffixAndEncodeAffix(Token *token, Tokenizer *tokenizer,TokenType prevTokenType){
   int  PossibleAffixCombination;
@@ -428,12 +363,17 @@ OperatorType determineOperatorType(Affix tokenAffix){
 // For example, (-)(2)---->(-2)
 Token *combinePrefixWithOperandToken(Token *prefixToken, Token *operandToken){
   char  prefixSymbol;
+  TokenType prefixTokenType;
+  TokenType operandTokenType;
 
-  if(prefixToken->type == TOKEN_OPERATOR_TYPE){
+  prefixTokenType = getTokenType(prefixToken);
+  operandTokenType = getTokenType(operandToken);
+
+  if(prefixTokenType == TOKEN_OPERATOR_TYPE){
     prefixSymbol = *((OperatorToken*)prefixToken)->str;
     // If nextToken is numbers then do the operation else throw error
-    if(operandToken->type == TOKEN_INTEGER_TYPE || operandToken->type == TOKEN_FLOAT_TYPE){
-      switch(operandToken->type){
+    if(operandTokenType == TOKEN_INTEGER_TYPE || operandTokenType== TOKEN_FLOAT_TYPE){
+      switch(operandTokenType){
         case TOKEN_INTEGER_TYPE : if(prefixSymbol == '+'){
                                     return operandToken;
                                   }
@@ -471,3 +411,70 @@ Token *combinePrefixWithOperandToken(Token *prefixToken, Token *operandToken){
     throwException(ERR_INVALID_OPERATOR, operandToken,"Token '%s' is an invalid to combined with prefixToken '%s'" , operandToken->str, prefixToken->str);
     }
 }
+
+
+// check next Token affix and encode it
+// needed to decode it later (getAffixType)
+/*
+void checkTokenAffixAndEncodeAffix(Tokenizer *tokenizer, Token *prevToken){
+  TokenType prevTokenType;
+  int  PossibleAffixCombination;
+  char operatorSymbol;
+
+  prevTokenType = getTokenType(prevToken);
+  Token *nextToken = NULL;
+
+  OperatorType currTokenOperatorType;
+  nextToken = getToken(tokenizer);
+  operatorSymbol = *((OperatorToken*)nextToken) -> str;
+
+  // (2)(+) / (2)(-) / (2)(*) / (2)(/)  return operator infix
+  if(prevTokenType == TOKEN_FLOAT_TYPE || prevTokenType == TOKEN_INTEGER_TYPE){
+    if(nextToken->type == TOKEN_OPERATOR_TYPE){
+      if(operatorSymbol == ')'){
+        encodeAffix(nextToken, SUFFIX);
+        pushBackToken(tokenizer, nextToken);
+      }
+      else if(operatorSymbol == '('){
+        throwException(ERR_INVALID_AFFIX, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
+      }
+      else{
+        encodeAffix(nextToken, INFIX);
+        pushBackToken(tokenizer, nextToken);
+      }
+    }
+    else{
+      pushBackToken(tokenizer, nextToken);
+    //  throwSimpleError(ERR_INVALID_AFFIX, "Invalid affix (currentToken and nextToken is not OperatorType)");
+      throwException(ERR_INVALID_AFFIX, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
+    }
+  }
+  // For example (+)(-) [(+) is preToken and (-) is nextToken]
+  // (-) should be infix
+  else if (prevTokenType == TOKEN_OPERATOR_TYPE){
+    if(nextToken->type == TOKEN_OPERATOR_TYPE){
+      pushBackToken(tokenizer, nextToken);
+      PossibleAffixCombination = checkOperatorsAffixPossibilities(prevToken, tokenizer);
+      if(PossibleAffixCombination == 1){
+          if(operatorSymbol == ')'){
+            encodeAffix(nextToken, SUFFIX);
+          }
+          else{
+            encodeAffix(nextToken, PREFIX);
+          }
+      }
+      else{
+        throwException(ERR_INVALID_AFFIX, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
+      }
+    } // Example (-)(2) return PREFIX
+    else{
+      encodeAffix(nextToken, PREFIX);
+      pushBackToken(tokenizer, nextToken);
+    }
+
+  }
+  else{
+    //throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
+    throwException(ERR_INVALID_OPERATOR, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
+  }
+}*/

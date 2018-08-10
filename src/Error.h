@@ -22,4 +22,5 @@
 #define ERR_INVALID_TOKEN         110
 #define ERR_STACK_INSUFFICIENT   111
 #define ERR_STACK_NOT_EMPTY      112
+#define ERR_INVALID_PRECEDENCE   113
 #endif // _ERROR_H

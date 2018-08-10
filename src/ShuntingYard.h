@@ -8,11 +8,14 @@
 #include "TokenInfo_AffixTable_wEvaluation.h"
 
 int isTokenValid(Token *token, TokenType lastTokenType);
+int checkIfNextTokenIsValid(Token *token, Tokenizer *tokenizer);
+int operatorStackHeadIsPrefix(StackBlock *operatorStack);
 void pushTokensToRespectiveStack(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack);
 void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack);
 void operateOnStacksDependOnAffix(StackBlock *operatorStack, StackBlock *operandStack, Affix affix);
 Token *operationOnStacksIfOperatorIsInfix(StackBlock *operatorStack, StackBlock *operandStack);
 Token *operationOnStacksIfOperatorIsPrefix(StackBlock *operatorStack, StackBlock *operandStack);
+void operateBasedOnPrecedence(StackBlock *operatorStack, StackBlock *operandStack, int comparePrecedenceResults);
 void pushOperandStack(StackBlock *operandStack, Token *token);
 void pushOperatorStack(StackBlock *operatorStack, Token *token);
 OperatorType determineTokenOperatorType(Tokenizer *tokenizer, Token *prevToken);

@@ -15,23 +15,140 @@
 
 #define START 1
 #define STOP 0
+
+void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
+  Token *token;
+  Token *nextToken;
+  Affix prevOperatorAffix;
+  TokenType prevTokenType;
+  OperatorPrecedence *comparePrecedenceResults;
+  prevTokenType = TOKEN_NULL_TYPE;
+  int condition = START;
+
+  //  if(operatorStack->count !=0){
+  //    comparePrecedenceResults = comparePrevTokenAndNextTokenPrecedence(token, (Token*)(operatorStack->head->data));
+  //    operateBasedOnPrecedence(operatorStack, operandStack, comparePrecedenceResults);
+  //  }
+  //tokenPrecedence = getTokenPrecedence(token);
+
+  while(condition == START){
+    token = getToken(tokenizer);
+
+    if(!isTokenValid(token, prevTokenType) && token->type != TOKEN_NULL_TYPE){
+      throwException(ERR_INVALID_TOKEN, token, "Token '%s' is invalid compare to '%s'", token->str, prevTokenType);
+    }
+
+    if(token->type == TOKEN_INTEGER_TYPE || token->type == TOKEN_FLOAT_TYPE){
+      prevTokenType = getTokenType(token);
+      pushOperandStack(operandStack, token);
+      continue;
+    }
+    else if (token->type == TOKEN_OPERATOR_TYPE){
+      prevTokenType = getTokenType(token);
+      if(operatorStack->count != 0){
+        if(!operatorStackHeadIsPrefix(operatorStack)){
+          checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
+          pushOperatorStack(operatorStack, token);
+          prevOperatorAffix = getAffix((Token*)(operatorStack->head->data));
+        }
+        else{ // if token is prefix
+          prevOperatorAffix = PREFIX;
+          if(!checkOperatorsAffixPossibilities(token, tokenizer)){
+            throwException(ERR_INVALID_OPERATOR, token ,"next token of '%s' is invalid ", token->str);
+          }
+          else{
+            pushOperatorStack(operatorStack, token);
+            operateOnStacksDependOnAffix(operatorStack, operandStack, prevOperatorAffix);
+          }
+        }
+      }
+        else{
+          checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
+          pushOperatorStack(operatorStack, token);
+          prevOperatorAffix = getAffix((Token*)(operatorStack->head->data));
+        }
+    }
+    else{
+      // end of tokenizer
+      if(token->type == TOKEN_NULL_TYPE){
+        while(operatorStack->count !=0){
+          prevOperatorAffix = getAffix((Token*)(operatorStack->head->data));
+          operateOnStacksDependOnAffix(operatorStack, operandStack, prevOperatorAffix);
+        }
+          condition = STOP;
+      }
+    }
+
+
+  }
+}
+
+
+void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorStack, Token *token){
+  Affix affixOfHeadOperatorToken;
+  Token *headOperatorToken;
+
+  headOperatorToken = (Token*)(operatorStack->head->data);
+  // HeadTokenIsInfix
+  if(!operatorStackHeadIsPrefix(operatorStack)){
+    pushOperatorStack(operatorStack, token);
+  }
+}
+
+
+int operatorStackHeadIsPrefix(StackBlock *operatorStack){
+  Affix affixOfHeadOperatorToken;
+  affixOfHeadOperatorToken = getAffix((Token*)(operatorStack->head->data));
+
+  if(affixOfHeadOperatorToken != PREFIX){
+    return 0;
+  }
+  else{
+    return 1;
+  }
+}
+/*
+void operateBasedOnPrecedence(StackBlock *operatorStack, StackBlock *operandStack, int comparePrecedenceResults){
+  Affix currTokenAffix;
+  currTokenAffix = getAffix((Token*)(operatorStack->head->data));
+  Token *ans;
+
+  switch (comparePrecedenceResults) {
+    // precedence of head Operator larger than token
+    case  0 : pushOperatorStack(operatorStack, token);
+              break;
+    case  1 : ans = operateOnStacksDependOnAffix(operatorStack, operandStack, currTokenAffix);
+              pushOperandStack(operandStack, ans);
+              break;
+    case  2 : ans = operateOnStacksDependOnAffix(operatorStack, operandStack, currTokenAffix);
+              pushOperandStack(operandStack, ans);
+              break;
+    default : throwException(ERR_INVALID_ANSWER, comparePrecedenceResults, "comparePrecedenceResults '%d' is invalid", comparePrecedenceResults);
+  }
+}*/
 /*
 void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
   Token *token;
+  Token *nextToken;
+  Affix prevOperatorAffix;
   TokenType prevTokenType;
-  OperatorPrecedence tokenPrecedence;
+  OperatorPrecedence *tokenPrecedence;
   prevTokenType = TOKEN_NULL_TYPE;
   int condition = START;
 
   while(condition == START){
     token = getToken(tokenizer);
     if(token->type == TOKEN_NULL_TYPE){
-      condition = STOP;
+      while(operatorStack->count !=0){
+        prevOperatorAffix = getAffix((Token*)(operatorStack->head->data));
+        operateOnStacksDependOnAffix(operatorStack, operandStack, prevOperatorAffix);
+      }
+          condition = STOP;
     }
     else{
       if(isTokenValid(token, prevTokenType)){
-
         if(token->type == TOKEN_INTEGER_TYPE || token->type == TOKEN_FLOAT_TYPE){
+          prevTokenType = getTokenType(token);
           pushOperandStack(operandStack, token);
           continue;
         }
@@ -39,22 +156,47 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
           checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
           tokenPrecedence = getTokenPrecedence(token);
           if(operatorStack->count == 0){
+            prevTokenType = getTokenType(token);
             pushOperatorStack(operatorStack, token);
+            prevOperatorAffix = getAffix((Token*)(operatorStack->head->data));
           }
           else{     // compare the precedence of operatorStack token and currentToken
             if(comparePrevTokenAndNextTokenPrecedence(token, (Token*)(operatorStack->head->data))){
-
+              nextToken = getToken(tokenizer);
+              if(nextToken->type == TOKEN_OPERATOR_TYPE){
+                if(checkOperatorTokensAffixPossibilities(token, nextToken)){
+                  pushBackToken(tokenizer, nextToken);
+                  tokenPrecedence = getTokenPrecedence(token);
+                  prevTokenType = getTokenType(token);
+                  pushOperatorStack(operatorStack, token);
+                  prevOperatorAffix = getAffix((Token*)(operatorStack->head->data));
+                }
+                else{
+                  throwException(ERR_INVALID_TOKEN, token, "Affix of Token '%s' is invalid compare to '%s'", token->str, nextToken->str);
+                }
+              }
+              prevOperatorAffix = getAffix((Token*)(operatorStack->head->data));
+              operateOnStacksDependOnAffix(operatorStack, operandStack, prevOperatorAffix);
+            }
+            else{
+              checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
+              tokenPrecedence = getTokenPrecedence(token);
+              prevTokenType = getTokenType(token);
+              pushOperatorStack(operatorStack, token);
             }
           }
         }
       }
       else{
-        throwException(ERR_INVALID_TOKEN, token, "Token '%s' is invalid compare to '%s'", token->str, prevTokenType)
+        throwException(ERR_INVALID_TOKEN, token, "Token '%s' is invalid compare to '%s'", token->str, prevTokenType);
       }
     }
   }
+
 }
 */
+
+
 int isTokenValid(Token *token, TokenType lastTokenType){
 
   if(token->type == TOKEN_FLOAT_TYPE || token->type == TOKEN_INTEGER_TYPE){
@@ -73,7 +215,7 @@ int isTokenValid(Token *token, TokenType lastTokenType){
     }
   }
   else{
-    throwException(ERR_INVALID_TOKEN, token, "Current token type is '%s' and previous token type is '%s'", token->type, lastTokenType);
+    return 0;
   }
 }
 void operateOnStacksDependOnAffix(StackBlock *operatorStack, StackBlock *operandStack, Affix affix){
@@ -102,8 +244,8 @@ Token *operationOnStacksIfOperatorIsPrefix(StackBlock *operatorStack, StackBlock
     token_1 = (Token*)(poppedToken_1->data);
     token_operator = (Token*)(poppedToken_operator->data);
     ans = combinePrefixWithOperandToken(token_operator, token_1);
-    freeToken(token_1);
-    freeToken(token_operator);
+    //freeToken(token_1);
+    //freeToken(token_operator);
     return ans;
   }
   else{

@@ -239,6 +239,32 @@ void test_checkOperatorsAffixPossibilities_given_multiply_and_close_bracket_expe
   result = checkOperatorsAffixPossibilities(token, tokenizer);
   TEST_ASSERT_EQUAL(0, result);
 }
+
+void test_checkOperatorsAffixPossibilities_given_close_bracket_and_close_bracket_expect_TRUE(void){
+  int result;
+  Token *token ;
+  Tokenizer *tokenizer ;
+
+  tokenizer = createTokenizer(") )");
+  token = getToken(tokenizer);
+
+  result = checkOperatorsAffixPossibilities(token, tokenizer);
+  TEST_ASSERT_EQUAL(1, result);
+}
+
+
+void test_checkOperatorsAffixPossibilities_given_open_bracket_and_open_bracket_expect_TRUE(void){
+  int result;
+  Token *token ;
+  Tokenizer *tokenizer ;
+
+  tokenizer = createTokenizer(") )");
+  token = getToken(tokenizer);
+
+  result = checkOperatorsAffixPossibilities(token, tokenizer);
+  TEST_ASSERT_EQUAL(1, result);
+}
+
 void test_checkOperatorsAffixPossibilities_given_open_bracket_and_minus_expect_TRUE(void){
   int result;
   Token *token ;
