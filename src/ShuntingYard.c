@@ -22,6 +22,7 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
   Affix prevOperatorAffix;
   TokenType prevTokenType;
   OperatorPrecedence *comparePrecedenceResults;
+  Associativity prevTokenAssociativity;
   prevTokenType = TOKEN_NULL_TYPE;
   int condition = START;
   int bracketFound = 0 ;
@@ -40,11 +41,12 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
     }
     else if (token->type == TOKEN_OPERATOR_TYPE){
       checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
-      ifOpenBracketFoundKeepPushingUntilCloseBracket();
+      //ifOpenBracketFoundKeepPushingUntilCloseBracket();
       pushIfOperatorStackIsEmpty(operatorStack, token, tokenizer, prevTokenType);
       pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token, tokenizer);
       pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack, token, tokenizer);
       operateIfHeadTokenOfStackIsHigherPrecedence(operatorStack, operandStack, token);
+      prevTokenAssociativity = getTokenAssociativity(token);
       prevTokenType = getTokenType(token);
     }
     else{
@@ -53,6 +55,20 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
     }
   }
 }
+
+void operateStackIfOperatorsAssociativityAreSame(StackBlock *operatorStack, StackBlock *operandStack, Token *token, Associativity prevTokenAssociativity){
+  Associativity currentTokenAssociativity;
+  Affix headOperatorAffix;
+  Token *headOperatorToken;
+  headOperatorToken = (Token*)(operatorStack->head->data);
+  currentTokenAssociativity = getTokenAssociativity(token);
+  headOperatorAffix = getAffix(headOperatorToken);
+
+  if(currentTokenAssociativity == prevTokenAssociativity){
+    operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
+  }
+}
+
 
 void ifNullTokenOperateUntilOperatorStackIsEmpty(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
   Affix headOperatorAffix;
@@ -104,11 +120,36 @@ void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(StackBlock *operatorSta
   // HeadTokenIsInfix
     if(headOperatorToken != token){
       if (comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken) == 2){
+      //  checkAssociativity(token, headOperatorToken);
         pushOperatorStack(operatorStack, token);
       }
     }
   }
 
+/*
+ *  affixOfCurrentToken         Associativity
+ *      PREFIX                  RIGHT-TO-LEFT
+ *      INFIX                   LEFT-TO-RIGHT
+ *      SUFFIX                  LEFT-TO-RIGHT
+ */
+Associativity getTokenAssociativity(Token *currentToken){
+  Affix affixOfCurrentToken;
+
+  affixOfCurrentToken = getAffix(currentToken);
+
+  if(affixOfCurrentToken == PREFIX){
+    return RIGHT_TO_LEFT;
+  }
+  else if(affixOfCurrentToken == INFIX){
+    return LEFT_TO_RIGHT;
+  }
+  else if(affixOfCurrentToken == SUFFIX){
+    return LEFT_TO_RIGHT;
+  }
+  else{
+    throwException(ERR_INVALID_AFFIX, currentToken, "Token '%s' has an invalid affix, thus can't find the associativity", currentToken->str);
+  }
+}
 
 void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer){
   Affix affixOfHeadOperatorToken;

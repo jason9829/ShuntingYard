@@ -8,6 +8,8 @@
 #include "CException.h"
 #include "Error.h"
 
+#define TRUE 1
+#define FALSE 0
 void setUp(void){}
 void tearDown(void){}
 
@@ -15,6 +17,110 @@ void tearDown(void){}
 // 3+*4
 // 3 + - + 5
 
+void test_isOperatorSymbolValid_given_plus_expect_valid(void){
+  Token *token ;
+  Tokenizer *tokenizer ;
+
+  tokenizer = createTokenizer("+");
+  token = getToken(tokenizer);
+
+
+  TEST_ASSERT_EQUAL(TRUE, isOperatorSymbolValid(token));
+}
+
+void test_isOperatorSymbolValid_given_minus_expect_valid(void){
+  Token *token ;
+  Tokenizer *tokenizer ;
+
+  tokenizer = createTokenizer("-");
+  token = getToken(tokenizer);
+
+
+  TEST_ASSERT_EQUAL(TRUE, isOperatorSymbolValid(token));
+}
+
+void test_isOperatorSymbolValid_given_multiply_expect_valid(void){
+  Token *token ;
+  Tokenizer *tokenizer ;
+
+  tokenizer = createTokenizer("*");
+  token = getToken(tokenizer);
+
+
+  TEST_ASSERT_EQUAL(TRUE, isOperatorSymbolValid(token));
+}
+
+void test_isOperatorSymbolValid_given_divide_expect_valid(void){
+  Token *token ;
+  Tokenizer *tokenizer ;
+
+  tokenizer = createTokenizer("/");
+  token = getToken(tokenizer);
+
+
+  TEST_ASSERT_EQUAL(TRUE, isOperatorSymbolValid(token));
+}
+
+void test_isOperatorSymbolValid_given_open_bracket_expect_valid(void){
+  Token *token ;
+  Tokenizer *tokenizer ;
+
+  tokenizer = createTokenizer("(");
+  token = getToken(tokenizer);
+
+
+  TEST_ASSERT_EQUAL(TRUE, isOperatorSymbolValid(token));
+}
+
+void test_isOperatorSymbolValid_given_close_bracket_expect_valid(void){
+  Token *token ;
+  Tokenizer *tokenizer ;
+
+  tokenizer = createTokenizer(")");
+  token = getToken(tokenizer);
+
+  TEST_ASSERT_EQUAL(TRUE, isOperatorSymbolValid(token));
+}
+
+void test_isOperatorSymbolValid_given_and_symbol_expect_ERR_INVALID_OPERATOR(void){
+  CEXCEPTION_T e;
+  Token *token ;
+  Tokenizer *tokenizer ;
+  int ans;
+
+  tokenizer = createTokenizer("&");
+  token = getToken(tokenizer);
+
+  Try{
+    ans = isOperatorSymbolValid(token);
+    TEST_FAIL_MESSAGE("Expect ERR_INVALID_OPERATOR. But no exception thrown.");
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e, 1);
+    TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
+  }
+
+}
+
+void test_isOperatorSymbolValid_given_1_expect_ERR_INVALID_OPERATOR(void){
+  CEXCEPTION_T e;
+  Token *token ;
+  Tokenizer *tokenizer ;
+  int ans;
+
+  tokenizer = createTokenizer("1");
+  token = getToken(tokenizer);
+
+  Try{
+    ans = isOperatorSymbolValid(token);
+    TEST_FAIL_MESSAGE("Expect ERR_INVALID_OPERATOR. But no exception thrown.");
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e, 1);
+    TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
+  }
+
+}
 void test_getTokenInfo_given_plus_sign_expect_attribute_7(void){
   Token *token ;
   Tokenizer *tokenizer ;
