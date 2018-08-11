@@ -168,7 +168,7 @@ void test_checkOperatorsAffixPossibilities_given_plus_and_divide_expect_FALSE(vo
   TEST_ASSERT_EQUAL(0, result);
 }
 
-void test_checkOperatorsAffixPossibilities_given_multiply_and_plus_expect_TRUE(void){
+void test_checkOperatorsAffixPossibilities_given_multiply_and_plus_expect_FALSE(void){
   int result;
   Token *token ;
   Tokenizer *tokenizer ;
@@ -267,8 +267,8 @@ void test_checkOperatorsAffixPossibilities_given_open_bracket_and_open_bracket_e
 
 void test_checkOperatorsAffixPossibilities_given_open_bracket_and_minus_expect_TRUE(void){
   int result;
-  Token *token ;
-  Tokenizer *tokenizer ;
+  Token *token;
+  Tokenizer *tokenizer;
 
   tokenizer = createTokenizer("( - ");
   token = getToken(tokenizer);
@@ -276,6 +276,7 @@ void test_checkOperatorsAffixPossibilities_given_open_bracket_and_minus_expect_T
   result = checkOperatorsAffixPossibilities(token, tokenizer);
   TEST_ASSERT_EQUAL(1, result);
 }
+
 // TokenInfo = (7) -------------> PREFIX_TYPE | INFIX_TYPE | SUFFIX_TYPE = 7
 void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_7_and_7_expect_TRUE_1(void){
   int result;
@@ -304,6 +305,190 @@ void test_compareCurrTokenAndNextTokenWithTable_given_TokenInfo_7_and_2_expect_F
   Tokenizer *tokenizer ;
 
   tokenizer = createTokenizer("+ /");
+  token_1 = getToken(tokenizer);
+  token_2 = getToken(tokenizer);
+  tokenInfo_1 = getTokenInfo(token_1);
+  tokenInfo_2 = getTokenInfo(token_2);
+
+  result = compareCurrTokenAndNextTokenWithTable(tokenInfo_1, tokenInfo_2);
+  TEST_ASSERT_EQUAL(0, result);
+}
+
+void test_compareCurrTokenAndNextTokenWithTable_given_open_bracket_and_plus_expect_TRUE(void){
+  int result;
+  Token *token_1 ;
+  Token *token_2 ;
+  TokenInfo *tokenInfo_1 ;
+  TokenInfo *tokenInfo_2 ;
+  Tokenizer *tokenizer ;
+
+  tokenizer = createTokenizer(")+ ");
+  token_1 = getToken(tokenizer);
+  token_2 = getToken(tokenizer);
+  tokenInfo_1 = getTokenInfo(token_1);
+  tokenInfo_2 = getTokenInfo(token_2);
+
+  result = compareCurrTokenAndNextTokenWithTable(tokenInfo_1, tokenInfo_2);
+  TEST_ASSERT_EQUAL(1, result);
+}
+
+void test_areAffixesCombinationValid_given_INFIX_PREFIX_expect_1(void){
+  int result;
+  Affix leftAffix;
+  Affix thisAffix;
+
+  leftAffix = INFIX;
+  thisAffix = PREFIX;
+
+
+  result = areAffixesCombinationValid(leftAffix, thisAffix);
+  TEST_ASSERT_EQUAL(1, result);
+
+}
+void test_areAffixesCombinationValid_given_PREFIX_PREFIX_expect_1(void){
+  int result;
+  Affix leftAffix;
+  Affix thisAffix;
+
+  leftAffix = PREFIX;
+  thisAffix = PREFIX;
+
+
+  result = areAffixesCombinationValid(leftAffix, thisAffix);
+  TEST_ASSERT_EQUAL(1, result);
+
+}
+void test_areAffixesCombinationValid_given_SUFFIX_INFIX_expect_1(void){
+  int result;
+  Affix leftAffix;
+  Affix thisAffix;
+
+  leftAffix = SUFFIX;
+  thisAffix = INFIX;
+
+
+  result = areAffixesCombinationValid(leftAffix, thisAffix);
+  TEST_ASSERT_EQUAL(1, result);
+
+}
+void test_areAffixesCombinationValid_given_SUFFIX_SUFFIX_expect_ERR_INVALID_AFFIX(void){
+  int result;
+  Affix leftAffix;
+  Affix thisAffix;
+
+  leftAffix = SUFFIX;
+  thisAffix = SUFFIX;
+
+
+  result = areAffixesCombinationValid(leftAffix, thisAffix);
+  TEST_ASSERT_EQUAL(1, result);
+
+}
+void test_areAffixesCombinationValid_given_INFIX_INFIX_expect_ERR_INVALID_AFFIX(void){
+  CEXCEPTION_T e;
+  int result;
+  Affix leftAffix;
+  Affix thisAffix;
+
+  leftAffix = INFIX;
+  thisAffix = INFIX;
+
+   Try{
+     result = areAffixesCombinationValid(leftAffix, thisAffix);
+     TEST_ASSERT_EQUAL(0, result);
+     //TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
+   }
+   Catch(e){
+   dumpTokenErrorMessage(e, 1);
+   TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
+   }
+}
+void test_areAffixesCombinationValid_given_INFIX_SUFFIX_expect_ERR_INVALID_AFFIX(void){
+   CEXCEPTION_T e;
+   int result;
+   Affix leftAffix;
+   Affix thisAffix;
+
+   leftAffix = INFIX;
+   thisAffix = SUFFIX;
+
+   Try{
+     result = areAffixesCombinationValid(leftAffix, thisAffix);
+     TEST_ASSERT_EQUAL(0, result);
+     //TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
+   }
+   Catch(e){
+   dumpTokenErrorMessage(e, 1);
+   TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
+   }
+}
+void test_areAffixesCombinationValid_given_PREFIX_INFIX_expect_ERR_INVALID_AFFIX(void){
+   CEXCEPTION_T e;
+   int result;
+   Affix leftAffix;
+   Affix thisAffix;
+
+   leftAffix = PREFIX;
+   thisAffix = INFIX;
+
+   Try{
+     result = areAffixesCombinationValid(leftAffix, thisAffix);
+     TEST_ASSERT_EQUAL(0, result);
+    // TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
+   }
+   Catch(e){
+   dumpTokenErrorMessage(e, 1);
+   TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
+   }
+}
+void test_areAffixesCombinationValid_given_PREFIX_SUFFIX_expect_ERR_INVALID_AFFIX(void){
+   CEXCEPTION_T e;
+   int result;
+   Affix leftAffix;
+   Affix thisAffix;
+
+   leftAffix = PREFIX;
+   thisAffix = SUFFIX;
+
+   Try{
+     result = areAffixesCombinationValid(leftAffix, thisAffix);
+     TEST_ASSERT_EQUAL(0, result);
+  //   TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
+   }
+   Catch(e){
+   dumpTokenErrorMessage(e, 1);
+   TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
+   }
+}
+void test_areAffixesCombinationValid_given_SUFFIX_PREFIX_expect_ERR_INVALID_AFFIX(void){
+   CEXCEPTION_T e;
+   int result;
+   Affix leftAffix;
+   Affix thisAffix;
+
+   leftAffix = SUFFIX;
+   thisAffix = PREFIX;
+
+   Try{
+     result = areAffixesCombinationValid(leftAffix, thisAffix);
+     TEST_ASSERT_EQUAL(0, result);
+     //TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
+   }
+   Catch(e){
+   dumpTokenErrorMessage(e, 1);
+   TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
+   }
+}
+
+void test_compareCurrTokenAndNextTokenWithTable_given_plus_open_bracket_expect_FALSE(void){
+  int result;
+  Token *token_1 ;
+  Token *token_2 ;
+  TokenInfo *tokenInfo_1 ;
+  TokenInfo *tokenInfo_2 ;
+  Tokenizer *tokenizer ;
+
+  tokenizer = createTokenizer("+) ");
   token_1 = getToken(tokenizer);
   token_2 = getToken(tokenizer);
   tokenInfo_1 = getTokenInfo(token_1);

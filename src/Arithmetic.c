@@ -45,9 +45,11 @@ Token *additionOf2Tokens(Token *token_1, Token *token_2){
 
   if(token_1->type == TOKEN_INTEGER_TYPE && token_2->type == TOKEN_INTEGER_TYPE){
     (IntegerToken*)Answer;
+    int answer;
     v1 = ((IntegerToken *)token_1)->value;
     v2 = ((IntegerToken *)token_2)->value;
     ((IntegerToken*)Answer)->value = v1 + v2;
+    answer = ((IntegerToken*)Answer)->value ;
     Answer->type = TOKEN_INTEGER_TYPE;    // type corrupted when check with codelite
     return Answer;
   }
@@ -88,10 +90,12 @@ Token *subtractionOf2Tokens(Token *token_1, Token *token_2){
   Token *Answer = (struct Token*)malloc (sizeof(struct Token));
 
   if(token_1->type == TOKEN_INTEGER_TYPE && token_2->type == TOKEN_INTEGER_TYPE){
+    int Ans;
     (IntegerToken*)Answer;
     v1 = ((IntegerToken *)token_1)->value;
     v2 = ((IntegerToken *)token_2)->value;
     ((IntegerToken*)Answer)->value = v1 - v2;
+    Ans = ((IntegerToken*)Answer)->value ;
     Answer->type = TOKEN_INTEGER_TYPE;    // type corrupted when check with codelite
     return Answer;
   }
@@ -100,6 +104,8 @@ Token *subtractionOf2Tokens(Token *token_1, Token *token_2){
     v1  = ((IntegerToken*)token_1)->value;
     v_2 = ((FloatToken*)token_2)->value;
     ((FloatToken*)Answer)->value = v1 - v_2;
+    float Ans;
+    Ans = ((FloatToken*)Answer)->value ;
     Answer->type = TOKEN_FLOAT_TYPE;
     return Answer;
   }
@@ -108,6 +114,8 @@ Token *subtractionOf2Tokens(Token *token_1, Token *token_2){
     v_1 = ((FloatToken*)token_1)->value;
     v2 = ((IntegerToken*)token_2)->value;
     ((FloatToken*)Answer)->value = v_1 - v2;
+    float Ans;
+    Ans = ((FloatToken*)Answer)->value ;
     Answer->type = TOKEN_FLOAT_TYPE;
     return Answer;
   }
@@ -116,6 +124,8 @@ Token *subtractionOf2Tokens(Token *token_1, Token *token_2){
     v_1 = ((FloatToken*)token_1)->value;
     v_2 = ((FloatToken*)token_2)->value;
     ((FloatToken*)Answer)->value = v_1 - v_2;
+    float Ans;
+    Ans = ((FloatToken*)Answer)->value ;
     Answer->type = TOKEN_FLOAT_TYPE;
     return Answer;
   }
@@ -134,10 +144,12 @@ Token *multiplicationOf2Tokens(Token *token_1, Token *token_2){
   Token *Answer = (struct Token*)malloc (sizeof(struct Token));
 
   if(token_1->type == TOKEN_INTEGER_TYPE && token_2->type == TOKEN_INTEGER_TYPE){
+    int Ans;
     (IntegerToken*)Answer;
     v1 = ((IntegerToken *)token_1)->value;
     v2 = ((IntegerToken *)token_2)->value;
     ((IntegerToken*)Answer)->value = v1 * v2;
+    Ans = ((IntegerToken*)Answer)->value ;
     Answer->type = TOKEN_INTEGER_TYPE;    // type corrupted when check with codelite
     return Answer;
   }
@@ -146,6 +158,8 @@ Token *multiplicationOf2Tokens(Token *token_1, Token *token_2){
     v1  = ((IntegerToken*)token_1)->value;
     v_2 = ((FloatToken*)token_2)->value;
     ((FloatToken*)Answer)->value = v1 * v_2;
+    float Ans;
+    Ans = ((FloatToken*)Answer)->value ;
     Answer->type = TOKEN_FLOAT_TYPE;
     return Answer;
   }
@@ -154,6 +168,8 @@ Token *multiplicationOf2Tokens(Token *token_1, Token *token_2){
     v_1 = ((FloatToken*)token_1)->value;
     v2 = ((IntegerToken*)token_2)->value;
     ((FloatToken*)Answer)->value = v_1 * v2;
+    float Ans;
+    Ans = ((FloatToken*)Answer)->value ;
     Answer->type = TOKEN_FLOAT_TYPE;
     return Answer;
   }
@@ -162,6 +178,8 @@ Token *multiplicationOf2Tokens(Token *token_1, Token *token_2){
     v_1 = ((FloatToken*)token_1)->value;
     v_2 = ((FloatToken*)token_2)->value;
     ((FloatToken*)Answer)->value = v_1 * v_2;
+    float Ans;
+    Ans = ((FloatToken*)Answer)->value ;
     Answer->type = TOKEN_FLOAT_TYPE;
     return Answer;
   }
@@ -180,10 +198,12 @@ Token *divisionOf2Tokens(Token *token_1, Token *token_2){
   Token *Answer = (struct Token*)malloc (sizeof(struct Token));
 
   if(token_1->type == TOKEN_INTEGER_TYPE && token_2->type == TOKEN_INTEGER_TYPE){
+    int Ans;
     (IntegerToken*)Answer;
     v1 = ((IntegerToken *)token_1)->value;
     v2 = ((IntegerToken *)token_2)->value;
     ((IntegerToken*)Answer)->value = v1 / v2;
+    Ans = ((IntegerToken*)Answer)->value ;
     Answer->type = TOKEN_INTEGER_TYPE;    // type corrupted when check with codelite
     return Answer;
   }
@@ -192,6 +212,8 @@ Token *divisionOf2Tokens(Token *token_1, Token *token_2){
     v1  = ((IntegerToken*)token_1)->value;
     v_2 = ((FloatToken*)token_2)->value;
     ((FloatToken*)Answer)->value = v1 / v_2;
+    float Ans;
+    Ans = ((FloatToken*)Answer)->value ;
     Answer->type = TOKEN_FLOAT_TYPE;
     return Answer;
   }
@@ -200,6 +222,8 @@ Token *divisionOf2Tokens(Token *token_1, Token *token_2){
     v_1 = ((FloatToken*)token_1)->value;
     v2 = ((IntegerToken*)token_2)->value;
     ((FloatToken*)Answer)->value = v_1 / v2;
+    float Ans;
+    Ans = ((FloatToken*)Answer)->value ;
     Answer->type = TOKEN_FLOAT_TYPE;
     return Answer;
   }
@@ -208,6 +232,8 @@ Token *divisionOf2Tokens(Token *token_1, Token *token_2){
     v_1 = ((FloatToken*)token_1)->value;
     v_2 = ((FloatToken*)token_2)->value;
     ((FloatToken*)Answer)->value = v_1 / v_2;
+    float Ans;
+    Ans = ((FloatToken*)Answer)->value ;
     Answer->type = TOKEN_FLOAT_TYPE;
     return Answer;
   }

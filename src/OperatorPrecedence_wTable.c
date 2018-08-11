@@ -71,11 +71,7 @@ OperatorPrecedence *getTokenPrecedence(Token *token){
 //  ii) current(head) operator precedence is higer return 1
 // iii) both operator precedence are same return 2
 int comparePrevTokenAndNextTokenPrecedence(Token *currToken, Token *prevToken){
-  int compareAffixPossibilities;
 
-  compareAffixPossibilities = checkOperatorTokensAffixPossibilities(prevToken, currToken);
-
-  if(compareAffixPossibilities){
     OperatorPrecedence *precedenceOfprevToken;
     OperatorPrecedence *precedenceOfcurrToken;
 
@@ -93,8 +89,3 @@ int comparePrevTokenAndNextTokenPrecedence(Token *currToken, Token *prevToken){
       return 2;
     }
   }
-  else{
-    throwException(ERR_INVALID_OPERATOR, currToken ,"'%s' is not an operator", currToken->str);
-  }
-
-}

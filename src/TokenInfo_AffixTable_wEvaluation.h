@@ -17,6 +17,7 @@ typedef enum{
 int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens);
 int checkOperatorTokensAffixPossibilities(Token *currToken, Token *nextToken);
 int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *nextTokenInfo);
+int areAffixesCombinationValid(Affix leftAffix, Affix thisAffix);
 Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken);
 //void checkTokenAffixAndEncodeAffix(Tokenizer *tokenizer, Token *prevToken);
 void checkTokenAffixAndEncodeAffix(Token *token, Tokenizer *tokenizer,TokenType prevTokenType);

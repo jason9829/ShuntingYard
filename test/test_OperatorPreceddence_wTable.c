@@ -91,7 +91,7 @@ void test_comparePrevTokenAndNextTokenPrecedence_given_plus_and_multiply_expect_
   Affix affix;
   Affix affixNextToken;
   Tokenizer *tokenizer = NULL;
-  tokenizer = createTokenizer("+*");
+  tokenizer = createTokenizer("+ *");
 
   token = getToken(tokenizer);
   nextToken = getToken(tokenizer);
@@ -105,12 +105,12 @@ void test_comparePrevTokenAndNextTokenPrecedence_given_plus_and_multiply_expect_
     ans = comparePrevTokenAndNextTokenPrecedence(nextToken, token);
     TEST_FAIL_MESSAGE("Expect ERR_INVALID_OPERATOR. But no exception thrown.");
   }
-    Catch(e){
-      dumpTokenErrorMessage(e, 1);
-      TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
-    }
-}
+  Catch(e){
+    dumpTokenErrorMessage(e, 1);
+    TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
+  }
 
+}
 void test_comparePrevTokenAndNextTokenPrecedence_given_divide_and_minus_expect_1(void){
   int ans;
   Token *token = NULL;
@@ -158,3 +158,5 @@ void test_comparePrevTokenAndNextTokenPrecedence_given_plus_and_plus_expect_2(vo
 
   TEST_ASSERT_EQUAL(0, ans);
 }
+
+void

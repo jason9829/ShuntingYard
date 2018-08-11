@@ -117,6 +117,45 @@ int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens){
 
 }
 
+/*   leftAffix    thisAffix      Validity      Example
+ *   INFIX        INFIX           FALSE        2 + *
+ *   INFIX        PREFIX          TRUE         2 + -
+ *   INFIX        SUFFIX          FALSE        2 + )
+ *
+ *   PREFIX       INFIX           FALSE        - +
+ *   PREFIX       PREFIX          TRUE         - -2
+ *   PREFIX       SUFFIX          FALSE        - )
+ *
+ *   SUFFIX       INFIX           TRUE         ) +
+ *   SUFFIX       PREFIX          FALSE        ) -2
+ *   SUFFIX       SUFFIX          TRUE         ) )
+ */
+int areAffixesCombinationValid(Affix leftAffix, Affix thisAffix){
+  Token *token ;
+  if(leftAffix == INFIX){
+    switch (thisAffix) {
+      case PREFIX : return 1;
+      default : return 0;
+      //default : throwException(ERR_INVALID_AFFIX, token," Combination of 'leftAffix' and 'thisAffix' is invalid");
+    }
+  }
+  else if(leftAffix == PREFIX){
+    switch (thisAffix) {
+      case PREFIX : return 1;
+      default : return 0;
+      //throwException(ERR_INVALID_AFFIX,token, " Combination of 'leftAffix' and 'thisAffix' is invalid");
+    }
+  }
+  else{
+    switch (thisAffix) {
+      case INFIX : return 1;
+      case SUFFIX : return 1;
+      default : return 0;
+      //throwException(ERR_INVALID_AFFIX, token, " Combination of 'leftAffix' and 'thisAffix' is invalid");
+    }
+  }
+
+}
 int checkOperatorTokensAffixPossibilities(Token *currToken, Token *nextToken){
   int compareWithTableResult;
   TokenInfo *currTokenInfo;
@@ -135,10 +174,8 @@ int checkOperatorTokensAffixPossibilities(Token *currToken, Token *nextToken){
       compareWithTableResult = compareCurrTokenAndNextTokenWithTable(currTokenInfo, nextTokenInfo);
 
       switch (compareWithTableResult) {
-        case 0 :
-                 return 0;
-        case 1 :
-                 return 1;
+        case 0 : return 0;
+        case 1 : return 1;
         // compareCurrTokenAndNextTokenWithTable only return 1 or 0
         // else error will be thrown in getTokenInfo
         //default : throwSimpleError(ERR_INVALID_ANSWER, "Invalid answer from compareCurrTokenAndNextTokenWithTable");
@@ -161,6 +198,8 @@ int checkOperatorTokensAffixPossibilities(Token *currToken, Token *nextToken){
   }
 
 }
+
+
 // This function will compare currOperator and nextOperator the Attribute from AffixPossibilities
 int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *nextTokenInfo){
   if(currTokenInfo->Attribute == 7){         // 4 | 2 | 1 = 7  (refer to #define)

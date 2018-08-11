@@ -13,6 +13,7 @@ int operatorStackHeadIsPrefix(StackBlock *operatorStack);
 void pushTokensToRespectiveStack(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack);
 void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack);
 void operateOnStacksDependOnAffix(StackBlock *operatorStack, StackBlock *operandStack, Affix affix);
+void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer);
 void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer);
 void pushIfOperandStackIsEmpty(StackBlock *operandStack, Token *token);
 void pushIfOperatorStackIsEmpty(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer, TokenType prevTokenType);
