@@ -44,7 +44,7 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
       //ifOpenBracketFoundKeepPushingUntilCloseBracket();
       pushIfOperatorStackIsEmpty(operatorStack, token, tokenizer, prevTokenType);
       pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token, tokenizer);
-      pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack, token, tokenizer);
+      pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack, token, tokenizer, prevTokenAssociativity);
       operateIfHeadTokenOfStackIsHigherPrecedence(operatorStack, operandStack, token);
       prevTokenAssociativity = getTokenAssociativity(token);
       prevTokenType = getTokenType(token);
@@ -110,7 +110,7 @@ void pushIfOperandStackIsEmpty(StackBlock *operandStack, Token *token){
 }
 
 
-void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer){
+void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer, Associativity prevTokenAssociativity){
   Affix affixOfHeadOperatorToken;
   Token *headOperatorToken;
   TokenType prevTokenType;
@@ -120,7 +120,7 @@ void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(StackBlock *operatorSta
   // HeadTokenIsInfix
     if(headOperatorToken != token){
       if (comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken) == 2){
-      //  checkAssociativity(token, headOperatorToken);
+        operateStackIfOperatorsAssociativityAreSame(operatorStack, operandStack, token, prevTokenAssociativity);
         pushOperatorStack(operatorStack, token);
       }
     }
