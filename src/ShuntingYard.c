@@ -25,12 +25,6 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
   prevTokenType = TOKEN_NULL_TYPE;
   int condition = START;
 
-  //  if(operatorStack->count !=0){
-  //    comparePrecedenceResults = comparePrevTokenAndNextTokenPrecedence(token, (Token*)(operatorStack->head->data));
-  //    operateBasedOnPrecedence(operatorStack, operandStack, comparePrecedenceResults);
-  //  }
-  //tokenPrecedence = getTokenPrecedence(token);
-
   while(condition == START){
     token = getToken(tokenizer);
 
@@ -39,56 +33,31 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
     }
 
     if(token->type == TOKEN_INTEGER_TYPE || token->type == TOKEN_FLOAT_TYPE){
-      prevTokenType = getTokenType(token);
       pushOperandStack(operandStack, token);
+      prevTokenType = getTokenType(token);
       continue;
     }
     else if (token->type == TOKEN_OPERATOR_TYPE){
+      checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
+      pushIfOperatorStackIsEmpty(operatorStack, token, tokenizer, prevTokenType);
+      pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token, tokenizer);
+      operateIfHeadTokenOfStackIsHigherPrecedence(operatorStack, operandStack, token);
       prevTokenType = getTokenType(token);
-      if(operatorStack->count != 0){
-        if(!operatorStackHeadIsPrefix(operatorStack)){
-          checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
-          pushOperatorStack(operatorStack, token);
-          prevOperatorAffix = getAffix((Token*)(operatorStack->head->data));
-        }
-        else{ // if token is prefix
-          prevOperatorAffix = PREFIX;
-          if(!checkOperatorsAffixPossibilities(token, tokenizer)){
-            throwException(ERR_INVALID_OPERATOR, token ,"next token of '%s' is invalid ", token->str);
-          }
-          else{
-            pushOperatorStack(operatorStack, token);
-            operateOnStacksDependOnAffix(operatorStack, operandStack, prevOperatorAffix);
-          }
-        }
-      }
-        else{
-          checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
-          pushOperatorStack(operatorStack, token);
-          prevOperatorAffix = getAffix((Token*)(operatorStack->head->data));
-        }
     }
     else{
-      // end of tokenizer
-      if(token->type == TOKEN_NULL_TYPE){
-        while(operatorStack->count !=0){
-          prevOperatorAffix = getAffix((Token*)(operatorStack->head->data));
-          operateOnStacksDependOnAffix(operatorStack, operandStack, prevOperatorAffix);
-        }
-          condition = STOP;
-      }
+      ifNullTokenOperateUntilOperatorStackIsEmpty(operatorStack, operandStack, token);
+      condition = STOP;
     }
-
-
   }
 }
+
 void ifNullTokenOperateUntilOperatorStackIsEmpty(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
   Affix headOperatorAffix;
   Token *headOperatorToken;
-  headOperatorToken = (Token*)operatorStack->head->data;
 
   if(token->type == TOKEN_NULL_TYPE){
     while(operatorStack->count !=0){
+      headOperatorToken = (Token*)operatorStack->head->data;
       headOperatorAffix = getAffix(headOperatorToken);
       operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
     }
@@ -99,17 +68,20 @@ void operateIfHeadTokenOfStackIsHigherPrecedence(StackBlock *operatorStack, Stac
   Token *headOperatorToken;
   Affix headOperatorAffix;
   headOperatorToken = (Token*)operatorStack->head->data;
-  if(comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken)){
-    headOperatorAffix = getAffix(headOperatorToken);
-    operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
+  headOperatorAffix = getAffix(headOperatorToken);
+  if(headOperatorToken != token){
+    if(comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken) == 1){
+      operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
+      pushOperatorStack(operatorStack, token);
+    }
+    else if (comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken) == 2){
+      pushOperatorStack(operatorStack, token);
+    }
   }
 }
 
-void pushIfOperatorStackIsEmpty(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer){
+void pushIfOperatorStackIsEmpty(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer, TokenType prevTokenType){
   if(operatorStack->count == 0){
-    TokenType prevTokenType;
-    prevTokenType = TOKEN_NULL_TYPE;
-    checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
     pushOperatorStack(operatorStack, token);
   }
 }
@@ -121,7 +93,7 @@ void pushIfOperandStackIsEmpty(StackBlock *operandStack, Token *token){
 }
 
 
-void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorStack, Tokenizer *tokenizer, Token *token){
+void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer){
   Affix affixOfHeadOperatorToken;
   Token *headOperatorToken;
   TokenType prevTokenType;
@@ -129,9 +101,10 @@ void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorSt
   headOperatorToken = (Token*)(operatorStack->head->data);
   prevTokenType = getTokenType(headOperatorToken);
   // HeadTokenIsInfix
-  if(!operatorStackHeadIsPrefix(operatorStack)){
-    checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
-    pushOperatorStack(operatorStack, token);
+    if(headOperatorToken != token){
+      if(!operatorStackHeadIsPrefix(operatorStack)){
+      pushOperatorStack(operatorStack, token);
+    }
   }
 }
 
@@ -146,6 +119,32 @@ int operatorStackHeadIsPrefix(StackBlock *operatorStack){
     return 1;
   }
 }
+
+
+
+int isTokenValid(Token *token, TokenType lastTokenType){
+
+  if(token->type == TOKEN_FLOAT_TYPE || token->type == TOKEN_INTEGER_TYPE){
+    switch (lastTokenType) {
+      case TOKEN_NULL_TYPE     : return 1;
+      case TOKEN_OPERATOR_TYPE : return 1;
+      default : return 0;
+    }
+  }
+  else if (token->type == TOKEN_OPERATOR_TYPE){
+    switch (lastTokenType) {
+      case TOKEN_NULL_TYPE     : return 1;
+      case TOKEN_INTEGER_TYPE   : return 1;
+      case TOKEN_FLOAT_TYPE     : return 1;
+      case TOKEN_OPERATOR_TYPE  : return 1;
+      default : return 0;
+    }
+  }
+  else{
+    return 0;
+  }
+}
+
 /*
 void operateBasedOnPrecedence(StackBlock *operatorStack, StackBlock *operandStack, int comparePrecedenceResults){
   Affix currTokenAffix;
@@ -235,28 +234,6 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
 }
 */
 
-
-int isTokenValid(Token *token, TokenType lastTokenType){
-
-  if(token->type == TOKEN_FLOAT_TYPE || token->type == TOKEN_INTEGER_TYPE){
-    switch (lastTokenType) {
-      case TOKEN_NULL_TYPE     : return 1;
-      case TOKEN_OPERATOR_TYPE : return 1;
-      default : return 0;
-    }
-  }
-  else if (token->type == TOKEN_OPERATOR_TYPE){
-    switch (lastTokenType) {
-      case TOKEN_INTEGER_TYPE   : return 1;
-      case TOKEN_FLOAT_TYPE     : return 1;
-      case TOKEN_OPERATOR_TYPE  : return 1;
-      default : return 0;
-    }
-  }
-  else{
-    return 0;
-  }
-}
 void operateOnStacksDependOnAffix(StackBlock *operatorStack, StackBlock *operandStack, Affix affix){
   Token *ans;
   switch (affix) {
