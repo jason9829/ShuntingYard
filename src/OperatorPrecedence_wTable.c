@@ -47,6 +47,9 @@ OperatorPrecedenceAndAssociativity *getTokenPrecedenceAndAssociativity(Token *to
                      else if(operatorSymbol == '-'){
                       return &bindingPowerAndAssociativity[PREFIX_MINUS];
                      }
+                     else if (operatorSymbol == '('){
+                      return &bindingPowerAndAssociativity[OPEN_BRACKET];
+                     }
                      else{
                        return &bindingPowerAndAssociativity[INVALID_OPERATOR];
                      }
@@ -57,6 +60,7 @@ OperatorPrecedenceAndAssociativity *getTokenPrecedenceAndAssociativity(Token *to
                       else{
                         return &bindingPowerAndAssociativity[INVALID_OPERATOR];
                       }
+
     case INFIX  :    if(operatorSymbol == '+'){
                       return &bindingPowerAndAssociativity[INFIX_PLUS];
                      }
@@ -90,6 +94,9 @@ OperatorPrecedence *getTokenPrecedence(Token *token){
                      }
                      else if(operatorSymbol == '-'){
                       return &bindingPower[PREFIX_MINUS];
+                     }
+                     else if (operatorSymbol == '('){
+                       return &bindingPower[OPEN_BRACKET];
                      }
 
     case SUFFIX :

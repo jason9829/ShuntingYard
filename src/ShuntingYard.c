@@ -257,6 +257,28 @@ int isTokenValid(Token *token, TokenType lastTokenType){
   }
 }
 
+int isOpenBracketToken(Token *token){
+  char TokenSymbol;
+  TokenSymbol = *((OperatorToken*)token)->str;
+
+  if(TokenSymbol == '('){
+    return 1;
+  }
+  else{
+    return 0;
+  }
+}
+int isClosingBracketToken(Token *token){
+  char TokenSymbol;
+  TokenSymbol = *((OperatorToken*)token)->str;
+
+  if(TokenSymbol == ')'){
+    return 1;
+  }
+  else{
+    return 0;
+  }
+}
 /*
 void operateBasedOnPrecedence(StackBlock *operatorStack, StackBlock *operandStack, int comparePrecedenceResults){
   Affix currTokenAffix;

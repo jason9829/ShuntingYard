@@ -11,6 +11,8 @@
 
 
 int isTokenValid(Token *token, TokenType lastTokenType);
+int isOpenBracketToken(Token *token);
+int isClosingBracketToken(Token *token);
 int checkIfNextTokenIsValid(Token *token, Tokenizer *tokenizer);
 int operatorStackHeadIsPrefix(StackBlock *operatorStack);
 int operatorStackHeadIsInfix(StackBlock *operatorStack);

@@ -18,6 +18,71 @@
 void setUp(void){}
 void tearDown(void){}
 
+
+void test_isOpenBracketToken_given_open_bracket_expect_1(void){
+  int result;
+  Token *token_1 = NULL;
+
+  Tokenizer *tokenizer = NULL;
+
+
+  tokenizer = createTokenizer("( ");
+  token_1 = getToken(tokenizer);
+
+  result = isOpenBracketToken(token_1);
+
+  TEST_ASSERT_EQUAL(1, result);
+
+}
+
+void test_isOpenBracketToken_given_plus_expect_0(void){
+  int result;
+  Token *token_1 = NULL;
+
+  Tokenizer *tokenizer = NULL;
+
+
+  tokenizer = createTokenizer("+ ");
+  token_1 = getToken(tokenizer);
+
+  result = isOpenBracketToken(token_1);
+
+  TEST_ASSERT_EQUAL(0, result);
+
+}
+
+void test_isClosingBracketToken_given_closeing_bracket_expect_1(void){
+  int result;
+  Token *token_1 = NULL;
+
+  Tokenizer *tokenizer = NULL;
+
+
+  tokenizer = createTokenizer(")");
+  token_1 = getToken(tokenizer);
+
+  result = isClosingBracketToken(token_1);
+
+  TEST_ASSERT_EQUAL(1, result);
+
+}
+
+
+void test_isClosingBracketToken_given_logical_and_sign_expect_0(void){
+  int result;
+  Token *token_1 = NULL;
+
+  Tokenizer *tokenizer = NULL;
+
+
+  tokenizer = createTokenizer("&");
+  token_1 = getToken(tokenizer);
+
+  result = isClosingBracketToken(token_1);
+
+  TEST_ASSERT_EQUAL(0, result);
+
+}
 /*
 void test_areAssociativitiesSame_given_LEFT_TO_RIGHT_and_LEFT_TO_RIGHT_expect_1(void){
   int result;
@@ -1233,6 +1298,7 @@ void test_shuntingYard_given_and_symbol_2_plus_3_expect_ERR_INVALID_OPERATOR(voi
   }
 }
 */
+/*
 void test_shuntingYard_given_test_for_bracket(void){
   CEXCEPTION_T e;
   Tokenizer *tokenizer  = NULL;
@@ -1262,8 +1328,8 @@ void test_shuntingYard_given_test_for_bracket(void){
   }
 
 }
+*/
 
-/*
 void test_operationOnStacksIfOperatorIsPrefix_given_plus_2point123_expect_ans_2point123(void){
   Tokenizer *tokenizer  = NULL;
   Token *operatorToken;
