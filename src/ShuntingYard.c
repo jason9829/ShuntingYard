@@ -19,6 +19,7 @@
 void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack){
   Token *token;
   Token *nextToken;
+  int answer;
   Affix prevOperatorAffix;
   TokenType prevTokenType;
   OperatorPrecedence *comparePrecedenceResults;
@@ -26,6 +27,7 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
   prevTokenType = TOKEN_NULL_TYPE;
   int condition = START;
   int bracketFound = 0 ;
+  Token *ans;
 
   while(condition == START){
     token = getToken(tokenizer);
@@ -40,14 +42,14 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
       continue;
     }
     else if (token->type == TOKEN_OPERATOR_TYPE){
-      checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
-      //ifOpenBracketFoundKeepPushingUntilCloseBracket();
-      pushIfOperatorStackIsEmpty(operatorStack, token);
-      pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token);
-      pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack,operandStack, token);
-      operateIfHeadTokenOfStackIsHigherPrecedence(operatorStack, operandStack, token);
-      prevTokenType = getTokenType(token);
-    }
+        checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
+        //ifOpenBracketFoundKeepPushingUntilCloseBracket();
+        pushIfOperatorStackIsEmpty(operatorStack, token);
+        pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token);
+        pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack,operandStack, token);
+        operateIfHeadTokenOfStackIsHigherPrecedence(operatorStack, operandStack, token);
+        prevTokenType = getTokenType(token);
+      }
     else{
       ifNullTokenOperateUntilOperatorStackIsEmpty(operatorStack, operandStack, token);
       condition = STOP;
@@ -68,7 +70,8 @@ void operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(StackBlock *operatorSt
     headOperatorAffix = getAffix(headOperatorToken);
 
   if(areAssociativitiesSame(headOperatorAndAssociativity, currentOperatorAndAssociativity)){
-      if(headOperatorAndAssociativity-> associativity == LEFT_TO_RIGHT && currentOperatorAndAssociativity-> associativity == LEFT_TO_RIGHT){
+//if((headOperatorAndAssociativity-> associativity == LEFT_TO_RIGHT && currentOperatorAndAssociativity-> associativity == LEFT_TO_RIGHT)){
+      if((headOperatorAndAssociativity-> associativity == LEFT_TO_RIGHT && currentOperatorAndAssociativity-> associativity == LEFT_TO_RIGHT) && ((headOperatorAndAssociativity-> bindingPower == currentOperatorAndAssociativity-> bindingPower))){
           operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
       }
     }
@@ -90,24 +93,33 @@ void ifNullTokenOperateUntilOperatorStackIsEmpty(StackBlock *operatorStack, Stac
   }
 
 }
+
 void operateIfHeadTokenOfStackIsHigherPrecedence(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
   Token *headOperatorToken;
   Affix headOperatorAffix;
   OperatorPrecedenceAndAssociativity *headOperatorAndAssociativity;
   OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity;
-  headOperatorToken = (Token*)operatorStack->head->data;
-  headOperatorAffix = getAffix(headOperatorToken);
-  if(headOperatorToken != token){
-    if(comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken) == 1){
-      operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
-      headOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(headOperatorToken);
-      currentOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(token);
-      operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(operatorStack, operandStack, token);
-      pushOperatorStack(operatorStack, token);
-    }
 
+  if((Token*)(operatorStack->head->data) != token){
+      while(operatorStack->count !=0 && (comparePrevTokenAndNextTokenPrecedence(token, (Token*)(operatorStack->head->data)) == 1 ) ){
+        headOperatorAffix = getAffix(headOperatorToken);
+        if(operatorStack->count ==0){
+          pushOperatorStack(operatorStack,token);
+        }
+        operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
+        if(operatorStack->count !=0){
+          headOperatorToken = (Token*)operatorStack->head->data;
+          headOperatorAffix = getAffix(headOperatorToken);
+
+        }
+      //  operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(operatorStack, operandStack, token);
+      }
+      pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack, operandStack, token);
+      pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token);
+      pushIfOperatorStackIsEmpty(operatorStack, token);
+    }
   }
-}
+
 
 void pushIfOperatorStackIsEmpty(StackBlock *operatorStack, Token *token){
   if(operatorStack->count == 0){
@@ -136,18 +148,21 @@ void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(StackBlock *operatorSta
   OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity;
   Token *headOperatorToken;
   TokenType prevTokenType;
-  headOperatorToken = (Token*)(operatorStack->head->data);
-  //prevTokenType = getTokenType(headOperatorToken);
-  headOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(headOperatorToken);
-  currentOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(token);
+  if(operatorStack->count != 0){
+    headOperatorToken = (Token*)(operatorStack->head->data);
+    //prevTokenType = getTokenType(headOperatorToken);
+    headOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(headOperatorToken);
+    currentOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(token);
 
-  // HeadTokenIsInfix
-    if(headOperatorToken != token){
-      if (comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken) == 2){
-          operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(operatorStack, operandStack, token);
-          pushOperatorStack(operatorStack, token);
-        }
-    }
+    // HeadTokenIsInfix
+      if(headOperatorToken != token){
+        if (comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken) == 2){
+            operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(operatorStack, operandStack, token);
+            pushOperatorStack(operatorStack, token);
+          }
+      }
+  }
+
   }
 
 /*
@@ -180,17 +195,20 @@ void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorSt
   Token *headOperatorToken;
   TokenType prevTokenType;
 
-  headOperatorToken = (Token*)(operatorStack->head->data);
-  prevTokenType = getTokenType(headOperatorToken);
-  affixOfHeadOperatorToken = getAffix(token);
-  // HeadTokenIsInfix
-    if(headOperatorToken != token){
-      if(!operatorStackHeadIsPrefix(operatorStack)){
-        if(!comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken)){  // If 1 mean headOperator is higher precedence
-           pushOperatorStack(operatorStack, token);
+  if(operatorStack->count !=0){
+    headOperatorToken = (Token*)(operatorStack->head->data);
+    prevTokenType = getTokenType(headOperatorToken);
+    affixOfHeadOperatorToken = getAffix(token);
+    // HeadTokenIsInfix
+      if(headOperatorToken != token){
+        if(!operatorStackHeadIsPrefix(operatorStack)){
+          if(!comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken)){  // If 1 mean headOperator is higher precedence
+             pushOperatorStack(operatorStack, token);
+          }
         }
-      }
+    }
   }
+
 }
 
 int operatorStackHeadIsPrefix(StackBlock *operatorStack){

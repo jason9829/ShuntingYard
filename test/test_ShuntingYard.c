@@ -21,12 +21,25 @@ void tearDown(void){}
 /*
 void test_areAssociativitiesSame_given_LEFT_TO_RIGHT_and_LEFT_TO_RIGHT_expect_1(void){
   int result;
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+  Affix affix;
+  Tokenizer *tokenizer = NULL;
+
   OperatorPrecedenceAndAssociativity *headOperatorAndAssociativity;
   OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity;
 
+  tokenizer = createTokenizer("+ - ");
+  token_1 = getToken(tokenizer);
+  affix = INFIX;
+  encodeAffix(token_1, affix);
 
-  headOperatorAndAssociativity->associativity = LEFT_TO_RIGHT;
-  currentOperatorAndAssociativity->associativity = LEFT_TO_RIGHT;
+  token_2 = getToken(tokenizer);
+  affix = INFIX;
+  encodeAffix(token_2, affix);
+
+  headOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(token_1);
+  currentOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(token_2);
 
   result = areAssociativitiesSame(headOperatorAndAssociativity, currentOperatorAndAssociativity);
 
@@ -35,27 +48,59 @@ void test_areAssociativitiesSame_given_LEFT_TO_RIGHT_and_LEFT_TO_RIGHT_expect_1(
 
 void test_areAssociativitiesSame_given_LEFT_TO_RIGHT_and_RIGHT_TO_LEFT_expect_0(void){
   int result;
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+  Affix affix;
+  Tokenizer *tokenizer = NULL;
+
   OperatorPrecedenceAndAssociativity *headOperatorAndAssociativity;
   OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity;
 
-  headOperatorAndAssociativity->associativity = LEFT_TO_RIGHT;
-  currentOperatorAndAssociativity->associativity = RIGHT_TO_LEFT;
+  tokenizer = createTokenizer("+ - ");
+  token_1 = getToken(tokenizer);
+  affix = INFIX;
+  encodeAffix(token_1, affix);
+
+  token_2 = getToken(tokenizer);
+  affix = PREFIX;
+  encodeAffix(token_2, affix);
+
+  headOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(token_1);
+  currentOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(token_2);
+
   result = areAssociativitiesSame(headOperatorAndAssociativity, currentOperatorAndAssociativity);
 
   TEST_ASSERT_EQUAL(0, result);
 }
 
-void test_areAssociativitiesSame_given_both_NO_Associativity_expect_1(void){
+void test_areAssociativitiesSame_given_both_NO_ASSOCIATIVITY_expect_1(void){
   int result;
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+  Affix affix;
+  Tokenizer *tokenizer = NULL;
+
   OperatorPrecedenceAndAssociativity *headOperatorAndAssociativity;
   OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity;
+
+  tokenizer = createTokenizer(" & & ");
+  token_1 = getToken(tokenizer);
+  affix = INFIX;
+  encodeAffix(token_1, affix);
+
+  token_2 = getToken(tokenizer);
+  affix = INFIX;
+  encodeAffix(token_2, affix);
+
+  headOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(token_1);
+  currentOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(token_2);
 
   result = areAssociativitiesSame(headOperatorAndAssociativity, currentOperatorAndAssociativity);
 
   TEST_ASSERT_EQUAL(1, result);
 }
-*/
-/*
+
+
 void test_checkAssociativity_given_currentToken_PREFIX_expect_RIGHT_TO_LEFT(void){
   Tokenizer *tokenizer  = NULL;
   Affix affix;
@@ -164,6 +209,7 @@ void test_pushOperatorStackIfHeadTokenOfStackIsSamePrecedence_given_headToken_is
   Token *operatorToken_2;
 
   StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack = { NULL, NULL, 0};
   StackItem *poppedStackItem;
 
   tokenizer = createTokenizer(" 2 + - 2 ");
@@ -173,8 +219,9 @@ void test_pushOperatorStackIfHeadTokenOfStackIsSamePrecedence_given_headToken_is
   affix = PREFIX;
   encodeAffix(operatorToken_1, affix);
   encodeAffix(operatorToken_2, affix);
+  pushOperandStack(&operandStack,operandToken_1);
   pushOperatorStack(&operatorStack, operatorToken_1);
-  pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(&operatorStack, operatorToken_2, tokenizer);
+  pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(&operatorStack, &operandStack, operatorToken_2);
 
   TEST_ASSERT_EQUAL(2, operatorStack.count);
 
@@ -189,6 +236,7 @@ void test_pushOperatorStackIfHeadTokenOfStackIsSamePrecedence_given_headToken_is
   Token *operatorToken_2;
 
   StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack = { NULL, NULL, 0};
   StackItem *poppedStackItem;
 
   tokenizer = createTokenizer(" 2 + - 2 ");
@@ -199,8 +247,9 @@ void test_pushOperatorStackIfHeadTokenOfStackIsSamePrecedence_given_headToken_is
   affix2 = INFIX;
   encodeAffix(operatorToken_1, affix1);
   encodeAffix(operatorToken_2, affix2);
+  pushOperandStack(&operandStack, operandToken_1);
   pushOperatorStack(&operatorStack, operatorToken_1);
-  pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(&operatorStack, operatorToken_2, tokenizer);
+  pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(&operatorStack, &operandStack, operatorToken_2);
 
   TEST_ASSERT_EQUAL(1, operatorStack.count);
 
@@ -750,8 +799,9 @@ void test_operatorStackHeadIsInfix_given_stackhead_PREFIX_expect_0(void){
     TEST_ASSERT_EQUAL(0, ans);
 }
 
-*/
 
+*/
+/*
 void test_shuntingYard_given_2_plus_3_expect_ans_5(void){
   Tokenizer *tokenizer  = NULL;
   Token *operatorToken;
@@ -776,7 +826,9 @@ void test_shuntingYard_given_2_plus_3_expect_ans_5(void){
 
 }
 
+
 void test_shuntingYard_given_negative2_plus_3_expect_ans_1(void){
+  CEXCEPTION_T e;
   Tokenizer *tokenizer  = NULL;
   Token *operatorToken;
   Token *operandToken;
@@ -790,15 +842,21 @@ void test_shuntingYard_given_negative2_plus_3_expect_ans_1(void){
 
   tokenizer = createTokenizer(" -2 + 3 ");
 
-  shuntingYard(tokenizer, &operatorStack, &operandStack);
-  poppedAns = popStack(&operandStack);
-  answerToken = (Token*)(poppedAns->data);
+  Try{
+    shuntingYard(tokenizer, &operatorStack, &operandStack);
+    poppedAns = popStack(&operandStack);
+    answerToken = (Token*)(poppedAns->data);
 
-  TEST_ASSERT_EQUAL(1, ((IntegerToken*)answerToken)->value);
-  TEST_ASSERT_EQUAL(NULL, operatorStack.head);
-  TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+    TEST_ASSERT_EQUAL(1, ((IntegerToken*)answerToken)->value);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e,1);
+  }
 
 }
+
 
 void test_shuntingYard_given_2_plus_negtive3_expect_ans_negative1(void){
   Tokenizer *tokenizer  = NULL;
@@ -897,6 +955,7 @@ void test_shuntingYard_given_negative2_minus_negtive3_expect_ans_negative5(void)
 }
 
 
+
 void test_shuntingYard_given_2_multiply_negtive2_expect_ans_negative4(void){
   Tokenizer *tokenizer  = NULL;
   Token *operatorToken;
@@ -944,6 +1003,7 @@ void test_shuntingYard_given_2_multiply_20_expect_ans_40(void){
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
 
 }
+
 void test_shuntingYard_given_2point5_multiply_40_prefix_minus_expect_ans_5point0(void){
   Tokenizer *tokenizer  = NULL;
   Token *operatorToken;
@@ -1043,7 +1103,6 @@ void test_shuntingYard_given_10_plus_5_minus_5_multiply_10_divide_2_expect_ans_n
 }
 
 
-
 void test_shuntingYard_given_10_plus_seven_multiply_2_plus_3_multiply_negative_42_divided_5point1_expect_ans_0point705(void){
   Tokenizer *tokenizer  = NULL;
   Token *operatorToken;
@@ -1083,19 +1142,19 @@ void test_shuntingYard_given_10_plus_seven_multiply_2_plus_3_multiply_minus_5_mu
   StackItem *poppedStackItem;
 
 
-  tokenizer = createTokenizer(" 10 + 7*2 + 3 - 5 *42 - 20 + 60  ");
+  tokenizer = createTokenizer(" 10 + 7*2 + 3 -5 - 42 * 20 + 20 +100 *20 /10");
 
   shuntingYard(tokenizer, &operatorStack, &operandStack);
   poppedAns = popStack(&operandStack);
   answerToken = (Token*)(poppedAns->data);
 
-  TEST_ASSERT_EQUAL(-143, ((IntegerToken*)answerToken)->value);
+  TEST_ASSERT_EQUAL(10 + 7 * 2 + 3 - 5 - 42 * 20 + 20 +100 *20 /10, ((IntegerToken*)answerToken)->value);
   TEST_ASSERT_EQUAL(NULL, operatorStack.head);
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
 
 }
-
 void test_shuntingYard_given_10_plus_seven_multiply_2_plus_3_multiply_minus_5_multiasdasdply_42_minus20_plus_60_minus_60_multiply_2_plus_100_plus_63_divide_100_plus_100_multuply_2_divide_2_expect_ans_negative_143(void){
+  CEXCEPTION_T e;
   Tokenizer *tokenizer  = NULL;
   Token *operatorToken;
   Token *operandToken;
@@ -1107,18 +1166,23 @@ void test_shuntingYard_given_10_plus_seven_multiply_2_plus_3_multiply_minus_5_mu
   StackBlock operandStack  = { NULL, NULL, 0};
   StackItem *poppedStackItem;
  //tokenizer = createTokenizer(" 10 /10 *10");
-  tokenizer = createTokenizer(" 10 + 7*2 + 3 - 5 *42 - 20 + 60 -60 *2 + 100 + 63 /100 +100 *2 /2");
 
-  shuntingYard(tokenizer, &operatorStack, &operandStack);
-  poppedAns = popStack(&operandStack);
-  answerToken = (Token*)(poppedAns->data);
+  tokenizer = createTokenizer(" 10  + - -5 *42 / 100 *1000");
 
-  TEST_ASSERT_EQUAL(-143, ((IntegerToken*)answerToken)->value);
-  TEST_ASSERT_EQUAL(NULL, operatorStack.head);
-  TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+  Try{
+    shuntingYard(tokenizer, &operatorStack, &operandStack);
+    poppedAns = popStack(&operandStack);
+    answerToken = (Token*)(poppedAns->data);
+    TEST_ASSERT_EQUAL( 10  + - -5 *42 /100 *1000 , ((IntegerToken*)answerToken)->value);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e,1);
+  }
 
 }
-/*
+
 void test_shuntingYard_given_2_2_plus_3_expect_ERR_INVALID_TOKEN(void){
   CEXCEPTION_T e;
   Tokenizer *tokenizer  = NULL;
@@ -1143,7 +1207,7 @@ void test_shuntingYard_given_2_2_plus_3_expect_ERR_INVALID_TOKEN(void){
     TEST_ASSERT_EQUAL(ERR_INVALID_TOKEN, e->errorCode);
   }
 }
-/*
+
 void test_shuntingYard_given_and_symbol_2_plus_3_expect_ERR_INVALID_OPERATOR(void){
   CEXCEPTION_T e;
   Tokenizer *tokenizer  = NULL;
@@ -1169,6 +1233,36 @@ void test_shuntingYard_given_and_symbol_2_plus_3_expect_ERR_INVALID_OPERATOR(voi
   }
 }
 */
+void test_shuntingYard_given_test_for_bracket(void){
+  CEXCEPTION_T e;
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken;
+  Token *operandToken;
+  StackItem *poppedAns;
+
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+ //tokenizer = createTokenizer(" 10 /10 *10");
+
+  tokenizer = createTokenizer(" (2+2) *4 + (5+50) * 2");
+
+  Try{
+    shuntingYard(tokenizer, &operatorStack, &operandStack);
+    poppedAns = popStack(&operandStack);
+    answerToken = (Token*)(poppedAns->data);
+    TEST_ASSERT_EQUAL( (2+2) *4 + (5+50) * 2  , ((IntegerToken*)answerToken)->value);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e,1);
+  }
+
+}
+
 /*
 void test_operationOnStacksIfOperatorIsPrefix_given_plus_2point123_expect_ans_2point123(void){
   Tokenizer *tokenizer  = NULL;
@@ -1242,6 +1336,7 @@ void test_pushTokensToRespectiveStack_given_3_plus__minus_minus_2_expect_push_al
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
   TEST_ASSERT_EQUAL(0, operatorStack.count);
 }
+*/
 /* Starting from empty stack then push to the tokens to respective Stack
  * Then expect both operand popped and operator popped then do the Arithmetic
  *
@@ -1255,7 +1350,7 @@ void test_pushTokensToRespectiveStack_given_3_plus__minus_minus_2_expect_push_al
  *
  */
 /*
-void xtest_operateOnTokens_given_1_plus_2_expect_3(void){
+void test_operateOnTokens_given_1_plus_2_expect_3(void){
   Tokenizer *tokenizer  = NULL;
   Token *answerToken;
 
@@ -1276,7 +1371,7 @@ void xtest_operateOnTokens_given_1_plus_2_expect_3(void){
   TEST_ASSERT_EQUAL(NULL, operandStack.tail);
 }
 
-void xtest_operateOnTokens_given_5_plus_minus_minus_3_expect_8(void){
+void test_operateOnTokens_given_5_plus_minus_minus_3_expect_8(void){
   Tokenizer *tokenizer  = NULL;
   Token *answerToken;
 
@@ -1290,7 +1385,7 @@ void xtest_operateOnTokens_given_5_plus_minus_minus_3_expect_8(void){
   poppedStackItem = popStack(&operandStack);
   answerToken = (Token*)(poppedStackItem->data);
 
-  TEST_ASSERT_EQUAL_FLOAT(5.0, ((FloatToken*)answerToken)->value);
+  TEST_ASSERT_EQUAL_FLOAT(8.0, ((IntegerToken*)answerToken)->value);
   TEST_ASSERT_EQUAL(NULL, operatorStack.head);
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
   TEST_ASSERT_EQUAL(NULL, operandStack.head);
@@ -1359,7 +1454,7 @@ void test_operateOnTokens_given_20000point5_divide_1point75_expect_11428point86(
   TEST_ASSERT_EQUAL(NULL, operandStack.head);
   TEST_ASSERT_EQUAL(NULL, operandStack.tail);
 }
-/*
+
 void test_operateOnTokens_given_3_plus_negative2_expect_1(void){
   Tokenizer *tokenizer  = NULL;
   Token *answerToken;
