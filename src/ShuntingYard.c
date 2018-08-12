@@ -42,11 +42,10 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
     else if (token->type == TOKEN_OPERATOR_TYPE){
       checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
       //ifOpenBracketFoundKeepPushingUntilCloseBracket();
-      pushIfOperatorStackIsEmpty(operatorStack, token, tokenizer, prevTokenType);
-      pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token, tokenizer);
-      pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack, token, tokenizer, prevTokenAssociativity);
+      pushIfOperatorStackIsEmpty(operatorStack, token);
+      pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token);
+      pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack,operandStack, token);
       operateIfHeadTokenOfStackIsHigherPrecedence(operatorStack, operandStack, token);
-      prevTokenAssociativity = getTokenAssociativity(token);
       prevTokenType = getTokenType(token);
     }
     else{
@@ -56,17 +55,25 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
   }
 }
 
-void operateStackIfOperatorsAssociativityAreSame(StackBlock *operatorStack, StackBlock *operandStack, Token *token, Associativity prevTokenAssociativity){
-  Associativity currentTokenAssociativity;
+void operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
+  OperatorPrecedenceAndAssociativity *headOperatorAndAssociativity;
+  OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity;
   Affix headOperatorAffix;
   Token *headOperatorToken;
-  headOperatorToken = (Token*)(operatorStack->head->data);
-  currentTokenAssociativity = getTokenAssociativity(token);
-  headOperatorAffix = getAffix(headOperatorToken);
 
-  if(currentTokenAssociativity == prevTokenAssociativity){
-    operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
+  if(operatorStack->count !=0){
+    headOperatorToken = (Token*)(operatorStack->head->data);
+    headOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(headOperatorToken);
+    currentOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(token);
+    headOperatorAffix = getAffix(headOperatorToken);
+
+  if(areAssociativitiesSame(headOperatorAndAssociativity, currentOperatorAndAssociativity)){
+      if(headOperatorAndAssociativity-> associativity == LEFT_TO_RIGHT && currentOperatorAndAssociativity-> associativity == LEFT_TO_RIGHT){
+          operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
+      }
+    }
   }
+
 }
 
 
@@ -86,18 +93,23 @@ void ifNullTokenOperateUntilOperatorStackIsEmpty(StackBlock *operatorStack, Stac
 void operateIfHeadTokenOfStackIsHigherPrecedence(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
   Token *headOperatorToken;
   Affix headOperatorAffix;
+  OperatorPrecedenceAndAssociativity *headOperatorAndAssociativity;
+  OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity;
   headOperatorToken = (Token*)operatorStack->head->data;
   headOperatorAffix = getAffix(headOperatorToken);
   if(headOperatorToken != token){
     if(comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken) == 1){
       operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
+      headOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(headOperatorToken);
+      currentOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(token);
+      operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(operatorStack, operandStack, token);
       pushOperatorStack(operatorStack, token);
     }
 
   }
 }
 
-void pushIfOperatorStackIsEmpty(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer, TokenType prevTokenType){
+void pushIfOperatorStackIsEmpty(StackBlock *operatorStack, Token *token){
   if(operatorStack->count == 0){
     pushOperatorStack(operatorStack, token);
   }
@@ -109,20 +121,32 @@ void pushIfOperandStackIsEmpty(StackBlock *operandStack, Token *token){
   }
 }
 
+int areAssociativitiesSame(OperatorPrecedenceAndAssociativity *headOperatorAndAssociativity, OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity){
+  if(headOperatorAndAssociativity->associativity == currentOperatorAndAssociativity->associativity){
+    return 1;
+  }
+  else{
+    return 0;
+  }
+}
 
-void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer, Associativity prevTokenAssociativity){
+void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(StackBlock *operatorStack,StackBlock *operandStack, Token *token){
   Affix affixOfHeadOperatorToken;
+  OperatorPrecedenceAndAssociativity *headOperatorAndAssociativity;
+  OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity;
   Token *headOperatorToken;
   TokenType prevTokenType;
-
   headOperatorToken = (Token*)(operatorStack->head->data);
-  prevTokenType = getTokenType(headOperatorToken);
+  //prevTokenType = getTokenType(headOperatorToken);
+  headOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(headOperatorToken);
+  currentOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(token);
+
   // HeadTokenIsInfix
     if(headOperatorToken != token){
       if (comparePrevTokenAndNextTokenPrecedence(token, headOperatorToken) == 2){
-        operateStackIfOperatorsAssociativityAreSame(operatorStack, operandStack, token, prevTokenAssociativity);
-        pushOperatorStack(operatorStack, token);
-      }
+          operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(operatorStack, operandStack, token);
+          pushOperatorStack(operatorStack, token);
+        }
     }
   }
 
@@ -151,7 +175,7 @@ Associativity getTokenAssociativity(Token *currentToken){
   }
 }
 
-void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorStack, Token *token, Tokenizer *tokenizer){
+void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorStack, Token *token){
   Affix affixOfHeadOperatorToken;
   Token *headOperatorToken;
   TokenType prevTokenType;

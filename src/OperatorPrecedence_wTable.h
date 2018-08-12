@@ -14,6 +14,7 @@ typedef enum{
   PREFIX_MINUS,
   OPEN_BRACKET,
   CLOSE_BRACKET,
+  INVALID_OPERATOR
 } operatorWithAffix;
 
 typedef struct OperatorPrecedence OperatorPrecedence;
@@ -21,6 +22,13 @@ struct OperatorPrecedence{
   int bindingPower;
 };
 
+typedef struct OperatorPrecedenceAndAssociativity OperatorPrecedenceAndAssociativity;
+struct OperatorPrecedenceAndAssociativity{
+  int bindingPower;
+  Associativity associativity;
+};
+
 OperatorPrecedence *getTokenPrecedence(Token *token);
+OperatorPrecedenceAndAssociativity *getTokenPrecedenceAndAssociativity(Token *token);
 int comparePrevTokenAndNextTokenPrecedence(Token *currToken, Token *prevToken);
 #endif // _OPERATORPRECEDENCE_WTABLE_H

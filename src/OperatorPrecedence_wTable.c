@@ -22,6 +22,62 @@ OperatorPrecedence bindingPower[50] = {
   [CLOSE_BRACKET] = {.bindingPower = WEAK},
 };
 
+OperatorPrecedenceAndAssociativity bindingPowerAndAssociativity[50] = {
+  [INFIX_PLUS] = {.bindingPower = WEAK, .associativity = LEFT_TO_RIGHT},
+  [INFIX_MINUS] = {.bindingPower = WEAK,.associativity = LEFT_TO_RIGHT},
+  [INFIX_MULTIPLY] = {.bindingPower = MEDIUM, .associativity = LEFT_TO_RIGHT},
+  [INFIX_DIVIDE] = {.bindingPower = MEDIUM, .associativity = LEFT_TO_RIGHT},
+  [PREFIX_PLUS] = {.bindingPower = STRONG, .associativity = RIGHT_TO_LEFT},
+  [PREFIX_MINUS] = {.bindingPower = STRONG, .associativity = RIGHT_TO_LEFT},
+  [OPEN_BRACKET] = {.bindingPower = WEAK, .associativity = LEFT_TO_RIGHT},
+  [CLOSE_BRACKET] = {.bindingPower = WEAK, .associativity = LEFT_TO_RIGHT},
+  [INVALID_OPERATOR] = {.bindingPower = 0, .associativity = 0},
+};
+
+OperatorPrecedenceAndAssociativity *getTokenPrecedenceAndAssociativity(Token *token){
+  Affix tokenAffix;
+  tokenAffix = getAffix(token);
+  char operatorSymbol;
+  operatorSymbol = *((OperatorToken*)token)->str;
+
+  switch(tokenAffix){
+    case PREFIX :    if(operatorSymbol == '+'){
+                      return &bindingPowerAndAssociativity[PREFIX_PLUS];
+                     }
+                     else if(operatorSymbol == '-'){
+                      return &bindingPowerAndAssociativity[PREFIX_MINUS];
+                     }
+                     else{
+                       return &bindingPowerAndAssociativity[INVALID_OPERATOR];
+                     }
+
+    case SUFFIX :    if(operatorSymbol == ')'){
+                      return &bindingPowerAndAssociativity[CLOSE_BRACKET];
+                      }
+                      else{
+                        return &bindingPowerAndAssociativity[INVALID_OPERATOR];
+                      }
+    case INFIX  :    if(operatorSymbol == '+'){
+                      return &bindingPowerAndAssociativity[INFIX_PLUS];
+                     }
+                     else if(operatorSymbol == '-'){
+                      return &bindingPowerAndAssociativity[INFIX_MINUS];
+                     }
+                     else if(operatorSymbol == '*'){
+                      return &bindingPowerAndAssociativity[INFIX_MULTIPLY];
+                     }
+                     else if(operatorSymbol == '/'){
+                      return &bindingPowerAndAssociativity[INFIX_DIVIDE];
+                     }
+                     else{
+                       return &bindingPowerAndAssociativity[INVALID_OPERATOR];
+                     }
+
+      default:  throwException(ERR_INVALID_AFFIX, token, "Invalid affix of '%c' operator", operatorSymbol);
+
+  }
+}
+
 OperatorPrecedence *getTokenPrecedence(Token *token){
   Affix tokenAffix;
   tokenAffix = getAffix(token);
@@ -50,7 +106,7 @@ OperatorPrecedence *getTokenPrecedence(Token *token){
                       return &bindingPower[INFIX_DIVIDE];
                      }
 
-      default:  throwException(ERR_INVALID_OPERATOR, token, "Invalid affix of '%c' operator", operatorSymbol);
+      default:  throwException(ERR_INVALID_AFFIX, token, "Invalid affix of '%c' operator", operatorSymbol);
 
   }
 
