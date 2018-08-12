@@ -268,6 +268,7 @@ int isOpenBracketToken(Token *token){
     return 0;
   }
 }
+
 int isClosingBracketToken(Token *token){
   char TokenSymbol;
   TokenSymbol = *((OperatorToken*)token)->str;
@@ -279,6 +280,7 @@ int isClosingBracketToken(Token *token){
     return 0;
   }
 }
+
 /*
 void operateBasedOnPrecedence(StackBlock *operatorStack, StackBlock *operandStack, int comparePrecedenceResults){
   Affix currTokenAffix;
