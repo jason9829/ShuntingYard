@@ -866,7 +866,7 @@ void test_operatorStackHeadIsInfix_given_stackhead_PREFIX_expect_0(void){
 
 
 */
-/*
+
 void test_shuntingYard_given_2_plus_3_expect_ans_5(void){
   Tokenizer *tokenizer  = NULL;
   Token *operatorToken;
@@ -1168,7 +1168,7 @@ void test_shuntingYard_given_10_plus_5_minus_5_multiply_10_divide_2_expect_ans_n
 }
 
 
-void test_shuntingYard_given_10_plus_seven_multiply_2_plus_3_multiply_negative_42_divided_5point1_expect_ans_0point705(void){
+void test_shuntingYard_given_10_plus_seven_multiply_2_plus_3_multiply_negative_42_divided_5point1_expect_ans_negative0point705(void){
   Tokenizer *tokenizer  = NULL;
   Token *operatorToken;
   Token *operandToken;
@@ -1181,7 +1181,7 @@ void test_shuntingYard_given_10_plus_seven_multiply_2_plus_3_multiply_negative_4
   StackItem *poppedStackItem;
 
 
-  tokenizer = createTokenizer(" 10 + 7*2 + 3 * -42 / 5.1");
+  tokenizer = createTokenizer(" 10 + 7*2 + 3 * -42 / 5.1 ");
 
   shuntingYard(tokenizer, &operatorStack, &operandStack);
   poppedAns = popStack(&operandStack);
@@ -1207,13 +1207,13 @@ void test_shuntingYard_given_10_plus_seven_multiply_2_plus_3_multiply_minus_5_mu
   StackItem *poppedStackItem;
 
 
-  tokenizer = createTokenizer(" 10 + 7*2 + 3 -5 - 42 * 20 + 20 +100 *20 /10");
+  tokenizer = createTokenizer(" 10 + 7*2 + 3 --5 - 42 * 20 + 20 +100 *20 /10 + 10 + 7*2 + 3 - + 5 - 42 * 20 + 20 +100 *20 /10 / 10 * 10");
 
   shuntingYard(tokenizer, &operatorStack, &operandStack);
   poppedAns = popStack(&operandStack);
   answerToken = (Token*)(poppedAns->data);
 
-  TEST_ASSERT_EQUAL(10 + 7 * 2 + 3 - 5 - 42 * 20 + 20 +100 *20 /10, ((IntegerToken*)answerToken)->value);
+  TEST_ASSERT_EQUAL(10 + 7 * 2 + 3 - - 5 - 42 * 20 + 20 +100 *20 /10 + 10 + 7*2 + 3 - + 5  - 42 * 20 + 20 +100 *20 /10 /10 * 10, ((IntegerToken*)answerToken)->value);
   TEST_ASSERT_EQUAL(NULL, operatorStack.head);
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
 
@@ -1297,8 +1297,7 @@ void test_shuntingYard_given_and_symbol_2_plus_3_expect_ERR_INVALID_OPERATOR(voi
     TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
   }
 }
-*/
-/*
+
 void test_shuntingYard_given_test_for_bracket(void){
   CEXCEPTION_T e;
   Tokenizer *tokenizer  = NULL;
@@ -1328,7 +1327,8 @@ void test_shuntingYard_given_test_for_bracket(void){
   }
 
 }
-*/
+
+/*
 
 void test_operationOnStacksIfOperatorIsPrefix_given_plus_2point123_expect_ans_2point123(void){
   Tokenizer *tokenizer  = NULL;
