@@ -18,6 +18,121 @@
 void setUp(void){}
 void tearDown(void){}
 
+void test_pushIfprevTokenIsOpenBracket_given_previous_token_is_open_bracket_expect_pushed(void){
+  int result;
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+	Token *poppedToken = NULL;
+
+  Affix affix;
+  Tokenizer *tokenizer = NULL;
+	StackItem *poppedStackItem;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+
+  tokenizer = createTokenizer("( + ");
+  token_1 = getToken(tokenizer);
+  affix = PREFIX;
+  encodeAffix(token_1, affix);
+  pushOperatorStack(&operatorStack, token_1);
+  token_2 = getToken(tokenizer);
+
+
+
+  pushIfprevTokenIsOpenBracket(&operatorStack, token_2);
+
+	TEST_ASSERT_EQUAL(2, operatorStack.count);
+}
+
+void test_cancelBracket_given_previous_token_is_open_bracket__currentToekn_is_closeing_bracket_expect_pushed(void){
+  int result;
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+	Token *poppedToken = NULL;
+
+  Affix affix;
+  Tokenizer *tokenizer = NULL;
+	StackItem *poppedStackItem;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+
+  tokenizer = createTokenizer("( ) ");
+  token_1 = getToken(tokenizer);
+  affix = PREFIX;
+  encodeAffix(token_1, affix);
+  pushOperatorStack(&operatorStack, token_1);
+  token_2 = getToken(tokenizer);
+
+
+
+  cancelBracket(&operatorStack, token_2);
+
+	TEST_ASSERT_EQUAL(0, operatorStack.count);
+}
+
+void test_operateIfBracket_given_previous_token_is_open_bracket_2_plus_2_closing_bracket_expect_4(void){
+  int result;
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+	Token *token_3 = NULL;
+  Token *token_4 = NULL;
+	Token *token_5 = NULL;
+
+	Token *poppedToken = NULL;
+
+  Affix affix;
+  Tokenizer *tokenizer = NULL;
+	StackItem *poppedStackItem;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+
+  tokenizer = createTokenizer(" ( 2 + 2) ");
+  token_1 = getToken(tokenizer);
+  affix = PREFIX;
+  encodeAffix(token_1, affix);
+	pushOperatorStack(&operatorStack, token_1);
+	token_2 = getToken(tokenizer);
+	pushOperandStack(&operandStack, token_2);
+
+	token_3 = getToken(tokenizer);
+	affix = INFIX;
+	encodeAffix(token_3, affix);
+	pushOperatorStack(&operatorStack, token_3);
+
+	token_4 = getToken(tokenizer);
+	pushOperandStack(&operandStack, token_4);
+	token_5 = getToken(tokenizer);
+	operateIfBracket(&operatorStack, &operandStack, token_5);
+
+	poppedStackItem = popStack(&operandStack);
+	poppedToken = (Token*)(poppedStackItem->data);
+
+	TEST_ASSERT_EQUAL(4, ((IntegerToken*)poppedToken)->value);
+}
+
+/*
+void test_pushOperatorBracket_given_open_bracket_2_plus_2_closing_bracket_2(void){
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+  Token *token_3 = NULL;
+  Token *token_4 = NULL;
+  Token *token_5 = NULL;
+  Tokenizer *tokenizer = NULL;
+
+
+  tokenizer = createTokenizer("( 2 + 2 )");
+  token_1 = getToken(tokenizer);
+
+  result = isOpenBracketToken(token_1);
+
+  TEST_ASSERT_EQUAL(1, result);
+
+
+}
+*/
 
 void test_isOpenBracketToken_given_open_bracket_expect_1(void){
   int result;

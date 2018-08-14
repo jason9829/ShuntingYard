@@ -25,6 +25,10 @@ void operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(StackBlock *operatorSt
 void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorStack, Token *token);
 void pushIfOperandStackIsEmpty(StackBlock *operandStack, Token *token);
 void pushIfOperatorStackIsEmpty(StackBlock *operatorStack, Token *token);
+void pushIfprevTokenIsOpenBracket(StackBlock *operatorStack, Token *token);
+void operateIfBracket(StackBlock *operatorStack, StackBlock *operandStack, Token *token);
+void cancelBracket(StackBlock *operatorStack, Token *token);
+void pushOperatorBracket(StackBlock *operatorStack, StackBlock *operandStack, Token *token);
 void operateIfHeadTokenOfStackIsHigherPrecedence(StackBlock *operatorStack, StackBlock *operandStack, Token *token);
 void ifNullTokenOperateUntilOperatorStackIsEmpty(StackBlock *operatorStack, StackBlock *operandStack, Token *token);
 Associativity getTokenAssociativity(Token *currentToken);

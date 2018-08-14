@@ -42,7 +42,7 @@ TokenInfo *getTokenInfo(Token *token){
     return &AffixPossibilities[')'];
   }
   else{
-    throwException(ERR_INVALID_OPERATOR, token , "Do not accept '%c' operator", operatorSymbol);
+    throwException(ERR_INVALID_OPERATOR, token , "'%c'is an invalid operator", operatorSymbol);
   }
 }
 
@@ -106,13 +106,13 @@ int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens){
     else{
       // getTokenInfo only accept '+', '-', '*', '/'
       // else error already thrown at getTokenInfo
-      throwException(ERR_INVALID_OPERATOR, nextToken ,"'%s' is not an operator", nextToken->str);
+      throwException(ERR_INVALID_OPERATOR, nextToken ,"'%s' is an invalid operator", nextToken->str);
     }
   }
   else{
     // getTokenInfo only accept '+', '-', '*', '/'
     // else error already thrown at getTokenInfo
-    throwException(ERR_INVALID_OPERATOR, currToken ,"'%s' is not an operator", nextToken->str);
+    throwException(ERR_INVALID_OPERATOR, currToken ,"'%s' is an invalid operator", nextToken->str);
   }
 
 }
@@ -188,13 +188,13 @@ int checkOperatorTokensAffixPossibilities(Token *currToken, Token *nextToken){
     else{
       // getTokenInfo only accept '+', '-', '*', '/'
       // else error already thrown at getTokenInfo
-      throwException(ERR_INVALID_OPERATOR, nextToken ,"'%s' is not an operator", nextToken->str);
+      throwException(ERR_INVALID_OPERATOR, nextToken ,"'%s' is an invalid operator", nextToken->str);
     }
   }
   else{
     // getTokenInfo only accept '+', '-', '*', '/'
     // else error already thrown at getTokenInfo
-    throwException(ERR_INVALID_OPERATOR, currToken ,"'%s' is not an operator", nextToken->str);
+    throwException(ERR_INVALID_OPERATOR, currToken ,"''%s' is an invalid operator", nextToken->str);
   }
 
 }
@@ -262,7 +262,7 @@ int isOperatorSymbolValid(Token* token){
       return 1;
   }
   else{
-      throwException(ERR_INVALID_OPERATOR, token, "Token '%s' is an invalid operator", token->str);
+      throwException(ERR_INVALID_OPERATOR, token, "'%s' is an invalid operator", token->str);
   }
 }
 // If infix pop two TOKEN prefix pop one token
@@ -296,7 +296,7 @@ Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
     else{
       pushBackToken(tokenizer, nextToken);
     //  throwSimpleError(ERR_INVALID_AFFIX, "Invalid affix (currentToken and nextToken is not OperatorType)");
-      throwException(ERR_INVALID_AFFIX, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
+      throwException(ERR_INVALID_AFFIX, nextToken,"Combination of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
     }
   }
   // For example (+)(-) [(+) is preToken and (-) is nextToken]
@@ -317,7 +317,7 @@ Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
       }
       else{
       //  throwSimpleError(ERR_INVALID_AFFIX, "current operator is valid (INFIX or PREFIX) but nextToken is either '*' or '/' (INFIX)");
-        throwException(ERR_INVALID_AFFIX, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
+        throwException(ERR_INVALID_AFFIX, nextToken,"Combination of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
       }
     } // Example (-)(2) return PREFIX
     else{
@@ -336,7 +336,7 @@ Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken){
   }
   else{
     //throwSimpleError(ERR_INVALID_OPERATOR, "Invalid operator found");
-    throwException(ERR_INVALID_OPERATOR, nextToken,"Affix of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
+    throwException(ERR_INVALID_OPERATOR, nextToken,"Combination of '%s' and '%s' is invalid", prevToken->str, nextToken->str);
   }
 
 }
@@ -356,7 +356,7 @@ void checkTokenAffixAndEncodeAffix(Token *token, Tokenizer *tokenizer,TokenType 
           encodeAffix(token, SUFFIX);
         }
         else if(operatorSymbol == '('){
-          throwException(ERR_INVALID_AFFIX, token,"Affix of '%s' is invalid because previous token type is 'TOKEN_FLOAT_TYPE' or 'TOKEN_INTEGER_TYPE' ", token->str);
+          throwException(ERR_INVALID_AFFIX, token,"Affix of '%s' is invalid' ", token->str);
         }
         else{
           PossibleAffixCombination = checkOperatorsAffixPossibilities(token, tokenizer);
@@ -370,7 +370,7 @@ void checkTokenAffixAndEncodeAffix(Token *token, Tokenizer *tokenizer,TokenType 
       }
 
       else{
-        throwException(ERR_INVALID_AFFIX, token,"Affix of '%s' and '%s' is invalid because previous token type is 'TOKEN_FLOAT_TYPE' or 'TOKEN_INTEGER_TYPE' ", token->str);
+        throwException(ERR_INVALID_AFFIX, token,"Combination of  '%s' and '%s' is invalid ", token->str);
       }
     }
     // For example (+)(-) [(+) is preToken and (-) is nextToken]
@@ -472,7 +472,7 @@ Token *combinePrefixWithOperandToken(Token *prefixToken, Token *operandToken){
   }
 
     else{
-    throwException(ERR_INVALID_OPERATOR, operandToken,"Token '%s' is an invalid to combined with prefixToken '%s'" , operandToken->str, prefixToken->str);
+    throwException(ERR_INVALID_OPERATOR, operandToken,"'%s' is an invalid to combined with prefix '%s'" , operandToken->str, prefixToken->str);
     }
 }
 

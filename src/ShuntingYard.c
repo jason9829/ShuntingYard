@@ -33,7 +33,7 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
     token = getToken(tokenizer);
 
     if(!isTokenValid(token, prevTokenType) && token->type != TOKEN_NULL_TYPE){
-      throwException(ERR_INVALID_TOKEN, token, "Token '%s' is invalid compare when compare to prevTokenType", token->str);
+      throwException(ERR_INVALID_TOKEN, token, "'%s' should not be here", token->str);
     }
 
     if(token->type == TOKEN_INTEGER_TYPE || token->type == TOKEN_FLOAT_TYPE){
@@ -42,12 +42,11 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
       continue;
     }
     else if (token->type == TOKEN_OPERATOR_TYPE){
-        checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
+
+		checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
+
         //ifOpenBracketFoundKeepPushingUntilCloseBracket();
-        pushIfOperatorStackIsEmpty(operatorStack, token);
-        pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token);
-        pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack,operandStack, token);
-        operateIfHeadTokenOfStackIsHigherPrecedence(operatorStack, operandStack, token);
+		pushOperatorBracket(operatorStack, operandStack, token);
         prevTokenType = getTokenType(token);
       }
     else{
@@ -55,6 +54,41 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
       condition = STOP;
     }
   }
+}
+
+// Assume open bracket is already found
+void operateIfBracket(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
+  Token *headOperatorToken;
+  Affix headOperatorAffix;
+  if(isClosingBracketToken(token)){
+    while(!isOpenBracketToken((Token*)(operatorStack->head->data))){
+      headOperatorToken = (Token*)(operatorStack->head->data);
+      headOperatorAffix = getAffix(headOperatorToken);
+      operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
+    }
+    cancelBracket(operatorStack, token);
+  }
+}
+
+void pushIfprevTokenIsOpenBracket(StackBlock *operatorStack, Token *token){
+	if((Token*)(operatorStack->head->data) != token && isOpenBracketToken((Token*)(operatorStack->head->data))){
+		pushOperatorStack(operatorStack, token);
+	}
+}
+
+void cancelBracket(StackBlock *operatorStack, Token *token){
+  if((Token*)(operatorStack->head->data) != token && isOpenBracketToken((Token*)(operatorStack->head->data)) && isClosingBracketToken(token)){
+  popStack(operatorStack);
+  freeToken(token);
+  }
+}
+
+void pushOperatorBracket(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
+    pushIfOperatorStackIsEmpty(operatorStack, token);
+    pushIfprevTokenIsOpenBracket(operatorStack, token);
+		pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token);
+    pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack,operandStack, token);
+    operateIfHeadTokenOfStackIsHigherPrecedence(operatorStack, operandStack, token);
 }
 
 void operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
@@ -100,7 +134,7 @@ void operateIfHeadTokenOfStackIsHigherPrecedence(StackBlock *operatorStack, Stac
   OperatorPrecedenceAndAssociativity *headOperatorAndAssociativity;
   OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity;
 
-  if((Token*)(operatorStack->head->data) != token){
+  if(((Token*)(operatorStack->head->data) != token) && !isClosingBracketToken(token) && !isOpenBracketToken(token)){
       while(operatorStack->count !=0 && (comparePrevTokenAndNextTokenPrecedence(token, (Token*)(operatorStack->head->data)) == 1 ) ){
         headOperatorAffix = getAffix(headOperatorToken);
         if(operatorStack->count ==0){
@@ -148,7 +182,8 @@ void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(StackBlock *operatorSta
   OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity;
   Token *headOperatorToken;
   TokenType prevTokenType;
-  if(operatorStack->count != 0){
+
+  if(!isClosingBracketToken(token) && !isOpenBracketToken(token) && operatorStack->count != 0){
     headOperatorToken = (Token*)(operatorStack->head->data);
     //prevTokenType = getTokenType(headOperatorToken);
     headOperatorAndAssociativity = getTokenPrecedenceAndAssociativity(headOperatorToken);
@@ -186,7 +221,7 @@ Associativity getTokenAssociativity(Token *currentToken){
     return LEFT_TO_RIGHT;
   }
   else{
-    throwException(ERR_INVALID_AFFIX, currentToken, "Token '%s' has an invalid affix, thus can't find the associativity", currentToken->str);
+    throwException(ERR_INVALID_AFFIX, currentToken, "'%s' has an invalid affix, it should not be here", currentToken->str);
   }
 }
 
@@ -245,7 +280,7 @@ int isTokenValid(Token *token, TokenType lastTokenType){
   }
   else if (token->type == TOKEN_OPERATOR_TYPE){
     switch (lastTokenType) {
-      case TOKEN_NULL_TYPE     : return 1;
+      case TOKEN_NULL_TYPE      : return 1;
       case TOKEN_INTEGER_TYPE   : return 1;
       case TOKEN_FLOAT_TYPE     : return 1;
       case TOKEN_OPERATOR_TYPE  : return 1;
@@ -401,7 +436,7 @@ Token *operationOnStacksIfOperatorIsPrefix(StackBlock *operatorStack, StackBlock
     return ans;
   }
   else{
-    throwException(ERR_STACK_INSUFFICIENT, operandStack->head->data, "The count in operatorStack is '%d' and count in operandStack is'%d", operatorStack->count, operandStack->count);
+    throwException(ERR_STACK_INSUFFICIENT, operandStack->head->data, "Only '%d' operator and '%d' operand", operatorStack->count, operandStack->count);
   }
 
 }
@@ -430,7 +465,7 @@ Token *operationOnStacksIfOperatorIsInfix(StackBlock *operatorStack, StackBlock 
       return ans;
     }
     else{
-      throwException(ERR_STACK_INSUFFICIENT, operandStack->head->data, "The count in operatorStack is '%d' and count in operandStack is'%d", operatorStack->count, operandStack->count);
+      throwException(ERR_STACK_INSUFFICIENT, operandStack->head->data, "Only '%d' operator and '%d' operand", operatorStack->count, operandStack->count);
     }
 }
 

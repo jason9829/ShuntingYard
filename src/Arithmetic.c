@@ -78,7 +78,7 @@ Token *additionOf2Tokens(Token *token_1, Token *token_2){
     return Answer;
   }
   else{
-  throwException(ERR_INVALID_OPERAND, token_1 , " Type of token '%s' or '%s' is invalid for addition", token_1 ->str, token_2->str);
+  throwException(ERR_INVALID_OPERAND, token_1 , " '%s' or '%s' is invalid for addition", token_1 ->str, token_2->str);
   }
 }
 
@@ -130,7 +130,7 @@ Token *subtractionOf2Tokens(Token *token_1, Token *token_2){
     return Answer;
   }
   else{
-  throwException(ERR_INVALID_OPERAND, token_1 , " Type of token '%s' or '%s' is invalid for subtraction", token_1 ->str, token_2->str);
+  throwException(ERR_INVALID_OPERAND, token_1 , " '%s' or '%s' is invalid for subtraction", token_1 ->str, token_2->str);
 
   }
 
@@ -184,7 +184,7 @@ Token *multiplicationOf2Tokens(Token *token_1, Token *token_2){
     return Answer;
   }
   else{
-throwException(ERR_INVALID_OPERAND, token_1 , " Type of token '%s' or '%s' is invalid for multiplication", token_1 ->str, token_2->str);
+throwException(ERR_INVALID_OPERAND, token_1 , " '%s' or '%s' is invalid for multiplication", token_1 ->str, token_2->str);
   }
 
 }
@@ -238,6 +238,6 @@ Token *divisionOf2Tokens(Token *token_1, Token *token_2){
     return Answer;
   }
   else{
-    throwException(ERR_INVALID_OPERAND, token_1 , " Type of token '%s' or '%s' is invalid for division", token_1 ->str, token_2->str);
+    throwException(ERR_INVALID_OPERAND, token_1 , " %s' or '%s' is invalid for division", token_1 ->str, token_2->str);
   }
 }

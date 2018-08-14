@@ -76,7 +76,7 @@ void pushStack(StackBlock *List,void *data){
   token = ((Token*)(data));
 
   if(token->type == TOKEN_NULL_TYPE){
-      throwException(ERR_NULL_TOKEN, List ,"Token is '%s'", token->str);
+      throwException(ERR_NULL_TOKEN, List ,"'%s' is invalid ", token->str);
   }
   StackItem *newStackItem = (struct StackItem*)malloc (sizeof(struct StackItem));
   if(List->head == NULL){

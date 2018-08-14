@@ -44,7 +44,7 @@ void test_getTokenPrecedenceAndAssociativity_given_CLOSE_BREACKET_expect_binding
   TEST_ASSERT_EQUAL(RIGHT_TO_LEFT, OperatorPrecedenceAndAssociativity->associativity);
 }
 
-void test_getTokenPrecedenceAndAssociativity_given_CLOSE_BREACKET_expect_bindingPower_1_associativity_LEFT_TO_RIGHT(void){
+void test_getTokenPrecedenceAndAssociativity_given_CLOSE_BREACKET_expect_bindingPower_0_associativity_LEFT_TO_RIGHT(void){
   Token *token = NULL;
   Affix affix;
   Tokenizer *tokenizer = NULL;
@@ -56,7 +56,7 @@ void test_getTokenPrecedenceAndAssociativity_given_CLOSE_BREACKET_expect_binding
   encodeAffix(token, affix);
   OperatorPrecedenceAndAssociativity = getTokenPrecedenceAndAssociativity(token);
 
-  TEST_ASSERT_EQUAL(1, OperatorPrecedenceAndAssociativity->bindingPower);
+  TEST_ASSERT_EQUAL(0, OperatorPrecedenceAndAssociativity->bindingPower);
   TEST_ASSERT_EQUAL(LEFT_TO_RIGHT, OperatorPrecedenceAndAssociativity->associativity);
 }
 
