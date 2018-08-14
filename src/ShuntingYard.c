@@ -26,7 +26,7 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
   Associativity prevTokenAssociativity;
   prevTokenType = TOKEN_NULL_TYPE;
   int condition = START;
-  int bracketFound = 0 ;
+  int openBracketFound = 0 ;
   Token *ans;
 
   while(condition == START){
@@ -42,8 +42,13 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
       continue;
     }
     else if (token->type == TOKEN_OPERATOR_TYPE){
+    openBracketFound = isOpenBracketToken(token);
+    checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
+    pushIfprevTokenIsOpenBracket(operatorStack, token);
+    if(openBracketFound){
+      operateIfBracket(operatorStack, operandStack, token);
+      }
 
-		checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
 
         //ifOpenBracketFoundKeepPushingUntilCloseBracket();
 		pushOperatorBracket(operatorStack, operandStack, token);
@@ -71,7 +76,7 @@ void operateIfBracket(StackBlock *operatorStack, StackBlock *operandStack, Token
 }
 
 void pushIfprevTokenIsOpenBracket(StackBlock *operatorStack, Token *token){
-	if((Token*)(operatorStack->head->data) != token && isOpenBracketToken((Token*)(operatorStack->head->data))){
+	if(operatorStack->count !=0 && (Token*)(operatorStack->head->data) != token && isOpenBracketToken((Token*)(operatorStack->head->data)) ){
 		pushOperatorStack(operatorStack, token);
 	}
 }
