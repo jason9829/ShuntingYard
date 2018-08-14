@@ -477,6 +477,7 @@ Token *combinePrefixWithOperandToken(Token *prefixToken, Token *operandToken){
 }
 
 
+
 // check next Token affix and encode it
 // needed to decode it later (getAffixType)
 /*

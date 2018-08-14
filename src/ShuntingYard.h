@@ -10,6 +10,7 @@
 
 
 
+
 int isTokenValid(Token *token, TokenType lastTokenType);
 int isOpenBracketToken(Token *token);
 int isClosingBracketToken(Token *token);
