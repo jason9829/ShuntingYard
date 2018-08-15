@@ -42,16 +42,17 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
       continue;
     }
     else if (token->type == TOKEN_OPERATOR_TYPE){
-    openBracketFound = isOpenBracketToken(token);
+    if(!openBracketFound){
+        openBracketFound = isOpenBracketToken(token);
+    }
     checkTokenAffixAndEncodeAffix(token, tokenizer, prevTokenType);
     pushIfprevTokenIsOpenBracket(operatorStack, token);
-    if(openBracketFound){
+    if(openBracketFound && isClosingBracketToken(token)){
       operateIfBracket(operatorStack, operandStack, token);
+       openBracketFound = 0;
       }
-
-
-        //ifOpenBracketFoundKeepPushingUntilCloseBracket();
-		pushOperatorBracket(operatorStack, operandStack, token);
+      //ifOpenBracketFoundKeepPushingUntilCloseBracket();
+		    pushOperator(operatorStack, operandStack, token);
         prevTokenType = getTokenType(token);
       }
     else{
@@ -66,7 +67,7 @@ void operateIfBracket(StackBlock *operatorStack, StackBlock *operandStack, Token
   Token *headOperatorToken;
   Affix headOperatorAffix;
   if(isClosingBracketToken(token)){
-    while(!isOpenBracketToken((Token*)(operatorStack->head->data))){
+    while(operatorStack->count != 0 && !isOpenBracketToken((Token*)(operatorStack->head->data))){
       headOperatorToken = (Token*)(operatorStack->head->data);
       headOperatorAffix = getAffix(headOperatorToken);
       operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
@@ -82,18 +83,21 @@ void pushIfprevTokenIsOpenBracket(StackBlock *operatorStack, Token *token){
 }
 
 void cancelBracket(StackBlock *operatorStack, Token *token){
-  if((Token*)(operatorStack->head->data) != token && isOpenBracketToken((Token*)(operatorStack->head->data)) && isClosingBracketToken(token)){
+  if(operatorStack->count != 0 && (Token*)(operatorStack->head->data) != token && isOpenBracketToken((Token*)(operatorStack->head->data)) && isClosingBracketToken(token)){
   popStack(operatorStack);
-  freeToken(token);
+  //freeToken(token);
   }
 }
 
-void pushOperatorBracket(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
-    pushIfOperatorStackIsEmpty(operatorStack, token);
-    pushIfprevTokenIsOpenBracket(operatorStack, token);
-		pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token);
-    pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack,operandStack, token);
-    operateIfHeadTokenOfStackIsHigherPrecedence(operatorStack, operandStack, token);
+void pushOperator(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
+    if(!isClosingBracketToken(token)){
+      pushIfOperatorStackIsEmpty(operatorStack, token);
+      //pushIfprevTokenIsOpenBracket(operatorStack, token);
+      pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token);
+      pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack,operandStack, token);
+      operateIfHeadTokenOfStackIsHigherPrecedence(operatorStack, operandStack, token);
+    }
+
 }
 
 void operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(StackBlock *operatorStack, StackBlock *operandStack, Token *token){

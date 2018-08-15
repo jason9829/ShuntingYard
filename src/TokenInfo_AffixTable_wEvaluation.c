@@ -382,6 +382,9 @@ void checkTokenAffixAndEncodeAffix(Token *token, Tokenizer *tokenizer,TokenType 
             if(operatorSymbol == ')'){
               encodeAffix(token, SUFFIX);
             }
+            else if (operatorSymbol == '*'|| operatorSymbol == '/'){
+              encodeAffix(token, INFIX);
+            }
             else{
               encodeAffix(token, PREFIX);
             }

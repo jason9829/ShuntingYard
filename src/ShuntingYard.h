@@ -29,7 +29,7 @@ void pushIfOperatorStackIsEmpty(StackBlock *operatorStack, Token *token);
 void pushIfprevTokenIsOpenBracket(StackBlock *operatorStack, Token *token);
 void operateIfBracket(StackBlock *operatorStack, StackBlock *operandStack, Token *token);
 void cancelBracket(StackBlock *operatorStack, Token *token);
-void pushOperatorBracket(StackBlock *operatorStack, StackBlock *operandStack, Token *token);
+void pushOperator(StackBlock *operatorStack, StackBlock *operandStack, Token *token);
 void operateIfHeadTokenOfStackIsHigherPrecedence(StackBlock *operatorStack, StackBlock *operandStack, Token *token);
 void ifNullTokenOperateUntilOperatorStackIsEmpty(StackBlock *operatorStack, StackBlock *operandStack, Token *token);
 Associativity getTokenAssociativity(Token *currentToken);

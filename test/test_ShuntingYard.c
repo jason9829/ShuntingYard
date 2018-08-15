@@ -1412,6 +1412,36 @@ void test_shuntingYard_given_and_symbol_2_plus_3_expect_ERR_INVALID_OPERATOR(voi
     TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
   }
 }
+void test_shuntingYard_given_bracket_2_multiply_2_expect_4(void){
+  CEXCEPTION_T e;
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken;
+  Token *operandToken;
+  StackItem *poppedAns;
+
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+ //tokenizer = createTokenizer(" 10 /10 *10");
+
+  tokenizer = createTokenizer(" (2*2)");
+
+  Try{
+    shuntingYard(tokenizer, &operatorStack, &operandStack);
+    poppedAns = popStack(&operandStack);
+    answerToken = (Token*)(poppedAns->data);
+    TEST_ASSERT_EQUAL( (2*2), ((IntegerToken*)answerToken)->value);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e,1);
+  }
+
+}
+
 
 void test_shuntingYard_given_test_for_bracket(void){
   CEXCEPTION_T e;
@@ -1427,13 +1457,13 @@ void test_shuntingYard_given_test_for_bracket(void){
   StackItem *poppedStackItem;
  //tokenizer = createTokenizer(" 10 /10 *10");
 
-  tokenizer = createTokenizer(" (2+2) *4 + (5+50) * 2");
+  tokenizer = createTokenizer(" (2+2) *4 + 2 * -4 + (2+2) + 20 ");
 
   Try{
     shuntingYard(tokenizer, &operatorStack, &operandStack);
     poppedAns = popStack(&operandStack);
     answerToken = (Token*)(poppedAns->data);
-    TEST_ASSERT_EQUAL( (2+2) *4 + (5+50) * 2  , ((IntegerToken*)answerToken)->value);
+    TEST_ASSERT_EQUAL((2+2) *4 + 2 * -4 + (2+2) + 20  , ((IntegerToken*)answerToken)->value);
     TEST_ASSERT_EQUAL(NULL, operatorStack.head);
     TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
   }
@@ -1442,6 +1472,8 @@ void test_shuntingYard_given_test_for_bracket(void){
   }
 
 }
+
+
 
 /*
 
