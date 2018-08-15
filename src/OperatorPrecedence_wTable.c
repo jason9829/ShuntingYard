@@ -10,6 +10,7 @@
 #define STRONG 3
 #define MEDIUM 2
 #define WEAK   1
+#define WEAKEST 0
 
 OperatorPrecedence bindingPower[50] = {
   [INFIX_PLUS] = {.bindingPower = WEAK},
@@ -18,8 +19,8 @@ OperatorPrecedence bindingPower[50] = {
   [INFIX_DIVIDE] = {.bindingPower = MEDIUM},
   [PREFIX_PLUS] = {.bindingPower = STRONG},
   [PREFIX_MINUS] = {.bindingPower = STRONG},
-  [OPEN_BRACKET] = {.bindingPower = 0},
-  [CLOSE_BRACKET] = {.bindingPower = 0},
+  [OPEN_BRACKET] = {.bindingPower = WEAKEST},
+  [CLOSE_BRACKET] = {.bindingPower = WEAKEST},
 };
 
 OperatorPrecedenceAndAssociativity bindingPowerAndAssociativity[50] = {
@@ -29,8 +30,8 @@ OperatorPrecedenceAndAssociativity bindingPowerAndAssociativity[50] = {
   [INFIX_DIVIDE] = {.bindingPower = MEDIUM, .associativity = LEFT_TO_RIGHT},
   [PREFIX_PLUS] = {.bindingPower = STRONG, .associativity = RIGHT_TO_LEFT},
   [PREFIX_MINUS] = {.bindingPower = STRONG, .associativity = RIGHT_TO_LEFT},
-  [OPEN_BRACKET] = {.bindingPower = 0, .associativity = LEFT_TO_RIGHT},
-  [CLOSE_BRACKET] = {.bindingPower = 0, .associativity = LEFT_TO_RIGHT},
+  [OPEN_BRACKET] = {.bindingPower = WEAKEST, .associativity = LEFT_TO_RIGHT},
+  [CLOSE_BRACKET] = {.bindingPower = WEAKEST, .associativity = LEFT_TO_RIGHT},
   [INVALID_OPERATOR] = {.bindingPower = 0, .associativity = 0},
 };
 
@@ -77,7 +78,7 @@ OperatorPrecedenceAndAssociativity *getTokenPrecedenceAndAssociativity(Token *to
                        return &bindingPowerAndAssociativity[INVALID_OPERATOR];
                      }
 
-      default:  throwException(ERR_INVALID_AFFIX, token, "'%c' is an invalid operator", operatorSymbol);
+      default:  throwException(ERR_INVALID_AFFIX, token, "Either '%c' is an invalid operator or has no affix", operatorSymbol);
 
   }
 }
@@ -113,7 +114,7 @@ OperatorPrecedence *getTokenPrecedence(Token *token){
                       return &bindingPower[INFIX_DIVIDE];
                      }
 
-      default:  throwException(ERR_INVALID_AFFIX, token, "'%c' is an invalid operator", operatorSymbol);
+      default:  throwException(ERR_INVALID_AFFIX, token, "Either '%c' is an invalid operator or has no affix ", operatorSymbol);
 
   }
 

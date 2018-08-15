@@ -76,7 +76,7 @@ void pushStack(StackBlock *List,void *data){
   token = ((Token*)(data));
 
   if(token->type == TOKEN_NULL_TYPE){
-      throwException(ERR_NULL_TOKEN, List ,"'%s' is invalid ", token->str);
+      throwException(ERR_NULL_TOKEN, List ,"Token is NULL ");
   }
   StackItem *newStackItem = (struct StackItem*)malloc (sizeof(struct StackItem));
   if(List->head == NULL){
@@ -125,8 +125,8 @@ void pushStack(StackBlock *List,void *data){
       newStackItem->data = (Token*)(data);
     }
     newStackItem->next = List->head;     // Take previous node as next
-    if(List->count == 1){     // if 2 block (head->newLinkedList) take previous as tail else tail remain the same
-      List->tail = newStackItem->next;              // previous node as tail
+    if(List->count == 1){                // if 2 block (head->newLinkedList) take previous as tail else tail remain the same
+      List->tail = newStackItem->next;   // previous node as tail
     }
     List->count++;
     List->head = newStackItem;

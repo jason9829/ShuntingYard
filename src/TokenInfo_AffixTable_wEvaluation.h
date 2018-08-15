@@ -18,9 +18,11 @@ int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens);
 int checkOperatorTokensAffixPossibilities(Token *currToken, Token *nextToken);
 int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *nextTokenInfo);
 int areAffixesCombinationValid(Affix leftAffix, Affix thisAffix);
+
 Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken);
-//void checkTokenAffixAndEncodeAffix(Tokenizer *tokenizer, Token *prevToken);
 void checkTokenAffixAndEncodeAffix(Token *token, Tokenizer *tokenizer,TokenType prevTokenType);
-OperatorType determineOperatorType(Affix tokenAffix);
+void encodeTokenAffix(Token *token, Token *prevToken, Tokenizer *tokenizer,TokenType prevTokenType);
+// encodeTokenAffix compare prevToken because need to check for '('
+
 Token *combinePrefixWithOperandToken(Token *prefixToken, Token *operandToken);
 #endif // _TOKENINFO_AFFIXTABLE_WEVALUATION_H

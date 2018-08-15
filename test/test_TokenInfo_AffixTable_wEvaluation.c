@@ -7,6 +7,7 @@
 #include "Exception.h"
 #include "CException.h"
 #include "Error.h"
+#include "Stack.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -16,6 +17,36 @@ void tearDown(void){}
 // 3++4
 // 3+*4
 // 3 + - + 5
+
+void test_encodeTokenWithAffix_given_operator_after_closing_bracket_expect_INFIX(void){
+  int closingBracketFound = 1;
+  Token *token_1 = NULL;
+  Token *token_2 = NULL;
+  Token *token_3 = NULL;
+  Token *answerToken = NULL;
+  TokenType prevTokentype;
+
+  Affix affix;
+  Tokenizer *tokenizer = NULL;
+  StackItem *poppedStackItem;
+
+  prevTokentype = TOKEN_OPERATOR_TYPE;
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+
+  tokenizer = createTokenizer("2 ) -  2");
+  token_1 = getToken(tokenizer);
+  token_2 = getToken(tokenizer);
+  token_3 = getToken(tokenizer);
+
+  pushStack(&operatorStack, token_2);
+
+  encodeTokenAffix(token_3,token_2, tokenizer,prevTokentype);
+
+  affix = getAffix(token_3);
+  TEST_ASSERT_EQUAL(INFIX,affix);
+}
+
 
 void test_isOperatorSymbolValid_given_plus_expect_valid(void){
   Token *token ;

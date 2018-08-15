@@ -8,7 +8,7 @@
 int *LinkedListAddToHead_wNewLinkedListAddress(LinkedList *List, void *data){
 
   if(*(int*)(data) == NULL){
-    throwException(ERR_INVALID_DATA,List,"Data trying to add is '%d'",(int*)(data));
+    throwException(ERR_INVALID_DATA,List,"Data trying to add is invalid");
   }
   else{
     ListItem *newLinkedList = (struct ListItem*)malloc (sizeof(struct ListItem));
@@ -34,7 +34,7 @@ int *LinkedListAddToHead_wNewLinkedListAddress(LinkedList *List, void *data){
 
 void LinkedListAddToHead(LinkedList *List,void *data){
   if(*(int*)(data) == NULL){
-    throwException(ERR_INVALID_DATA,List,"Data trying to add is '%d'",(int*)(data));
+    throwException(ERR_INVALID_DATA,List,"Data trying to add is invalid");
   }
   else{
     ListItem *newLinkedList = (struct ListItem*)malloc (sizeof(struct ListItem));

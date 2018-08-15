@@ -196,25 +196,3 @@ void test_TokenAffix_three_functions_encodeAffix_getAffix_getTokenType_given_min
   TEST_ASSERT_EQUAL(NO_AFFIX,affix);
   TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE,tokenType);
 }
-/*
-void test_extractAffix_given_operatorToken_expect_affix_PREFIX(void){
-  Affix affix;
-
-  Token *token = NULL;
-  Tokenizer *tokenizer = NULL;
-
-  tokenizer = createTokenizer("-2");
-
-  token = getToken(tokenizer);
-  StackItem TOKEN_operator = {NULL, (void *)token};
-  StackBlock operatorStack = {&TOKEN_operator, &TOKEN_operator,1};
-
-  StackItem TOKEN_operand = {NULL ,(void *) token};
-  StackBlock operandStack = {&TOKEN_operand, &TOKEN_operand,1};
-
-  token = getToken(tokenizer);
-  affix = extractAffix(&operatorStack, &operandStack);
-
-  TEST_ASSERT_EQUAL(PREFIX, affix);
-}
-*/
