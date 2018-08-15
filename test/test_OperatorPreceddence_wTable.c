@@ -26,6 +26,10 @@ void test_getTokenPrecedenceAndAssociativity_given_INFIX_PLUS_expect_bindingPowe
 
   TEST_ASSERT_EQUAL(1, OperatorPrecedenceAndAssociativity->bindingPower);
   TEST_ASSERT_EQUAL(LEFT_TO_RIGHT, OperatorPrecedenceAndAssociativity->associativity);
+
+  freeTokenizer(tokenizer);
+  freeToken(token);
+
 }
 
 void test_getTokenPrecedenceAndAssociativity_given_CLOSE_BREACKET_expect_bindingPower_3_associativity_RIGHT_TO_LEFT(void){
@@ -42,6 +46,9 @@ void test_getTokenPrecedenceAndAssociativity_given_CLOSE_BREACKET_expect_binding
 
   TEST_ASSERT_EQUAL(3, OperatorPrecedenceAndAssociativity->bindingPower);
   TEST_ASSERT_EQUAL(RIGHT_TO_LEFT, OperatorPrecedenceAndAssociativity->associativity);
+
+  freeTokenizer(tokenizer);
+  freeToken(token);
 }
 
 void test_getTokenPrecedenceAndAssociativity_given_CLOSE_BREACKET_expect_bindingPower_0_associativity_LEFT_TO_RIGHT(void){
@@ -58,6 +65,8 @@ void test_getTokenPrecedenceAndAssociativity_given_CLOSE_BREACKET_expect_binding
 
   TEST_ASSERT_EQUAL(0, OperatorPrecedenceAndAssociativity->bindingPower);
   TEST_ASSERT_EQUAL(LEFT_TO_RIGHT, OperatorPrecedenceAndAssociativity->associativity);
+  freeTokenizer(tokenizer);
+  freeToken(token);
 }
 
 void test_getTokenPrecedenceAndAssociativity_given_and_sign_expect_bindingPower_0_associativity_0(void){
@@ -74,6 +83,8 @@ void test_getTokenPrecedenceAndAssociativity_given_and_sign_expect_bindingPower_
 
   TEST_ASSERT_EQUAL(0, OperatorPrecedenceAndAssociativity->bindingPower);
   TEST_ASSERT_EQUAL(0, OperatorPrecedenceAndAssociativity->associativity);
+  freeTokenizer(tokenizer);
+  freeToken(token);
 }
 
 
@@ -96,7 +107,8 @@ void test_getTokenPrecedenceAndAssociativity_given_plus_NO_AFFIX_expect_ERR_INVA
     dumpTokenErrorMessage(e, 1);
     TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
   }
-
+  freeTokenizer(tokenizer);
+  freeToken(token);
 }
 
 // plus and minus sign has the same binding power
@@ -113,6 +125,8 @@ void test_getTokenPrecedence_given_plus_sign_expect_1(void){
   precedence = getTokenPrecedence(token);
 
   TEST_ASSERT_EQUAL(3, precedence->bindingPower);
+  freeTokenizer(tokenizer);
+  freeToken(token);
 }
 
 void test_getTokenPrecedence_given_plus_1_expect_1(void){
@@ -129,6 +143,9 @@ void test_getTokenPrecedence_given_plus_1_expect_1(void){
   precedence = getTokenPrecedence(token);
 
   TEST_ASSERT_EQUAL(3, precedence->bindingPower);
+  freeTokenizer(tokenizer);
+  freeToken(token);
+  freeToken(nextToken);
 }
 
 // multiply and divide sign has the same binding power
@@ -146,6 +163,8 @@ void test_getTokenPrecedence_given_divide_sign_expect_2(void){
 
   precedence = getTokenPrecedence(token);
   TEST_ASSERT_EQUAL(2, precedence->bindingPower);
+  freeTokenizer(tokenizer);
+  freeToken(token);
 
 }
 
@@ -166,7 +185,8 @@ void test_getTokenPrecedence_given_a_expect_ERR_INVALID_AFFIX(void){
       dumpTokenErrorMessage(e, 1);
       TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
     }
-
+    freeTokenizer(tokenizer);
+    freeToken(token);
 }
 
 void test_comparePrevTokenAndNextTokenPrecedence_given_plus_and_multiply_expect_0(void){
@@ -196,7 +216,9 @@ void test_comparePrevTokenAndNextTokenPrecedence_given_plus_and_multiply_expect_
     dumpTokenErrorMessage(e, 1);
     TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
   }
-
+  freeTokenizer(tokenizer);
+  freeToken(token);
+  freeToken(nextToken);
 }
 void test_comparePrevTokenAndNextTokenPrecedence_given_divide_and_minus_expect_1(void){
   int ans;
@@ -219,6 +241,9 @@ void test_comparePrevTokenAndNextTokenPrecedence_given_divide_and_minus_expect_1
   ans = comparePrevTokenAndNextTokenPrecedence(nextToken, token);
 
   TEST_ASSERT_EQUAL(0, ans);
+  freeTokenizer(tokenizer);
+  freeToken(token);
+  freeToken(nextToken);
 }
 
 void test_comparePrevTokenAndNextTokenPrecedence_given_plus_and_plus_expect_2(void){
@@ -244,4 +269,7 @@ void test_comparePrevTokenAndNextTokenPrecedence_given_plus_and_plus_expect_2(vo
   ans = comparePrevTokenAndNextTokenPrecedence(nextToken, token);
 
   TEST_ASSERT_EQUAL(0, ans);
+  freeTokenizer(tokenizer);
+  freeToken(token);
+  freeToken(nextToken);
 }
