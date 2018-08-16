@@ -17,46 +17,6 @@ void tearDown(void){}
 
 
 
-///
- //    ************************************************************************
- //    | TESTS for void encodeTokenAffix(Token *token, Token *prevToken,      |
- //    | Tokenizer *tokenizer,TokenType prevTokenType)                        |
- //    ************************************************************************
- //    | 1. if head of operatorStack is an open bracket, it will push         |
- //    | currentToken to closing bracket, it will                             |
- //    |    cancel out the bracket                                            |
- //    | 2. else it will do nothing                                           |
- //    ************************************************************************
- //
-
-void test_encodeTokenWithAffix_given_operator_after_closing_bracket_expect_INFIX(void){
-  int closingBracketFound = 1;
-  Token *token_1 = NULL;
-  Token *token_2 = NULL;
-  Token *token_3 = NULL;
-  Token *answerToken = NULL;
-  TokenType prevTokentype;
-
-  Affix affix;
-  Tokenizer *tokenizer = NULL;
-  StackItem *poppedStackItem;
-
-  prevTokentype = TOKEN_OPERATOR_TYPE;
-  StackBlock operatorStack = { NULL, NULL, 0};
-  StackBlock operandStack  = { NULL, NULL, 0};
-
-  tokenizer = createTokenizer("2 ) -  2");
-  token_1 = getToken(tokenizer);
-  token_2 = getToken(tokenizer);
-  token_3 = getToken(tokenizer);
-
-  pushStack(&operatorStack, token_2);
-
-  encodeTokenAffix(token_3,token_2, tokenizer,prevTokentype);
-
-  affix = getAffix(token_3);
-  TEST_ASSERT_EQUAL(INFIX,affix);
-}
 
 ///
  //    ************************************************************************
@@ -838,7 +798,39 @@ void test_checkTokenAffix_given_minus_sign_and_minus_sign_expect_PREFIX(void){
  //    | 1. This function job is to check the affix type of token and encode  |
  //    |   the affix into the token                                           |
  //    ************************************************************************
- //
+ //    Eg
+ //           2 + - 2
+ // INFIX-------^ ^-------------PREFIX
+ //  
+ void test_encodeTokenAffix_given_operator_after_closing_bracket_expect_INFIX(void){
+   int closingBracketFound = 1;
+   Token *token_1 = NULL;
+   Token *token_2 = NULL;
+   Token *token_3 = NULL;
+   Token *answerToken = NULL;
+   TokenType prevTokentype;
+
+   Affix affix;
+   Tokenizer *tokenizer = NULL;
+   StackItem *poppedStackItem;
+
+   prevTokentype = TOKEN_OPERATOR_TYPE;
+   StackBlock operatorStack = { NULL, NULL, 0};
+   StackBlock operandStack  = { NULL, NULL, 0};
+
+   tokenizer = createTokenizer("2 ) -  2");
+   token_1 = getToken(tokenizer);
+   token_2 = getToken(tokenizer);
+   token_3 = getToken(tokenizer);
+
+   pushStack(&operatorStack, token_2);
+
+   encodeTokenAffix(token_3,token_2, tokenizer,prevTokentype);
+
+   affix = getAffix(token_3);
+   TEST_ASSERT_EQUAL(INFIX,affix);
+ }
+
  void test_encodeTokenAffix_given_2_plus_3_expect_infix(void){
    Affix affix;
    Token *token ;

@@ -35,7 +35,7 @@ void test_calculationOnTokens_given_2_plus_2_expect_4(void){
   TEST_ASSERT_EQUAL(4,((IntegerToken*)Ans)->value);
   TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE,Ans->type);
 
-  //freeTokenizer(tokenizer);
+  freeTokenizer(tokenizer);
   //freeToken(token_1);
   //freeToken(token_2);
   //freeToken(token_operator);
@@ -67,7 +67,7 @@ void test_calculationOnTokens_given_invalid_operator_expect_ERR_INVALID_OPERATOR
     dumpTokenErrorMessage(e, 1);
     TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
   }
-  //freeTokenizer(tokenizer);
+  freeTokenizer(tokenizer);
   //freeToken(token_1);
   //freeToken(token_2);
   //freeToken(token_operator);
@@ -89,7 +89,7 @@ void test_calculationOnTokens_given_2_minus_2_expect_0(void){
   TEST_ASSERT_EQUAL(0,((IntegerToken*)Ans)->value);
   TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE,Ans->type);
 
-  //freeTokenizer(tokenizer);
+  freeTokenizer(tokenizer);
   //freeToken(token_1);
   //freeToken(token_2);
   //freeToken(token_operator);
@@ -111,10 +111,10 @@ void test_calculationOnTokens_given_2_multiply_3_expect_6(void){
   TEST_ASSERT_EQUAL(6,((IntegerToken*)Ans)->value);
   TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE,Ans->type);
 
-  //freeTokenizer(tokenizer);
+  freeTokenizer(tokenizer);
   //freeToken(token_1);
   //freeToken(token_2);
-//  freeToken(token_operator);
+  //freeToken(token_operator);
 }
 
 ///
@@ -144,11 +144,11 @@ void test_additionOf2Tokens_given_10_plus_10_expect_20(void){
   TEST_ASSERT_EQUAL(20,((IntegerToken*)Ans)->value);
   TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE,Ans->type);
 
-  //freeTokenizer(tokenizer);
+  freeTokenizer(tokenizer);
   //freeToken(token_1);
   //freeToken(token_2);
   //freeToken(token_operator);
-  //freeToken(Ans);
+//  freeToken(Ans);
 }
 
 void test_additionOf2Tokens_given_10point123_plus_10point123_expect_20point246(void){
