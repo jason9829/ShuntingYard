@@ -199,8 +199,6 @@ void test_isOpenBracketToken_given_open_bracket_expect_1(void){
 
   TEST_ASSERT_EQUAL(1, result);
 
-
-
 }
 
 void test_isOpenBracketToken_given_plus_expect_0(void){
@@ -393,9 +391,6 @@ void test_checkAssociativity_given_currentToken_SUFFIX_expect_LEFT_TO_RIGHT(void
   currTokenAssociativity = getTokenAssociativity(token);
   TEST_ASSERT_EQUAL(LEFT_TO_RIGHT, currTokenAssociativity);
 
-
-  freeToken(token);
-
 }
 
 void test_checkAssociativity_given_currentToken_INVALID_AFFIX_expect_ERR_INVALID_AFFIX(void){
@@ -418,7 +413,6 @@ void test_checkAssociativity_given_currentToken_INVALID_AFFIX_expect_ERR_INVALID
     TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
   }
 
-  freeToken(token);
 }
 
 
@@ -448,10 +442,6 @@ void test_pushOperatorStackIfHeadTokenOfStackIsSamePrecedence_given_headToken_is
 
   TEST_ASSERT_EQUAL(2, operatorStack.count);
 
-
-
-
-
 }
 
 void test_pushOperatorStackIfHeadTokenOfStackIsSamePrecedence_given_headToken_is_prefix_nextToken_also_infix_expect_didnt_pushed(void){
@@ -479,11 +469,6 @@ void test_pushOperatorStackIfHeadTokenOfStackIsSamePrecedence_given_headToken_is
   pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(&operatorStack, &operandStack, operatorToken_2);
 
   TEST_ASSERT_EQUAL(1, operatorStack.count);
-
-
-
-
-
 
 }
 
@@ -513,10 +498,6 @@ void test_pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence_given_headToken_i
   TEST_ASSERT_EQUAL(2, operatorStack.count);
 
 
-
-
-
-  freeToken(operandToken_2);
 }
 
 void test_pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence_given_headToken_is_prefix_expect_didnt_push(void){
@@ -546,10 +527,6 @@ void test_pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence_given_headToken_i
   TEST_ASSERT_EQUAL(1, operatorStack.count);
   TEST_ASSERT_EQUAL(temp, operatorToken_2);
 
-
-
-
-
 }
 
 
@@ -571,10 +548,6 @@ void test_pushIfOperatorStackIsEmpty_given_empty_stack_and_an_operator_expect_pu
   pushIfOperatorStackIsEmpty(&operatorStack, operatorToken_1);
 
   TEST_ASSERT_EQUAL(1, operatorStack.count);
-
-
-
-
 
 }
 
@@ -983,9 +956,6 @@ void test_operateOnStacksDependOnAffix_given_minus_5_expect_negative5(void){
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
 
 
-
-
-  freeToken(operandToken_2);
 }
 
 
@@ -1032,7 +1002,6 @@ void test_operatorStackHeadIsPrefix_given_stackhead_INFIX_expect_0(void){
     TEST_ASSERT_EQUAL(0, ans);
 
 
-
 }
 
 
@@ -1056,7 +1025,6 @@ void test_operatorStackHeadIsInfix_given_stackhead_INFIX_expect_1(void){
     TEST_ASSERT_EQUAL(1, ans);
 
 
-
 }
 
 void test_operatorStackHeadIsInfix_given_stackhead_PREFIX_expect_0(void){
@@ -1076,7 +1044,6 @@ void test_operatorStackHeadIsInfix_given_stackhead_PREFIX_expect_0(void){
     ans = operatorStackHeadIsInfix(&operatorStack);
 
     TEST_ASSERT_EQUAL(0, ans);
-
 
 
 }
@@ -1103,8 +1070,6 @@ void test_shuntingYard_given_2_plus_3_expect_ans_5(void){
   TEST_ASSERT_EQUAL(5, ((IntegerToken*)answerToken)->value);
   TEST_ASSERT_EQUAL(NULL, operatorStack.head);
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
-
-
 
 
 }
@@ -1139,7 +1104,6 @@ void test_shuntingYard_given_negative2_plus_3_expect_ans_1(void){
   }
 
 
-
 }
 
 
@@ -1164,8 +1128,6 @@ void test_shuntingYard_given_2_plus_negtive3_expect_ans_negative1(void){
   TEST_ASSERT_EQUAL(-1, ((IntegerToken*)answerToken)->value);
   TEST_ASSERT_EQUAL(NULL, operatorStack.head);
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
-
-
 
 
 
@@ -1195,9 +1157,6 @@ void test_shuntingYard_given_2_plus_minus_negtive778_expect_ans_780(void){
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
 
 
-
-
-
 }
 
 void test_shuntingYard_given_10_plus_minus_plus_negtive778_expect_ans_780(void){
@@ -1222,10 +1181,6 @@ void test_shuntingYard_given_10_plus_minus_plus_negtive778_expect_ans_780(void){
   TEST_ASSERT_EQUAL(NULL, operatorStack.head);
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
 
-
-
-
-
 }
 
 void test_shuntingYard_given_negative2_minus_negtive3_expect_ans_negative5(void){
@@ -1249,8 +1204,6 @@ void test_shuntingYard_given_negative2_minus_negtive3_expect_ans_negative5(void)
   TEST_ASSERT_EQUAL(-5, ((IntegerToken*)answerToken)->value);
   TEST_ASSERT_EQUAL(NULL, operatorStack.head);
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
-
-
 
 
 }
@@ -1280,9 +1233,6 @@ void test_shuntingYard_given_2_multiply_negtive2_expect_ans_negative4(void){
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
 
 
-
-
-
 }
 
 void test_shuntingYard_given_2_multiply_20_expect_ans_40(void){
@@ -1306,9 +1256,6 @@ void test_shuntingYard_given_2_multiply_20_expect_ans_40(void){
   TEST_ASSERT_EQUAL(40, ((IntegerToken*)answerToken)->value);
   TEST_ASSERT_EQUAL(NULL, operatorStack.head);
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
-
-
-
 
 
 }
@@ -1336,9 +1283,6 @@ void test_shuntingYard_given_2point5_multiply_40_prefix_minus_expect_ans_5point0
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
 
 
-
-
-
 }
 
 
@@ -1364,7 +1308,6 @@ void test_shuntingYard_given_one_plus_5_multiply_3_expect_ans_16(void){
   TEST_ASSERT_EQUAL(16, ((IntegerToken*)answerToken)->value);
   TEST_ASSERT_EQUAL(NULL, operatorStack.head);
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
-
 
 }
 
