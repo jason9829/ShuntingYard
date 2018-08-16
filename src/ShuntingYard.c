@@ -92,7 +92,6 @@ void noOperatorBetweenBrackets(Token *token, Token *prevToken){
 }
 
 void matchBracket(Token *token,int openBracketCounter, int closeBracketCounter){
-
   if(openBracketCounter !=0 && (openBracketCounter!=closeBracketCounter)){
     throwException(ERR_MISSING_BRACKET,token, "Expecting ')' but not found");
   }
@@ -156,7 +155,6 @@ void operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(StackBlock *operatorSt
     headOperatorAffix = getAffix(headOperatorToken);
 
   if(areAssociativitiesSame(headOperatorAndAssociativity, currentOperatorAndAssociativity)){
-//if((headOperatorAndAssociativity-> associativity == LEFT_TO_RIGHT && currentOperatorAndAssociativity-> associativity == LEFT_TO_RIGHT)){
       if((headOperatorAndAssociativity-> associativity == LEFT_TO_RIGHT && currentOperatorAndAssociativity-> associativity == LEFT_TO_RIGHT) && ((headOperatorAndAssociativity-> bindingPower == currentOperatorAndAssociativity-> bindingPower))){
           operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
       }
@@ -227,6 +225,7 @@ void pushIfOperandStackIsEmpty(StackBlock *operandStack, Token *token){
   }
 }
 
+// Check for Associativity (depend on affix) if same return 1
 int areAssociativitiesSame(OperatorPrecedenceAndAssociativity *headOperatorAndAssociativity, OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity){
   if(headOperatorAndAssociativity->associativity == currentOperatorAndAssociativity->associativity){
     return 1;
@@ -236,6 +235,13 @@ int areAssociativitiesSame(OperatorPrecedenceAndAssociativity *headOperatorAndAs
   }
 }
 
+// Example
+//               (+) - PREFIX
+//
+//     +----+
+//    |  +  |   -- PREFIX
+//    +----+
+// For this case the precedence are the same so it will push the (+) operator
 void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(StackBlock *operatorStack,StackBlock *operandStack, Token *token){
   Affix affixOfHeadOperatorToken;
   OperatorPrecedenceAndAssociativity *headOperatorAndAssociativity;
@@ -257,8 +263,7 @@ void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(StackBlock *operatorSta
           }
       }
   }
-
-  }
+}
 
 /*
  *  affixOfCurrentToken         Associativity
@@ -285,6 +290,13 @@ Associativity getTokenAssociativity(Token *currentToken){
   }
 }
 
+//  Example
+//               (+) - PREFIX
+//
+//     +----+
+//    |  +  |   -- INFIX
+//    +----+
+// For this case the precedence of head of Stack is lower, thus the PREFIX (-) will be pushed
 void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorStack, Token *token){
   Affix affixOfHeadOperatorToken;
   Token *headOperatorToken;
@@ -303,7 +315,6 @@ void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorSt
         }
     }
   }
-
 }
 
 int operatorStackHeadIsPrefix(StackBlock *operatorStack){
@@ -330,6 +341,7 @@ int operatorStackHeadIsInfix(StackBlock *operatorStack){
   }
 }
 
+// checking the validity of Token
 int isTokenValid(Token *token, TokenType lastTokenType){
   if(token->type == TOKEN_FLOAT_TYPE || token->type == TOKEN_INTEGER_TYPE){
     switch (lastTokenType) {
@@ -376,7 +388,7 @@ int isClosingBracketToken(Token *token){
   }
 }
 
-
+// This function will choose what operation to do depend the affix
 void operateOnStacksDependOnAffix(StackBlock *operatorStack, StackBlock *operandStack, Affix affix){
   Token *ans;
   switch (affix) {

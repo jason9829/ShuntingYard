@@ -17,7 +17,7 @@ void test_calculationOnTokens_given_2_plus_2_expect_4(void){
   Token *Ans            = NULL;
   Tokenizer *tokenizer  = NULL;
 
-  tokenizer = createTokenizer(" 2 +2");
+  tokenizer = createTokenizer(" 2 +2");      
   token_1 = getToken(tokenizer);
   token_operator = getToken(tokenizer);
   token_2 = getToken(tokenizer);

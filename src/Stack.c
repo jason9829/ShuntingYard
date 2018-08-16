@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <malloc.h>
 
+
 int *pushStack_wNewStackAddress(StackBlock *List,void *data){
   Token *token = (struct Token*)malloc(sizeof(struct Token));
   token = (Token*)(data);

@@ -14,9 +14,7 @@
 void setUp(void){}
 void tearDown(void){}
 
-// 3++4
-// 3+*4
-// 3 + - + 5
+
 
 void test_encodeTokenWithAffix_given_operator_after_closing_bracket_expect_INFIX(void){
   int closingBracketFound = 1;
@@ -152,6 +150,7 @@ void test_isOperatorSymbolValid_given_1_expect_ERR_INVALID_OPERATOR(void){
   }
 
 }
+
 void test_getTokenInfo_given_plus_sign_expect_attribute_7(void){
   Token *token ;
   Tokenizer *tokenizer ;
@@ -163,6 +162,7 @@ void test_getTokenInfo_given_plus_sign_expect_attribute_7(void){
 
   TEST_ASSERT_EQUAL(7, affix->Attribute);
 }
+
 void test_getTokenInfo_given_minus_sign_expect_attribute_7(void){
   Token *token ;
   Tokenizer *tokenizer ;
@@ -174,6 +174,7 @@ void test_getTokenInfo_given_minus_sign_expect_attribute_7(void){
 
   TEST_ASSERT_EQUAL(7, affix->Attribute);
 }
+
 void test_getTokenInfo_given_multiply_sign_expect_attribute_7(void){
   Token *token ;
   Tokenizer *tokenizer ;
@@ -185,6 +186,7 @@ void test_getTokenInfo_given_multiply_sign_expect_attribute_7(void){
 
   TEST_ASSERT_EQUAL(2, affix->Attribute);
 }
+
 void test_getTokenInfo_given_divide_sign_expect_attribute_7(void){
   Token *token ;
   Tokenizer *tokenizer ;
@@ -533,7 +535,6 @@ void test_areAffixesCombinationValid_given_INFIX_INFIX_expect_ERR_INVALID_AFFIX(
    Try{
      result = areAffixesCombinationValid(leftAffix, thisAffix);
      TEST_ASSERT_EQUAL(0, result);
-     //TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
    }
    Catch(e){
    dumpTokenErrorMessage(e, 1);
@@ -552,7 +553,6 @@ void test_areAffixesCombinationValid_given_INFIX_SUFFIX_expect_ERR_INVALID_AFFIX
    Try{
      result = areAffixesCombinationValid(leftAffix, thisAffix);
      TEST_ASSERT_EQUAL(0, result);
-     //TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
    }
    Catch(e){
    dumpTokenErrorMessage(e, 1);
@@ -571,7 +571,6 @@ void test_areAffixesCombinationValid_given_PREFIX_INFIX_expect_ERR_INVALID_AFFIX
    Try{
      result = areAffixesCombinationValid(leftAffix, thisAffix);
      TEST_ASSERT_EQUAL(0, result);
-    // TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
    }
    Catch(e){
    dumpTokenErrorMessage(e, 1);
@@ -590,7 +589,6 @@ void test_areAffixesCombinationValid_given_PREFIX_SUFFIX_expect_ERR_INVALID_AFFI
    Try{
      result = areAffixesCombinationValid(leftAffix, thisAffix);
      TEST_ASSERT_EQUAL(0, result);
-  //   TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
    }
    Catch(e){
    dumpTokenErrorMessage(e, 1);
@@ -609,7 +607,6 @@ void test_areAffixesCombinationValid_given_SUFFIX_PREFIX_expect_ERR_INVALID_AFFI
    Try{
      result = areAffixesCombinationValid(leftAffix, thisAffix);
      TEST_ASSERT_EQUAL(0, result);
-     //TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
    }
    Catch(e){
    dumpTokenErrorMessage(e, 1);
