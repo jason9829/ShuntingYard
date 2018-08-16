@@ -16,6 +16,16 @@ void tearDown(void){}
 
 
 
+///
+ //    ******************************************************************************************************************
+ //    | TESTS for void encodeTokenAffix(Token *token, Token *prevToken, Tokenizer *tokenizer,TokenType prevTokenType); |                                |
+ //    ******************************************************************************************************************
+ //    | 1. if head of operatorStack is an open bracket, it will push currentToken to closing bracket, it will          |
+ //    |    cancel out the bracket                                                                                      |
+ //    | 2. else it will do nothing                                                                                     |
+ //    *****************************************************************************************************************
+ //
+
 void test_encodeTokenWithAffix_given_operator_after_closing_bracket_expect_INFIX(void){
   int closingBracketFound = 1;
   Token *token_1 = NULL;

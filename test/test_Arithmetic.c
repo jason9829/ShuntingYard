@@ -10,6 +10,15 @@
 void setUp(void){}
 void tearDown(void){}
 
+///
+ //    *******************************************************************************************************************************************************************************
+ //    | TESTS for Token *calculationOnTokens(Token *token_1, Token *token_2, Token *token_operator);                                                                                |
+ //    *******************************************************************************************************************************************************************************
+ //    | 1. This function included additionOf2Tokens, subtractionOf2Tokens, multiplicationOf2Tokens, divisionOf2Tokens                                                               |
+ //    | 2. It will only be called when the operator is INFIX                                                                                  |
+ //    *******************************************************************************************************************************************************************************
+ //
+
 void test_calculationOnTokens_given_2_plus_2_expect_4(void){
   Token *token_1        = NULL;
   Token *token_2        = NULL;
@@ -17,7 +26,7 @@ void test_calculationOnTokens_given_2_plus_2_expect_4(void){
   Token *Ans            = NULL;
   Tokenizer *tokenizer  = NULL;
 
-  tokenizer = createTokenizer(" 2 +2");      
+  tokenizer = createTokenizer(" 2 +2");
   token_1 = getToken(tokenizer);
   token_operator = getToken(tokenizer);
   token_2 = getToken(tokenizer);
@@ -32,6 +41,89 @@ void test_calculationOnTokens_given_2_plus_2_expect_4(void){
   //freeToken(token_operator);
   //freeToken(Ans);
 }
+
+
+void test_calculationOnTokens_given_invalid_operator_expect_ERR_INVALID_OPERATOR(void){
+  CEXCEPTION_T e;
+
+  Token *token_1        = NULL;
+  Token *token_2        = NULL;
+  Token *token_operator = NULL;
+  Tokenizer *tokenizer  = NULL;
+  Token *Ans            = NULL;
+
+
+  // no need operator bcz the function is already an addition
+  tokenizer = createTokenizer("  123 a; 4124");
+  token_1 = getToken(tokenizer);
+  token_operator = getToken(tokenizer);
+  token_2 = getToken(tokenizer);
+
+  Try{
+      Ans = calculationOnTokens(token_1, token_2, token_operator);
+      TEST_FAIL_MESSAGE("Expect ERR_INVALID_OPERATOR. But no exception thrown.");
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e, 1);
+    TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
+  }
+  //freeTokenizer(tokenizer);
+  //freeToken(token_1);
+  //freeToken(token_2);
+  //freeToken(token_operator);
+}
+
+void test_calculationOnTokens_given_2_minus_2_expect_0(void){
+  Token *token_1        = NULL;
+  Token *token_2        = NULL;
+  Token *token_operator = NULL;
+  Token *Ans            ;
+  Tokenizer *tokenizer  = NULL;
+
+  tokenizer = createTokenizer(" 2-  2");
+  token_1 = getToken(tokenizer);
+  token_operator = getToken(tokenizer);
+  token_2 = getToken(tokenizer);
+  Ans = calculationOnTokens(token_1, token_2, token_operator);
+
+  TEST_ASSERT_EQUAL(0,((IntegerToken*)Ans)->value);
+  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE,Ans->type);
+
+  //freeTokenizer(tokenizer);
+  //freeToken(token_1);
+  //freeToken(token_2);
+  //freeToken(token_operator);
+}
+
+void test_calculationOnTokens_given_2_multiply_3_expect_6(void){
+  Token *token_1        = NULL;
+  Token *token_2        = NULL;
+  Token *token_operator = NULL;
+  Token *Ans            ;
+  Tokenizer *tokenizer  = NULL;
+
+  tokenizer = createTokenizer(" 2 *    3");
+  token_1 = getToken(tokenizer);
+  token_operator = getToken(tokenizer);
+  token_2 = getToken(tokenizer);
+  Ans = calculationOnTokens(token_1, token_2, token_operator);
+
+  TEST_ASSERT_EQUAL(6,((IntegerToken*)Ans)->value);
+  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE,Ans->type);
+
+  //freeTokenizer(tokenizer);
+  //freeToken(token_1);
+  //freeToken(token_2);
+//  freeToken(token_operator);
+}
+
+///
+ //    ******************************************************************************************************************************************************
+ //    | TESTS for Token *additionOf2Tokens(Token *token_1, Token *token_2);                                                                                |
+ //    ******************************************************************************************************************************************************
+ //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it will compute the addition                                                     |
+ //    ******************************************************************************************************************************************************
+ //
 
 void test_additionOf2Tokens_given_10_plus_10_expect_20(void){
   Token *token_1        = NULL;
@@ -167,27 +259,16 @@ void test_additionOf2Tokens_given_abcd_and_4124aa_expect_ERR_INVALID_OPERAND(voi
 }
 
 
-void test_calculationOnTokens_given_2_minus_2_expect_0(void){
-  Token *token_1        = NULL;
-  Token *token_2        = NULL;
-  Token *token_operator = NULL;
-  Token *Ans            ;
-  Tokenizer *tokenizer  = NULL;
 
-  tokenizer = createTokenizer(" 2-  2");
-  token_1 = getToken(tokenizer);
-  token_operator = getToken(tokenizer);
-  token_2 = getToken(tokenizer);
-  Ans = calculationOnTokens(token_1, token_2, token_operator);
 
-  TEST_ASSERT_EQUAL(0,((IntegerToken*)Ans)->value);
-  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE,Ans->type);
+///
+ //    ******************************************************************************************************************************************************
+ //    | TESTS for Token *subtractionOf2Tokens(Token *token_1, Token *token_2);                                                                             |
+ //    ******************************************************************************************************************************************************
+ //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it will compute the subtraction                                                     |
+ //    ******************************************************************************************************************************************************
+ //
 
-  //freeTokenizer(tokenizer);
-  //freeToken(token_1);
-  //freeToken(token_2);
-  //freeToken(token_operator);
-}
 void test_subtractionOf2Tokens_given_10_minus_10_expect_0(void){
   Token *token_1        = NULL;
   Token *token_2        = NULL;
@@ -238,7 +319,7 @@ void test_subtractionOf2Tokens_given_10point123_minus_10_expect_0point123(void){
   //freeToken(token_operator);
 }
 
-void test_additionOf2Tokens_given_10point123_minus_negative_12point123_expect_negative2(void){
+void test_subtractionOf2Tokens_given_10point123_minus_negative_12point123_expect_negative2(void){
   Token *token_1        = NULL;
   Token *token_2        = NULL;
   Token *token_operator = NULL;
@@ -289,28 +370,14 @@ void test_subtractionOf2Tokens_given_10_minus_1point12_expect_8point88(void){
 }
 
 
-void test_calculationOnTokens_given_2_multiply_3_expect_6(void){
-  Token *token_1        = NULL;
-  Token *token_2        = NULL;
-  Token *token_operator = NULL;
-  Token *Ans            ;
-  Tokenizer *tokenizer  = NULL;
 
-  tokenizer = createTokenizer(" 2 *    3");
-  token_1 = getToken(tokenizer);
-  token_operator = getToken(tokenizer);
-  token_2 = getToken(tokenizer);
-  Ans = calculationOnTokens(token_1, token_2, token_operator);
 
-  TEST_ASSERT_EQUAL(6,((IntegerToken*)Ans)->value);
-  TEST_ASSERT_EQUAL(TOKEN_INTEGER_TYPE,Ans->type);
-
-  //freeTokenizer(tokenizer);
-  //freeToken(token_1);
-  //freeToken(token_2);
-//  freeToken(token_operator);
-}
-
+///
+ //    ******************************************************************************************************************************************************
+ //    | TESTS for Token *multiplicationOf2Tokens(Token *token_1, Token *token_2);                                                                          |
+ //    ******************************************************************************************************************************************************
+ //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it will compute the multiplication                                               |
+ //    ******************************************************************************************************************************************************
 void test_multiplicationOf2Tokens_given_10_multiply_2_expect_20(void){
   Token *token_1        = NULL;
   Token *token_2        = NULL;
@@ -431,8 +498,13 @@ void test_calculationOnTokens_given_2_div_2_expect_1(void){
   //freeToken(token_2);
   //freeToken(token_operator);
 }
-
-void test_multiplicationOf2Tokens_given_10_div_2_expect_5(void){
+///
+ //    ******************************************************************************************************************************************************
+ //    | TESTS for Token *divisionOf2Tokens(Token *token_1, Token *token_2);                                                                                |
+ //    ******************************************************************************************************************************************************
+ //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it will compute the division                                                     |
+ //    ******************************************************************************************************************************************************
+void test_divisionOf2Tokens_given_10_div_2_expect_5(void){
   Token *token_1        = NULL;
   Token *token_2        = NULL;
   Token *token_operator = NULL;
@@ -525,36 +597,6 @@ void test_divisionOf2Tokens_given_999point99_div_2point99_expect_334point445(voi
   TEST_ASSERT_EQUAL(334.445,((FloatToken*)Ans)->value);
   TEST_ASSERT_EQUAL(TOKEN_FLOAT_TYPE,Ans->type);
 
-  //freeTokenizer(tokenizer);
-  //freeToken(token_1);
-  //freeToken(token_2);
-  //freeToken(token_operator);
-}
-
-void test_calculationOnTokens_given_invalid_operator_expect_ERR_INVALID_OPERATOR(void){
-  CEXCEPTION_T e;
-
-  Token *token_1        = NULL;
-  Token *token_2        = NULL;
-  Token *token_operator = NULL;
-  Tokenizer *tokenizer  = NULL;
-  Token *Ans            = NULL;
-
-
-  // no need operator bcz the function is already an addition
-  tokenizer = createTokenizer("  123 a; 4124");
-  token_1 = getToken(tokenizer);
-  token_operator = getToken(tokenizer);
-  token_2 = getToken(tokenizer);
-
-  Try{
-      Ans = calculationOnTokens(token_1, token_2, token_operator);
-      TEST_FAIL_MESSAGE("Expect ERR_INVALID_OPERATOR. But no exception thrown.");
-  }
-  Catch(e){
-    dumpTokenErrorMessage(e, 1);
-    TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
-  }
   //freeTokenizer(tokenizer);
   //freeToken(token_1);
   //freeToken(token_2);

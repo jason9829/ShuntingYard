@@ -425,7 +425,7 @@ void test_matchBracket_given_1_open_bracket_no_close_bracket_expect_ERR_MISSING_
  //    | TESTS for void cancelBracket(StackBlock *operatorStack, Token *token);                                    |
  //    *************************************************************************************************************
  //    | 1. if head of operatorStack is an open bracket, it will push currentToken to closing bracket, it will     |
-//     |    cancel out the bracket                                                                                 |
+ //    |    cancel out the bracket                                                                                 |
  //    | 2. else it will do nothing                                                                                |
  //    *************************************************************************************************************
  //

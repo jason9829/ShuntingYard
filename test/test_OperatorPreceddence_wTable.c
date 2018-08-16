@@ -12,6 +12,14 @@
 void setUp(void){}
 void tearDown(void){}
 
+///
+ //    *******************************************************************************************************************************************************************************
+ //    | TESTS for OperatorPrecedenceAndAssociativity *getTokenPrecedenceAndAssociativity(Token *token);                                                                             |
+ //    *******************************************************************************************************************************************************************************
+ //    | 1. This function will getTokenPrecedenceAndAssociativity from the OperatorPrecedenceAndAssociativity bindingPowerAndAssociativity[50] table                                 |
+ //    *******************************************************************************************************************************************************************************
+ //
+
 void test_getTokenPrecedenceAndAssociativity_given_INFIX_PLUS_expect_bindingPower_1_associativity_LEFT_TO_RIGHT(void){
   Token *token = NULL;
   Affix affix;
@@ -111,6 +119,15 @@ void test_getTokenPrecedenceAndAssociativity_given_plus_NO_AFFIX_expect_ERR_INVA
   freeToken(token);
 }
 
+
+///
+ //    *******************************************************************************************************************************************************************************
+ //    | TESTS for OperatorPrecedence *getTokenPrecedence(Token *token);                                                                                                             |
+ //    *******************************************************************************************************************************************************************************
+ //    | 1. This function will getTokenPrecedenceAndAssociativity from the OperatorPrecedence bindingPower[50] table                                 |
+ //    *******************************************************************************************************************************************************************************
+ //
+
 // plus and minus sign has the same binding power
 void test_getTokenPrecedence_given_plus_sign_expect_1(void){
   Token *token = NULL;
@@ -188,6 +205,17 @@ void test_getTokenPrecedence_given_a_expect_ERR_INVALID_AFFIX(void){
     freeTokenizer(tokenizer);
     freeToken(token);
 }
+
+///
+ //    *******************************************************************************************************************************************************************************
+ //    | TESTS for int comparePrevTokenAndNextTokenPrecedence(Token *currToken, Token *prevToken);                                                                                   |
+ //    *******************************************************************************************************************************************************************************
+ //    | 1. This function will compare the precedence of prevToken(head) and currrToken                                                                                              |
+ //    | 2. if precedence(prevToken) > token , return 1                                                                                                                              |
+ //    |    else if precedence(prevToken) < token, return 0                                                                                                                          |
+ //    |    else return 2                                                                                                                                                            |
+ //    *******************************************************************************************************************************************************************************
+ //
 
 void test_comparePrevTokenAndNextTokenPrecedence_given_plus_and_multiply_expect_0(void){
   CEXCEPTION_T e;
