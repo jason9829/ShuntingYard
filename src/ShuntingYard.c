@@ -182,6 +182,9 @@ void ifNullTokenOperateUntilOperatorStackIsEmpty(StackBlock *operatorStack, Stac
 
 }
 
+// comparePrevTokenAndNextTokenPrecedence == 1 (headToken Higher)
+//                                        == 2 equal
+//                                        == 0 (headToken lower)
 void operateIfHeadTokenOfStackIsHigherPrecedence(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
   Token *headOperatorToken;
   char headOperatorSymbol;
@@ -203,7 +206,6 @@ void operateIfHeadTokenOfStackIsHigherPrecedence(StackBlock *operatorStack, Stac
             headOperatorAffix = getAffix(headOperatorToken);
           }
         }
-      //  operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(operatorStack, operandStack, token);
       }
       pushIfprevTokenIsOpenBracket(operatorStack, token);
       pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack, operandStack, token);

@@ -118,11 +118,12 @@ void test_calculationOnTokens_given_2_multiply_3_expect_6(void){
 }
 
 ///
- //    ******************************************************************************************************************************************************
- //    | TESTS for Token *additionOf2Tokens(Token *token_1, Token *token_2);                                                                                |
- //    ******************************************************************************************************************************************************
- //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it will compute the addition                                                     |
- //    ******************************************************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for Token *additionOf2Tokens(Token *token_1, Token *token_2)   |
+ //    ************************************************************************
+ //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it |
+ //    |will compute the addition                                             |
+ //    ************************************************************************
  //
 
 void test_additionOf2Tokens_given_10_plus_10_expect_20(void){
@@ -262,11 +263,12 @@ void test_additionOf2Tokens_given_abcd_and_4124aa_expect_ERR_INVALID_OPERAND(voi
 
 
 ///
- //    ******************************************************************************************************************************************************
- //    | TESTS for Token *subtractionOf2Tokens(Token *token_1, Token *token_2);                                                                             |
- //    ******************************************************************************************************************************************************
- //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it will compute the subtraction                                                     |
- //    ******************************************************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for Token *subtractionOf2Tokens(Token *token_1, Token *token_2)|
+ //    ************************************************************************
+ //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it |
+ //    | will compute the subtraction                                         |
+ //    ************************************************************************
  //
 
 void test_subtractionOf2Tokens_given_10_minus_10_expect_0(void){
@@ -373,11 +375,12 @@ void test_subtractionOf2Tokens_given_10_minus_1point12_expect_8point88(void){
 
 
 ///
- //    ******************************************************************************************************************************************************
- //    | TESTS for Token *multiplicationOf2Tokens(Token *token_1, Token *token_2);                                                                          |
- //    ******************************************************************************************************************************************************
- //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it will compute the multiplication                                               |
- //    ******************************************************************************************************************************************************
+ //    ****************************************************************************
+ //    | TESTS for Token *multiplicationOf2Tokens(Token *token_1, Token *token_2) |
+ //    ****************************************************************************
+ //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it will|
+ //    | compute the multiplication                                               |
+ //    ****************************************************************************
 void test_multiplicationOf2Tokens_given_10_multiply_2_expect_20(void){
   Token *token_1        = NULL;
   Token *token_2        = NULL;
@@ -499,11 +502,12 @@ void test_calculationOnTokens_given_2_div_2_expect_1(void){
   //freeToken(token_operator);
 }
 ///
- //    ******************************************************************************************************************************************************
- //    | TESTS for Token *divisionOf2Tokens(Token *token_1, Token *token_2);                                                                                |
- //    ******************************************************************************************************************************************************
- //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it will compute the division                                                     |
- //    ******************************************************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for Token *divisionOf2Tokens(Token *token_1, Token *token_2);  |
+ //    ************************************************************************
+ //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it |
+ //    |will compute the division                                             |
+ //    ************************************************************************
 void test_divisionOf2Tokens_given_10_div_2_expect_5(void){
   Token *token_1        = NULL;
   Token *token_2        = NULL;

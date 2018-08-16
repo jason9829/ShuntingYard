@@ -20,12 +20,13 @@ void tearDown(void){}
 
 
 ///
- //    *******************************************************************************************************************************************************************************
- //    | TESTS for int isTokenValid(Token *token, TokenType lastTokenType);                                                                                                          |
- //    *******************************************************************************************************************************************************************************
- //    | 1. This function will compare the currentTokenType and lastTokenType, if the combination is possible then return 1                                                          |
- //    | 2. else return 0                                                                                                                                                            |
- //    *******************************************************************************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for int isTokenValid(Token *token, TokenType lastTokenType)    |
+ //    ************************************************************************
+ //    | 1. This function will compare the currentTokenType and lastTokenType,|
+ //    | if the combination is possible then return 1                         |
+ //    | 2. else return 0                                                     |
+ //    ************************************************************************
  //
 // (+)(2)  valid
 void test_isTokenValid_given_plus_and_2_expect_true(void){
@@ -109,12 +110,12 @@ void test_isTokenValid_given_two_and_two_expect_true(void){
 
 }
 ///
- //    *************************************************************************************************************
- //    | TESTS for int isOpenBracketToken(Token *token);                                                           |
- //    *************************************************************************************************************
- //    | 1. This function will return 1 if the token is open bracket                                               |
- //    | 2. else rreturn 0                                                                                         |                                                                            |
- //    *************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for int isOpenBracketToken(Token *token)                       |
+ //    ************************************************************************
+ //    | 1. This function will return 1 if the token is open bracket          |
+ //    | 2. else rreturn 0                                                    |
+ //    ************************************************************************
  //
 
 void test_isOpenBracketToken_given_open_bracket_expect_1(void){
@@ -152,12 +153,12 @@ void test_isOpenBracketToken_given_plus_expect_0(void){
 }
 
 ///
- //    *************************************************************************************************************
- //    | TESTS for int ClosingBracketToke(Token *token);                                                           |
- //    *************************************************************************************************************
- //    | 1. This function will return 1 if the token is closing bracket                                            |
- //    | 2. else return 0                                                                                          |
- //    *************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for int ClosingBracketToke(Token *token)                       |
+ //    ************************************************************************
+ //    | 1. This function will return 1 if the token is closing bracket       |
+ //    | 2. else return 0                                                     |
+ //    ************************************************************************
  //
 
 void test_isClosingBracketToken_given_closing_bracket_expect_1(void){
@@ -194,12 +195,13 @@ void test_isClosingBracketToken_given_logical_and_sign_expect_0(void){
 }
 
 ///
- //    *******************************************************************************************************************************************************************************
- //    | TESTS for int operatorStackHeadIsPrefix(StackBlock *operatorStack);                                                                                                         |
- //    *******************************************************************************************************************************************************************************
- //    | 1. This function will return 1 if the headOperatorToken is PREFIX  (must encode before hand)                                                                                |
- //    | 2. else  return 0                                                                                                                                                           |
- //    *******************************************************************************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for int operatorStackHeadIsPrefix(StackBlock *operatorStack)   |
+ //    ************************************************************************
+ //    | 1. This function will return 1 if the headOperatorToken is PREFIX    |
+ //    | (must encode before hand)                                            |
+ //    | 2. else  return 0                                                    |
+ //    ************************************************************************
  //
 void test_operatorStackHeadIsPrefix_given_stackhead_PREFIX_expect_1(void){
     Affix affix;
@@ -247,8 +249,8 @@ void test_operatorStackHeadIsPrefix_given_stackhead_INFIX_expect_0(void){
 }
 
 ///
- //    *******************************************************************************************************************************************************************************
- //    | TESTS for int operatorStackHeadIsInfix(StackBlock *operatorStack);                                                                                                         |
+ //    ***********************************************************************
+ //    | TESTS for int operatorStackHeadIsInfix(StackBlock *operatorStack)                                                                                                        |
  //    *******************************************************************************************************************************************************************************
  //    | 1. This function will return 1 if the headOperatorToken is INFIX  (must encode before hand)                                                                                |
  //    | 2. else  return 0                                                                                                                                                           |
@@ -629,7 +631,7 @@ void test_pushIfprevTokenIsOpenBracket_given_previous_token_is_plus_expect_nothi
 
 ///
  //    *************************************************************************************************************
- //    | TESTS for void pushIfprevTokenIsOpenBracket(StackBlock *operatorStack, Token *token);                     |
+ //    | TESTS for void pushIfprevTokenIsOpenBracket(StackBlock *operatorStack, Token *token)                       |
  //    *************************************************************************************************************
  //    | 1. This function will the opration in a bracket                                                           |
  //    | 2. else it will do nothing                                                                                |
@@ -811,12 +813,14 @@ void test_getTokenAssociativity_given_currentToken_INVALID_AFFIX_expect_ERR_INVA
 
 
 ///
- //    ********************************************************************************************************************************************************************************
- //    | TESTS for void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(StackBlock *operatorStack, StackBlock *operandStack, Token *token);                                      |
- //    *******************************************************************************************************************************************************************************
- //    | 1. This function will compare the precedence of HeadofOperatorStack and token, if both of them are same precedence then it will push                                        |
- //    | 2. else do nothing                                                                                                                                                          |
- //    *******************************************************************************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for void pushOperatorStackIfHeadTokenOfStackIsSamePrecedence   |
+ //    | (StackBlock *operatorStack, StackBlock *operandStack, Token *token)  |
+ //    ************************************************************************
+ //    | 1. This function will compare the precedence of HeadofOperatorStack  |
+ //    | and token, if both of them are same precedence then it will push     |
+ //    | 2. else do nothing                                                   |
+ //    ************************************************************************
  //
 
 void test_pushOperatorStackIfHeadTokenOfStackIsSamePrecedence_given_headToken_is_prefix_nextToken_also_prefix_expect_pushed(void){
@@ -902,12 +906,14 @@ void test_pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence_given_headToken_i
 }
 
 ///
- //    ********************************************************************************************************************************************************************************
- //    | TESTS for void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(StackBlock *operatorStack, Token *token);                                                               |
- //    *******************************************************************************************************************************************************************************
- //    | 1. This function will compare the precedence of HeadofOperatorStack and token, if head operator is lower precedence then it will push                                       |
- //    | 2. else do nothing                                                                                                                                                          |
- //    *******************************************************************************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for void pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence  |
+ //    | (StackBlock *operatorStack, Token *token)                            |
+ //    ***********************************************************************
+ //    | 1. This function will compare the precedence of HeadofOperatorStack  |
+ //    | and token, if head operator is lower precedence then it will push    |
+ //    | 2. else do nothing                                                   |
+ //    ************************************************************************
  //
 
 void test_pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence_given_headToken_is_prefix_expect_didnt_push(void){
@@ -940,12 +946,13 @@ void test_pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence_given_headToken_i
 }
 
 ///
- //    *******************************************************************************************************************************************************************************
- //    | TESTS for void pushIfOperatorStackIsEmpty(StackBlock *operatorStack, Token *token);                                                                                         |
- //    *******************************************************************************************************************************************************************************
- //    | 1. If the operatorStack is empty , it will just push                                                                                                                        |
- //    | 2. else do nothing                                                                                                                                                          |
- //    *******************************************************************************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for void pushIfOperatorStackIsEmpty                            |
+ //    | (StackBlock *operatorStack, Token *token)                            |
+ //    ***********************************************************************|
+ //    | 1. If the operatorStack is empty , it will just push                 |
+ //    | 2. else do nothing                                                   |
+ //    ************************************************************************
  //
 
 void test_pushIfOperatorStackIsEmpty_given_empty_stack_and_an_operator_expect_pushed(void){
@@ -999,12 +1006,15 @@ void test_pushIfOperatorStackIsEmpty_given_not_empty_stack_an_operator_expect_di
 
 
 ///
- //    *******************************************************************************************************************************************************************************
- //    | TESTS for void operateIfHeadTokenOfStackIsHigherPrecedence(StackBlock *operatorStack, StackBlock *operandStack, Token *token);                                              |
- //    *******************************************************************************************************************************************************************************
- //    | 1. If the headOfOperatorStack is higher precedence, it will compute the operands based on the affix of the headToken                                                        |
- //    | 2. else it will check for precedence check for precedence and determine push or compute                                                                                     |
- //    *******************************************************************************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for void operateIfHeadTokenOfStackIsHigherPrecedence           |
+ //    | (StackBlock *operatorStack, StackBlock *operandStack, Token *token)  |
+ //    ************************************************************************
+ //    | 1. If the headOfOperatorStack is higher precedence, it will compute  |
+ //    | the operands based on the affix of the headToken                     |
+ //    | 2. else it will check for precedence check for precedence and        |
+ //    | determine push or compute                                            |
+ //    ************************************************************************
  //
 
 void test_operateIfHeadTokenOfStackIsHigherPrecedence_given_3_multiply_2_then_add_compare_expect_six_push_back(void){
@@ -1074,14 +1084,17 @@ void test_operateIfHeadTokenOfStackIsHigherPrecedence_given_4_divided_2_then_add
 }
 
 ///
- //    *******************************************************************************************************************************************************************************
- //    | TESTS for void operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT(StackBlock *operatorStack,StackBlock *operandStack, Token *token);                                      |
- //    *******************************************************************************************************************************************************************************
- //    | 1. If headOfOperatorStack and token are same precedence then it will check for associativity, if associativity i LEFT_TO_RIGHT then do the operation on the stack           |
- //    |    first then push when token is higer precidence                                                                                                                           |
- //    | 2. else don't operate                                                                              |
- //    *******************************************************************************************************************************************************************************
- //
+ //    ************************************************************************
+ //    | TESTS for void operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT  |
+ //    | (StackBlock *operatorStack,StackBlock *operandStack, Token *token)   |
+ //    ************************************************************************
+ //    | 1. If headOfOperatorStack and token are same precedence then it will |
+ //    | check for associativity, if associativity i LEFT_TO_RIGHT then       |
+ //    | do the operation on the stack   first then push when token is        |
+ //    | higer precidence                                                     |
+ //    |                                                                      |
+ //    | 2. else don't operate                                                |
+ //    ************************************************************************
 void test_operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT_given_3_plus_INFIX_2_minus_INFIX_expect_5_minus(void){
   Associativity prevTokenAssociativity;
   Tokenizer *tokenizer  = NULL;
@@ -1164,12 +1177,14 @@ void test_operateStackIfOperatorsAssociativityAreLEFT_TO_RIGHT_given_3_plus_INFI
 
 
 ///
- //    *******************************************************************************************************************************************************************************
- //    | TESTS for void ifNullTokenOperateUntilOperatorStackIsEmpty(StackBlock *operatorStack, StackBlock *operandStack, Token *token);                                              |
- //    *******************************************************************************************************************************************************************************
- //    | 1. If TokenType is TOKEN_NULL_TYPE, then do the operation until the operatorStack is empty                                                                                  |                                   |
- //    | 2. else don't operate                                                                                                                                                       |
- //    *******************************************************************************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for void ifNullTokenOperateUntilOperatorStackIsEmpty           |
+ //    | (StackBlock *operatorStack, StackBlock *operandStack, Token *token)  |
+ //    ************************************************************************
+ //    | 1. If TokenType is TOKEN_NULL_TYPE, then do the operation until the  |
+ //    | operatorStack is empty                                               |
+ //    | 2. else don't operate                                                |
+ //    ************************************************************************
  //
 void test_ifNullTokenOperateUntilOperatorStackIsEmpty_given_3_minus_2__expect_1_push_back(void){
   Tokenizer *tokenizer  = NULL;
@@ -1237,12 +1252,14 @@ void test_ifNullTokenOperateUntilOperatorStackIsEmpty_given_3_minus_2_plus_expec
 
 
 ///
- //    *******************************************************************************************************************************************************************************
- //    | TESTS for Token *operationOnStacksIfOperatorIsInfix(StackBlock *operatorStack, StackBlock *operandStack);                                                                   |
- //    *******************************************************************************************************************************************************************************
- //    | 1. This function will do the arithmetic for the headOperator and first two operand                                                                                          |
- //    | 2. else  do nothing                                                                                                                                                         |
- //    *******************************************************************************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for Token *operationOnStacksIfOperatorIsInfix                  |
+ //    | (StackBlock *operatorStack, StackBlock *operandStack)                |
+ //    ************************************************************************
+ //    | 1. This function will do the arithmetic for the headOperator and     |
+ //    | first two operand                                                    |
+ //    | 2. else  do nothing                                                  |
+ //    ************************************************************************
  //
 void test_operationOnStacksIfOperatorIsInfix_given_2_plus_10_expect_12(void){
     StackBlock operatorStack = { NULL, NULL, 0};
@@ -1318,12 +1335,14 @@ void test_operationOnStacksIfOperatorIsInfix_given_2_multiply_expect_ERR_STACK_I
 }
 
 ///
- //    *******************************************************************************************************************************************************************************
- //    | TESTS for Token *operationOnStacksIfOperatorIsPrefix(StackBlock *operatorStack, StackBlock *operandStack);                                                                                               |
- //    *******************************************************************************************************************************************************************************
- //    | 1. This function will combine the headOperatorToken [PREFIX] ('+' or '-')  to the headOperandToken. eg  (-)(10) = (-10)                                                  |
- //    | 2. else  do nothing                                                                                                                                                          |
- //    *******************************************************************************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for Token *operationOnStacksIfOperatorIsPrefix                 |
+ //    | (StackBlock *operatorStack, StackBlock *operandStack)                |
+ //    ************************************************************************
+ //    | 1. This function will combine the headOperatorToken [PREFIX] ('+' or |
+ //    | '-')  to the headOperandToken. eg  (-)(10) = (-10)                   |
+ //    | 2. else  do nothing                                                  |
+ //    ************************************************************************
  //
 void test_operationOnStacksIfOperatorIsPrefix_given_minus_2_expect_ans_minus_2(void){
   Tokenizer *tokenizer  = NULL;
@@ -1355,12 +1374,14 @@ void test_operationOnStacksIfOperatorIsPrefix_given_minus_2_expect_ans_minus_2(v
 }
 
 ///
- //    *******************************************************************************************************************************************************************************
- //    | TESTS for void operateOnStacksDependOnAffix(StackBlock *operatorStack, StackBlock *operandStack, Affix affix);                                                              |
- //    *******************************************************************************************************************************************************************************
- //    | 1. This function will call function operationOnStacksIfOperatorIsPrefix or  operationOnStacksIfOperatorIsInfix to do the operation                                          |
- //    | 2. else  do nothing                                                                                                                                                         |
- //    *******************************************************************************************************************************************************************************
+ //    **************************************************************************
+ //    | TESTS for void operateOnStacksDependOnAffix                            |
+ //    | (StackBlock *operatorStack, StackBlock *operandStack, Affix affix)     |
+ //    **************************************************************************
+ //    | 1. This function will call function operationOnStacksIfOperatorIsPrefix|
+ //    | or  operationOnStacksIfOperatorIsInfix to do the operation             |
+ //    | 2. else  do nothing                                                    |
+ //    **************************************************************************
  //
 void test_operateOnStacksDependOnAffix_given_2_plus_10_expect_12(void){
   Affix affix;
@@ -1439,12 +1460,13 @@ void test_operateOnStacksDependOnAffix_given_minus_5_expect_negative5(void){
 
 
 ///
- //    *************************************************************************************************************
- //    | TESTS for void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *operandStack)    |
- //    *************************************************************************************************************
- //    | 1. Only accept '+', '-' , '*' , '/' operation operator                                                    |
- //    | 2. (2)(2)  no operation operator between brackets are not allowed                                         |
- //    **************************************************************************************************************
+ //    ************************************************************************
+ //    | TESTS for void shuntingYard(Tokenizer *tokenizer,                    |
+ //    | StackBlock *operatorStack, StackBlock *operandStack)                 |
+ //    ************************************************************************
+ //    | 1. Only accept '+', '-' , '*' , '/' operation operator               |
+ //    | 2. (2)(2)  no operation operator between brackets are not allowed    |
+ //    ************************************************************************
  //
 void test_shuntingYard_given_2_plus_3_expect_ans_5(void){
   Tokenizer *tokenizer  = NULL;
@@ -1706,6 +1728,30 @@ void test_shuntingYard_given_one_plus_5_multiply_3_expect_ans_16(void){
 
 }
 
+
+void test_shuntingYard_given_negative_one_plus_5_multiply_3_expect_ans_correct(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken;
+  Token *operandToken;
+  StackItem *poppedAns;
+
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  tokenizer = createTokenizer(" -1 + 5 * 3 ");
+
+  shuntingYard(tokenizer, &operatorStack, &operandStack);
+  poppedAns = popStack(&operandStack);
+  answerToken = (Token*)(poppedAns->data);
+
+  TEST_ASSERT_EQUAL(-1 + 5 * 3 , ((IntegerToken*)answerToken)->value);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+  TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+
+}
 void test_shuntingYard_given_one_plus_5_multiply_3_plus_10_minus_2_expect_ans_24(void){
   Tokenizer *tokenizer  = NULL;
   Token *operatorToken;

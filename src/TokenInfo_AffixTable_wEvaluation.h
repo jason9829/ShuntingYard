@@ -20,6 +20,8 @@ int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *n
 int areAffixesCombinationValid(Affix leftAffix, Affix thisAffix);
 
 Affix checkTokenAffix(Tokenizer *tokenizer, Token *prevToken);
+
+// did not compare prevToken
 void checkTokenAffixAndEncodeAffix(Token *token, Tokenizer *tokenizer,TokenType prevTokenType);
 void encodeTokenAffix(Token *token, Token *prevToken, Tokenizer *tokenizer,TokenType prevTokenType);
 // encodeTokenAffix compare prevToken because need to check for '('
