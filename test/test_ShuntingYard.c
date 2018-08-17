@@ -418,6 +418,7 @@ void test_matchBracket_given_1_open_bracket_no_close_bracket_expect_ERR_MISSING_
   }
   Catch(e){
     dumpTokenErrorMessage(e,1);
+    TEST_ASSERT_EQUAL(ERR_MISSING_BRACKET, e->errorCode);
   }
 
 }
@@ -811,6 +812,28 @@ void test_getTokenAssociativity_given_currentToken_INVALID_AFFIX_expect_ERR_INVA
 
 }
 
+
+void test_getTokenAssociativity_given_currentToken_a_ERR_INVALID_AFFIX(void){
+  CEXCEPTION_T e;
+  Tokenizer *tokenizer  = NULL;
+  Affix affix;
+  Token *token;
+
+  Associativity currTokenAssociativity;
+
+  tokenizer = createTokenizer(" a");
+  token = getToken(tokenizer);
+
+  Try{
+  currTokenAssociativity = getTokenAssociativity(token);
+  TEST_FAIL_MESSAGE("Expect ERR_INVALID_AFFIX. But no exception thrown.");
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e, 1);
+    TEST_ASSERT_EQUAL(ERR_INVALID_AFFIX, e->errorCode);
+  }
+
+}
 
 ///
  //    ************************************************************************
@@ -1284,6 +1307,7 @@ void test_operationOnStacksIfOperatorIsInfix_given_2_plus_10_expect_12(void){
     TEST_ASSERT_EQUAL(12, ((IntegerToken*)ans)->value);
 }
 
+
 void test_operationOnStacksIfOperatorIsInfix_given_2_multiply_10point5_expect_21point0(void){
     StackBlock operatorStack = { NULL, NULL, 0};
     StackBlock operandStack  = { NULL, NULL, 0};
@@ -1550,6 +1574,37 @@ void test_shuntingYard_given_2_plus_negtive3_expect_ans_negative1(void){
 
 }
 
+
+void test_shuntingYard_given_2_plus_a_3_expect_ERR_INVALID_OPERATOR(void){
+  CEXCEPTION_T e;
+  Tokenizer *tokenizer  = NULL;
+  Token *operatorToken;
+  Token *operandToken;
+  StackItem *poppedAns;
+
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  tokenizer = createTokenizer(" 2 +a 3 ");
+  Try{
+    shuntingYard(tokenizer, &operatorStack, &operandStack);
+    poppedAns = popStack(&operandStack);
+    answerToken = (Token*)(poppedAns->data);
+
+    TEST_ASSERT_EQUAL(-1, ((IntegerToken*)answerToken)->value);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e,1);
+    TEST_ASSERT_EQUAL(ERR_INVALID_OPERATOR, e->errorCode);
+  }
+
+}
 
 void test_shuntingYard_given_2_plus_minus_negtive778_expect_ans_780(void){
   Tokenizer *tokenizer  = NULL;
@@ -2014,6 +2069,7 @@ void test_shuntingYard_given_open_bracket_2_multiply_2_without_close_bracket_plu
   }
   Catch(e){
     dumpTokenErrorMessage(e,1);
+    TEST_ASSERT_EQUAL(ERR_MISSING_BRACKET, e->errorCode);
   }
 
 }
