@@ -11,12 +11,14 @@ void setUp(void){}
 void tearDown(void){}
 
 ///
- //    *******************************************************************************************************************************************************************************
- //    | TESTS for Token *calculationOnTokens(Token *token_1, Token *token_2, Token *token_operator);                                                                                |
- //    *******************************************************************************************************************************************************************************
- //    | 1. This function included additionOf2Tokens, subtractionOf2Tokens, multiplicationOf2Tokens, divisionOf2Tokens                                                               |
- //    | 2. It will only be called when the operator is INFIX                                                                                  |
- //    *******************************************************************************************************************************************************************************
+ //    *************************************************************************
+ //    | TESTS for Token *calculationOnTokens(Token *token_1, Token *token_2,  |
+ //    |  Token *token_operator)                                               |
+ //    *************************************************************************
+ //    | 1. This function included additionOf2Tokens, subtractionOf2Tokens,    |
+ //    |    multiplicationOf2Tokens, divisionOf2Tokens                         |
+ //    | 2. It will only be called when the operator is INFIX                  |
+ //    *************************************************************************
  //
 
 void test_calculationOnTokens_given_2_plus_2_expect_4(void){
@@ -122,7 +124,7 @@ void test_calculationOnTokens_given_2_multiply_3_expect_6(void){
  //    | TESTS for Token *additionOf2Tokens(Token *token_1, Token *token_2)   |
  //    ************************************************************************
  //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it |
- //    |will compute the addition                                             |
+ //    |    will compute the addition                                         |
  //    ************************************************************************
  //
 
@@ -267,7 +269,7 @@ void test_additionOf2Tokens_given_abcd_and_4124aa_expect_ERR_INVALID_OPERAND(voi
  //    | TESTS for Token *subtractionOf2Tokens(Token *token_1, Token *token_2)|
  //    ************************************************************************
  //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it |
- //    | will compute the subtraction                                         |
+ //    |    will compute the subtraction                                      |
  //    ************************************************************************
  //
 
@@ -379,7 +381,7 @@ void test_subtractionOf2Tokens_given_10_minus_1point12_expect_8point88(void){
  //    | TESTS for Token *multiplicationOf2Tokens(Token *token_1, Token *token_2) |
  //    ****************************************************************************
  //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it will|
- //    | compute the multiplication                                               |
+ //    |    compute the multiplication                                            |
  //    ****************************************************************************
 void test_multiplicationOf2Tokens_given_10_multiply_2_expect_20(void){
   Token *token_1        = NULL;
@@ -506,7 +508,7 @@ void test_calculationOnTokens_given_2_div_2_expect_1(void){
  //    | TESTS for Token *divisionOf2Tokens(Token *token_1, Token *token_2);  |
  //    ************************************************************************
  //    | 1. If the '+' is INFIX, assume there are at least 2 operands then it |
- //    |will compute the division                                             |
+ //    |    will compute the division                                         |
  //    ************************************************************************
 void test_divisionOf2Tokens_given_10_div_2_expect_5(void){
   Token *token_1        = NULL;

@@ -15,10 +15,11 @@ void tearDown(void){}
 ///
  //    ************************************************************************
  //    | TESTS for OperatorPrecedenceAndAssociativity                         |
- //    | *getTokenPrecedenceAndAssociativity(Token *token);                   |
+ //    | *getTokenPrecedenceAndAssociativity(Token *token)                    |
  //    ************************************************************************
  //    | 1. This function will getTokenPrecedenceAndAssociativity from the    |
- //    |OperatorPrecedenceAndAssociativity bindingPowerAndAssociativity table |
+ //    |    OperatorPrecedenceAndAssociativity                                |
+ //    |    bindingPowerAndAssociativity table                                |
  //    ************************************************************************
  //
 
@@ -127,7 +128,7 @@ void test_getTokenPrecedenceAndAssociativity_given_plus_NO_AFFIX_expect_ERR_INVA
  //    | TESTS for OperatorPrecedence *getTokenPrecedence(Token *token);      |
  //    ************************************************************************
  //    | 1. This function will getTokenPrecedenceAndAssociativity from the    |
- //    | OperatorPrecedence bindingPower[50] table                            |
+ //    |    OperatorPrecedence bindingPower[50] table                         |
  //    ************************************************************************
  //
 
@@ -216,7 +217,7 @@ void test_getTokenPrecedence_given_a_expect_ERR_INVALID_AFFIX(void){
  //    |(Token *currToken, Token *prevToken);                                 |
  //    ************************************************************************
  //    | 1. This function will compare the precedence of prevToken(head)      |
- //    | and currrToken                                                       |
+ //    |    and currrToken                                                    |
  //    | 2. if precedence(prevToken) > token , return 1                       |
  //    |    else if precedence(prevToken) < token, return 0                   |
  //    |    else return 2                                                     |

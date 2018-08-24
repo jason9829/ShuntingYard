@@ -19,6 +19,7 @@ int operatorStackHeadIsInfix(StackBlock *operatorStack);
 int areAssociativitiesSame(OperatorPrecedenceAndAssociativity *headOperatorAndAssociativity, OperatorPrecedenceAndAssociativity *currentOperatorAndAssociativity);
 
 void noOperatorBetweenBrackets(Token *token, Token *prevToken);
+void closeBracketFoundButNoOpenBracket(Token *token,int openBracketCounter, int closeBracketCounter);
 void matchBracket(Token *token,int openBracketCounter, int closeBracketCounter);
 void cancelBracket(StackBlock *operatorStack, Token *token);
 

@@ -48,6 +48,7 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
       if(isClosingBracketToken(token)){
         closeBracketCounter +=1;
       }
+      closeBracketFoundButNoOpenBracket(token, openBracketCounter, closeBracketCounter);
       encodeTokenAffix(token, prevToken, tokenizer, prevTokenType);
       pushIfprevTokenIsOpenBracket(operatorStack, token);
 
@@ -65,7 +66,17 @@ void shuntingYard(Tokenizer *tokenizer, StackBlock *operatorStack, StackBlock *o
       ifNullTokenOperateUntilOperatorStackIsEmpty(operatorStack, operandStack, token);
       matchBracket(token,openBracketCounter ,closeBracketCounter);
       condition = STOP;
+      freeToken(prevToken);
+      freeToken(token);
+      freeTokenizer(tokenizer);
     }
+  }
+}
+
+// This function will thrown an error when ')' was found and there is no '('
+void closeBracketFoundButNoOpenBracket(Token *token,int openBracketCounter, int closeBracketCounter){
+  if(openBracketCounter == 0 && closeBracketCounter !=0){
+    throwException(ERR_MISSING_BRACKET, token, "Expecting '(' before '%s'", token->str);
   }
 }
 
