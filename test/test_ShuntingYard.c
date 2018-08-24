@@ -19,6 +19,41 @@ void setUp(void){}
 void tearDown(void){}
 
 
+void test_pushIfCurrentOpenBracket_given_non_Empty_Stack_open_Bracket_expect_pushed(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *token;
+  TokenType prevTokenType;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  tokenizer = createTokenizer(" + ( ");
+
+  token = getToken(tokenizer);
+  pushOperatorStack(&operatorStack, token);
+
+  token = getToken(tokenizer);
+  pushIfCurrentOpenBracket(&operatorStack, token);
+
+  TEST_ASSERT_EQUAL(2, operatorStack.count);
+
+
+}
+
+
+void test_pushIfCurrentOpenBracket_given_Empty_Stack_plus_expect_nothing_pushed(void){
+  Tokenizer *tokenizer  = NULL;
+  Token *token;
+  TokenType prevTokenType;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  tokenizer = createTokenizer(" +  ");
+
+  token = getToken(tokenizer);
+  pushIfCurrentOpenBracket(&operatorStack, token);
+
+  TEST_ASSERT_EQUAL(0, operatorStack.count);
+
+
+}
 ///
  //    ************************************************************************
  //    | TESTS for int isTokenValid(Token *token, TokenType lastTokenType)    |
@@ -2478,5 +2513,91 @@ void test_shuntingYard_given_10_multiply_minus_1point5_expect_minus_15point0(voi
   TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
   TEST_ASSERT_EQUAL(NULL, operandStack.head);
   TEST_ASSERT_EQUAL(NULL, operandStack.tail);
+
+}
+
+
+void test_shuntingYard_expression_w_multiple_bracket(void){
+  CEXCEPTION_T e;
+  Tokenizer *tokenizer  = NULL;
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  tokenizer = createTokenizer("(((6)* ((((3+5))))/5 ) - 5) * 7 + (5 - 6) * (((7)))");
+
+  Try{
+    shuntingYard(tokenizer, &operatorStack, &operandStack);
+    poppedStackItem = popStack(&operandStack);
+    answerToken = (Token*)(poppedStackItem->data);
+
+    TEST_ASSERT_EQUAL_FLOAT((((6)* ((((3+5))))/5 ) - 5) * 7 + (5 - 6) * (((7))), ((IntegerToken*)answerToken)->value);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+    TEST_ASSERT_EQUAL(NULL, operandStack.head);
+    TEST_ASSERT_EQUAL(NULL, operandStack.tail);
+
+  }Catch(e){
+    dumpTokenErrorMessage(e,1);
+    TEST_FAIL_MESSAGE("Do not expect an exception");
+  }
+
+}
+
+void test_shuntingYard_expression_2_w_multiple_bracket(void){
+  CEXCEPTION_T e;
+  Tokenizer *tokenizer  = NULL;
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  tokenizer = createTokenizer("-((-+-(-5)* - -7) - +5)");
+
+  Try{
+    shuntingYard(tokenizer, &operatorStack, &operandStack);
+    poppedStackItem = popStack(&operandStack);
+    answerToken = (Token*)(poppedStackItem->data);
+
+    TEST_ASSERT_EQUAL_FLOAT(-((-+-(-5)* - -7) - +5), ((IntegerToken*)answerToken)->value);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+    TEST_ASSERT_EQUAL(NULL, operandStack.head);
+    TEST_ASSERT_EQUAL(NULL, operandStack.tail);
+  }Catch(e){
+    dumpTokenErrorMessage(e,1);
+    TEST_FAIL_MESSAGE("Do not expect an exception");
+  }
+
+}
+
+void test_shuntingYar_xxxxx(void){
+  CEXCEPTION_T e;
+  Tokenizer *tokenizer  = NULL;
+  Token *answerToken;
+
+  StackBlock operatorStack = { NULL, NULL, 0};
+  StackBlock operandStack  = { NULL, NULL, 0};
+  StackItem *poppedStackItem;
+
+  tokenizer = createTokenizer("+-4* (-7-6) *5 -6 +2");
+
+  Try{
+    shuntingYard(tokenizer, &operatorStack, &operandStack);
+    poppedStackItem = popStack(&operandStack);
+    answerToken = (Token*)(poppedStackItem->data);
+
+    TEST_ASSERT_EQUAL_FLOAT(+-4* (-7-6) *5 -6 +2, ((IntegerToken*)answerToken)->value);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.head);
+    TEST_ASSERT_EQUAL(NULL, operatorStack.tail);
+    TEST_ASSERT_EQUAL(NULL, operandStack.head);
+    TEST_ASSERT_EQUAL(NULL, operandStack.tail);
+  }Catch(e){
+    dumpTokenErrorMessage(e,1);
+    TEST_FAIL_MESSAGE("Do not expect an exception");
+  }
 
 }

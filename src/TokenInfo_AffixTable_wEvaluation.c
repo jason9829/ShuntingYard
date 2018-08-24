@@ -103,6 +103,10 @@ int checkOperatorsAffixPossibilities(Token *currToken, Tokenizer *nextTokens){
 		    pushBackToken(nextTokens, nextToken);
 		    return 1 ;
     }
+    else if (nextToken->type == TOKEN_NULL_TYPE){
+      pushBackToken(nextTokens, nextToken);
+      return 1 ;
+    }
 
     else{
       // getTokenInfo only accept '+', '-', '*', '/'
@@ -198,7 +202,7 @@ int compareCurrTokenAndNextTokenWithTable(TokenInfo *currTokenInfo, TokenInfo *n
       switch (nextTokenInfo->Attribute) {
         case 7 : return 1;
         case 4 : return 0;
-        case 2 : return 0;
+        case 2 : return 1;
         case 1 : return 1;
         // getTokenInfo only give 2 or 7
         // else error already thrown at getTokenInfo

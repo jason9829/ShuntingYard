@@ -103,16 +103,36 @@ void matchBracket(Token *token,int openBracketCounter, int closeBracketCounter){
 
 // Assume open bracket is already found
 void operateIfBracket(StackBlock *operatorStack, StackBlock *operandStack, Token *token){
-  Token *headOperatorToken;
-  Affix headOperatorAffix;
-  if(isClosingBracketToken(token)){
-    while(operatorStack->count != 0 && !isOpenBracketToken((Token*)(operatorStack->head->data))){
-      headOperatorToken = (Token*)(operatorStack->head->data);
-      headOperatorAffix = getAffix(headOperatorToken);
-      operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
+  if(operatorStack->count !=0){
+    Token *headOp = (Token*)(operatorStack->head->data);
+    if(((OperatorToken*)headOp)->str[0] != '('){
+      Token *headOperatorToken;
+      Affix headOperatorAffix;
+      if(isClosingBracketToken(token)){
+        while(operatorStack->count != 0 && !isOpenBracketToken((Token*)(operatorStack->head->data))){
+          headOperatorToken = (Token*)(operatorStack->head->data);
+          headOperatorAffix = getAffix(headOperatorToken);
+          operateOnStacksDependOnAffix(operatorStack, operandStack, headOperatorAffix);
+        }
+        cancelBracket(operatorStack, token);
+      }
     }
-    cancelBracket(operatorStack, token);
   }
+}
+
+void pushIfCurrentOpenBracket(StackBlock *operatorStack, Token *token){
+    if(operatorStack->count !=0){
+      char operatorSymbol;
+      Token *headOperatorToken;
+      headOperatorToken = (Token*)(operatorStack->head->data);
+      // HeadTokenIsInfix
+        if(headOperatorToken != token){
+          operatorSymbol = *((OperatorToken*)token)->str;
+          if(operatorSymbol == '('){
+            pushOperatorStack(operatorStack, token);
+          }
+        }
+      }
 }
 
 void pushIfprevTokenIsOpenBracket(StackBlock *operatorStack, Token *token){
@@ -138,6 +158,7 @@ void pushOperator(StackBlock *operatorStack, StackBlock *operandStack, Token *to
       pushOperatorStackIfHeadTokenOfStackIsLowerPrecedence(operatorStack, token);
       pushOperatorStackIfHeadTokenOfStackIsSamePrecedence(operatorStack,operandStack, token);
       operateIfHeadTokenOfStackIsHigherPrecedence(operatorStack, operandStack, token);
+      pushIfCurrentOpenBracket(operatorStack, token);
     }
 
 }

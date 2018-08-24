@@ -32,6 +32,7 @@ Associativity getTokenAssociativity(Token *currentToken);
 Token *operationOnStacksIfOperatorIsInfix(StackBlock *operatorStack, StackBlock *operandStack);
 Token *operationOnStacksIfOperatorIsPrefix(StackBlock *operatorStack, StackBlock *operandStack);
 
+void pushOpenBracket(StackBlock *operatorStack, Token *token);
 void pushOperator(StackBlock *operatorStack, StackBlock *operandStack, Token *token);
 void pushOperandStack(StackBlock *operandStack, Token *token);
 void pushOperatorStack(StackBlock *operatorStack, Token *token);
