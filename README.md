@@ -1,4 +1,4 @@
 # ShuntingYard
-An algorithm that pasrse mathematical expression into infix notation.
+An algorithm that parse mathematical expression into infix notation.
 
 
