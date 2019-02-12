@@ -14,9 +14,9 @@ which operation should be done first for any given mathematical expression.
 Since computer will read the expression from left to right, it will operate the
 expression based on what operator read first not based on precedence. This may
 cause error in some mathemtical expression. For exaxmple,
-'''md
+```md
 Expression = 5 - 2 * 10
-'''
+```
 By right, the multiplication of 2 and 10 should be done first but without any
 precedence, the computer will calculate ("5 - 2") first then multiply by 10
 which results 30 but the correct answer is -15.
@@ -32,15 +32,15 @@ or vice versa.
 If there are operand on the left hand side of the operator exclude brackets and
 there are operands after the operand. Then, the operator is considered binary
 (weakest precedence).
-'''md
+```md
 Expression = 1 + 10
   Binary-------^
-'''
+```
 
 ### High precedence in term of binding energy
 If there are already an binary operator or the previous operator is an unary then 
 current operator is consider unary (higher precedence than binary) 
-'''md
+```md
 Expression = 1 + - 10
   Unary----------^
   
@@ -48,6 +48,7 @@ Expression = 1 + - 10
   
  Expression = 1 + + - 10
   Unary-------------^ 
-'''
+```
+
 # <a name="ref"></a> Reference
 1. [Operator precedence wiki](https://en.wikipedia.org/wiki/Order_of_operations)
