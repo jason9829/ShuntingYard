@@ -3,6 +3,8 @@
 Explanation of the algorithm with examples:
 1. [Example without brackets](#ex1) 
 2. [Example with brackets](#ex2)
+3. [Example with prefix](#ex3)
+
 # <a name="ex1"></a> Example without brackets
 Expression : 1 + 2 * 3
 
@@ -247,4 +249,66 @@ Expression :   END
 *-----*    *-----*
    X          Y
  3 * 3 = 9 ---^
+```
+
+# <a name="ex3"></a> Example with prefix
+Expression : 9 + -1
+**Step 0**
+```md
+Expression : 9 + -1
+
+*-----*    *-----*              X -Operator Stack
+|     |    |     |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+```
+
+**Step 1**
+```md
+Since the operand stack are empty, '9' will pushed into Y.
+Expression : + -1
+
+*-----*    *-----*              X -Operator Stack
+|     |    |  9  |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+```
+
+**Step 2**
+```md
+Since the operator stack are empty, '+' will pushed into X.
+Expression : -1
+
+*-----*    *-----*              X -Operator Stack
+|  X  |    |  9  |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+```
+
+**Step 3**
+```md
+Since there are '+' operator in X, there are a comparison of precedence between
+operator in the stack('+') and operator at expression('-'). '-' are binded with 1
+(there are already an addition operator) so this '-' mean unary minus of 1. So,
+the operator '-' will combine with '1' to become '-1'. And '-1' then pushed into Y.
+Expression : END
+
+           *-----*
+           | -1  |
+*-----*    *-----*              X -Operator Stack
+|  +  |    |  9  |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+```
+
+**Step 4**
+```md
+Since the expression is ENDed. The operation of '+' between '-1' and '9' is performed.
+The final answer '8' pushed back into Y.
+Expression : END
+
+*-----*    *-----*              X -Operator Stack
+|     |    |  8  |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
 ```
