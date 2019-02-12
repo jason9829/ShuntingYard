@@ -1,10 +1,12 @@
 
 # Sections
-Explanation of the algorithm with examples:
+i) Explanation of the algorithm with examples:
 1. [Example without brackets](#ex1) 
 2. [Example with brackets](#ex2)
 3. [Example with prefix](#ex3)
 4. [Complex expression example](#ex4)
+
+ii) [Reference](#ref) 
 
 # <a name="ex1"></a> Example without brackets
 Expression : 1 + 2 * 3
@@ -579,5 +581,5 @@ is performed then the final answer 320 is push into Y.
    X          Y  
 ```
 
-# Reference
-1. [C Operator Precedence](https://en.cppreference.com/w/c/language/operator_precedence)
+# <a name="ref"></a> Reference
+1. [C Operator Precedence]<a href="https://en.cppreference.com/w/c/language/operator_precedence" target="_blank">example</a>
