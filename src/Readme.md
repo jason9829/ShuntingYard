@@ -1,5 +1,5 @@
 ## Explanation of the algorithm
-Example without brackets
+#Example without brackets
 Expression : 1 + 2 * 3
 
 **Step 0**
@@ -52,8 +52,10 @@ Expression :  * 3
 
 **Step 4**
 ```md
-Since there are operator in the Operator Stack(X), the comparison of precedence between two operators '+'(in X) and '*' (before push).
-For this example, precedence of '*' > '+', thus '*' will be push into X. If the precedence of operator in X is larger than the operator of expression, then the operator of that operator(higher precedence).
+Since there are operator in the Operator Stack(X), the comparison of precedence between two operators
+'+'(in X) and '*' (before push). For this example, precedence of '*' > '+', thus '*' will be push into 
+X. If the precedence of operator in X is larger than the operator of expression, then the operator of 
+that operator(higher precedence).
 
 Expression :  3
           
@@ -83,7 +85,9 @@ Expression :  END
 
 **Step 6**
 ```md
-Since the expression is END. The operation can be started. For basic operation(plus, minus, multiply and divisoin), two operands and one operator is required. So '*' will be pop out from X and '3' and '2'. And the multiplication of '3' and '2' will be done. The results of that operation will be push back to Y.
+Since the expression is END. The operation can be started. For basic operation(plus, minus, multiply and divisoin), 
+two operands and one operator is required. So '*' will be pop out from X and '3' and '2'. And the multiplication of
+'3' and '2' will be done. The results of that operation will be push back to Y.
 
 Expression :  END
           
@@ -97,7 +101,8 @@ Expression :  END
 
 **Step 7**
 ```md
-Then operator '+' and operands '6' and '1' popped from respective stacks. And the operation on plus will be performed. The final answer '7' will be pushed back to Y.
+Then operator '+' and operands '6' and '1' popped from respective stacks. And the operation on plus will be 
+performed. The final answer '7' will be pushed back to Y.
 
 Expression :  END
                    
