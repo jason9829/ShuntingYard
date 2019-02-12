@@ -1,5 +1,8 @@
 ## Explanation of the algorithm
-#Example without brackets
+# Sections
+[Example without brackets](#ex1) Example without brackets
+
+# <a name="ex1"></a> DETAIL SECTION
 Expression : 1 + 2 * 3
 
 **Step 0**
