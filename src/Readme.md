@@ -1,8 +1,8 @@
 ## Explanation of the algorithm
 # Sections
-[Example without brackets](#ex1) Example without brackets
+1. [Example without brackets](#ex1) 
 
-# <a name="ex1"></a> DETAIL SECTION
+# <a name="ex1"></a> Example without brackets
 Expression : 1 + 2 * 3
 
 **Step 0**
