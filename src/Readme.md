@@ -6,11 +6,11 @@ Expression : 1 + 2 * 3
 ```md
 Expression : 1 + 2 * 3
 
-*-----*    *-----*            **X -Operator Stack
-|     |    |     |              Y -Operand  Stack**
+*-----*    *-----*              X -Operator Stack
+|     |    |     |              Y -Operand  Stack
 *-----*    *-----*
    X          Y
-'''
+```
 
 **Step 1**
 ```md
@@ -18,11 +18,11 @@ Push the first operand '1' into Operand Stack(Y).
 
 Expression :  + 2 * 3
 
-*-----*    *-----*            **X -Operator Stack
-|     |    |  1  |              Y -Operand  Stack**
+*-----*    *-----*              X -Operator Stack
+|     |    |  1  |              Y -Operand  Stack
 *-----*    *-----*
    X          Y
-'''
+```
 
 **Step 2**
 ```md
@@ -30,11 +30,11 @@ Push the first operator '+' into Operator Stack(X).
 
 Expression :  2 * 3
 
-*-----*    *-----*            **X -Operator Stack
-|  +  |    |  1  |              Y -Operand  Stack**
+*-----*    *-----*              X -Operator Stack
+|  +  |    |  1  |              Y -Operand  Stack
 *-----*    *-----*
    X          Y
-'''
+```
 
 **Step 3**
 ```md
@@ -44,11 +44,11 @@ Expression :  * 3
           
            *-----*
            |  2  |
-*-----*    *-----*            **X -Operator Stack
-|  +  |    |  1  |              Y -Operand  Stack**
+*-----*    *-----*              X -Operator Stack
+|  +  |    |  1  |              Y -Operand  Stack
 *-----*    *-----*
    X          Y
-'''
+```
 
 **Step 4**
 ```md
@@ -59,11 +59,11 @@ Expression :  3
           
 *-----*    *-----*
 |  *  |    |  2  |
-*-----*    *-----*            **X -Operator Stack
-|  +  |    |  1  |              Y -Operand  Stack**
+*-----*    *-----*              X -Operator Stack
+|  +  |    |  1  |              Y -Operand  Stack
 *-----*    *-----*
    X          Y
-'''
+```
 
 **Step 5**
 ```md
@@ -75,11 +75,11 @@ Expression :  END
            |  3  |
 *-----*    *-----*
 |  *  |    |  2  |
-*-----*    *-----*            **X -Operator Stack
-|  +  |    |  1  |              Y -Operand  Stack**
+*-----*    *-----*              X -Operator Stack
+|  +  |    |  1  |              Y -Operand  Stack
 *-----*    *-----*
    X          Y
-'''
+```
 
 **Step 6**
 ```md
@@ -89,11 +89,11 @@ Expression :  END
           
            *-----*
            |  6  | <------- 3 * 2 = 6
-*-----*    *-----*            **X -Operator Stack
-|  +  |    |  1  |              Y -Operand  Stack**
+*-----*    *-----*              X -Operator Stack
+|  +  |    |  1  |              Y -Operand  Stack
 *-----*    *-----*
    X          Y
-'''
+```
 
 **Step 7**
 ```md
@@ -102,9 +102,9 @@ Then operator '+' and operands '6' and '1' popped from respective stacks. And th
 Expression :  END
                    
 
-*-----*    *-----*            **X -Operator Stack
-|     |    |  7  |              Y -Operand  Stack**
+*-----*    *-----*              X -Operator Stack
+|     |    |  7  |              Y -Operand  Stack
 *-----*    *-----*
    X          Y
   1 = 6 = 7----^
-'''   
+```
