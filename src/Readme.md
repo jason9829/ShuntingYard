@@ -583,3 +583,4 @@ is performed then the final answer 320 is push into Y.
 
 # <a name="ref"></a> Reference
 1. [C Operator Precedence](https://en.cppreference.com/w/c/language/operator_precedence)
+2. [Operator Precedence Description](https://github.com/jason9829/ShuntingYard/blob/master/src/Readme_Precedence.md)
