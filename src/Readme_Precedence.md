@@ -22,13 +22,13 @@ precedence, the computer will calculate ("5 - 2") first then multiply by 10
 which results 30 but the correct answer is -15.
 
 # <a name="WorkOfOpPre"></a> Working of operator precedence
-## Binding energy
+### Binding energy
 Binding energy is the strength of bond between the operator and operand. If the
 binding energy is high mean the operation of that operator will be performed first
 or vice versa.
 
-# How to know the precedence of an operator
-## Low precedence in term of binding energy
+## How to know the precedence of an operator
+### Low precedence in term of binding energy
 If there are operand on the left hand side of the operator exclude brackets and
 there are operands after the operand. Then, the operator is considered binary
 (weakest precedence).
@@ -37,7 +37,7 @@ Expression = 1 + 10
   Binary-------^
 '''
 
-## High precedence in term of binding energy
+### High precedence in term of binding energy
 If there are already an binary operator or the previous operator is an unary then 
 current operator is consider unary (higher precedence than binary) 
 '''md
