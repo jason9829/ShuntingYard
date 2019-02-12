@@ -1,7 +1,8 @@
-## Explanation of the algorithm
-# Sections
-1. [Example without brackets](#ex1) 
 
+# Sections
+Explanation of the algorithm with examples:
+1. [Example without brackets](#ex1) 
+2. [Example with brackets](#ex2)
 # <a name="ex1"></a> Example without brackets
 Expression : 1 + 2 * 3
 
@@ -55,7 +56,7 @@ Expression :  * 3
 
 **Step 4**
 ```md
-Since there are operator in the Operator Stack(X), the comparison of precedence between two operators
+Since there are operator in the Operator Stack(X), there are comparison of precedence between two operators
 '+'(in X) and '*' (before push). For this example, precedence of '*' > '+', thus '*' will be push into 
 X. If the precedence of operator in X is larger than the operator of expression, then the operator of 
 that operator(higher precedence).
@@ -115,4 +116,135 @@ Expression :  END
 *-----*    *-----*
    X          Y
   1 = 6 = 7----^
+```
+
+# <a name="ex2"></a> Example with brackets
+Expression : (1 + 2) * 3
+
+**Step 0**
+```md
+Expression : (1 + 2) * 3
+
+*-----*    *-----*              X -Operator Stack
+|     |    |     |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+```
+
+**Step 1**
+```md
+For brackets, '(' will be push into Operator Stack no matter the precedence of previous operator.
+Thus, the first operand '(' pushed into Operator Stack(X).
+
+Expression : 1 + 2) * 3
+
+*-----*    *-----*              X -Operator Stack
+|  (  |    |     |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+```
+
+**Step 2**
+```md
+If there are no operation then the operand will be push into Operand Stack(Y).
+
+Expression :  + 2) * 3
+
+*-----*    *-----*              X -Operator Stack
+|  (  |    |  1  |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+```
+
+**Step 3**
+```md
+Since there are no operator after '(' so '+' will pushed into X. If there are operator after '('
+Then, the comparison of predence between the operator after '(' and current operator at expression.
+If the precedence of operator in the stack(operator after '(') is higher then current operator. 
+Then the operation of operation in the stack will be performed first before pushing in the current
+operator.
+On the otherhand, if the operation in the stack has lower precedencce then the current operator at
+the expression will be pushed into X.
+
+Expression :  2) * 3
+
+*-----*
+|  +  |
+*-----*    *-----*              X -Operator Stack
+|  (  |    |  1  |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+```
+
+**Step 4**
+```md
+Since there are not enough operand for operation. '2' is pushed into Y
+
+Expression :  ) * 3
+
+*-----*    *-----*
+|  +  |    |  2  |
+*-----*    *-----*              X -Operator Stack
+|  (  |    |  1  |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+```  
+
+**Step 4**
+```md
+Since '(' are in X and ')' is met. When ')' met, the operation in the bracket will be done
+(plus in this case). Thus '+' will be pop from X and '2' and '1' pop from Y stack. After the 
+plus operation(1 + 2). The '(' will be pop out and ')' will be remove(both discarded). Then answer
+will be pushed back into Y.
+
+Expression :  * 3
+
+           *-----*
+           |     |
+*-----*    *-----*              X -Operator Stack
+|     |    |  3  |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+ 1 + 2 = 3 ---^  
+   
+```
+
+
+**Step 5**
+```md
+Since there are not operator in X. '*' will be pushed into X.
+Expression :   3
+
+           *-----*
+           |     |
+*-----*    *-----*              X -Operator Stack
+|  *  |    |  3  |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+```
+
+**Step 6**
+```md
+Since there are not enough operannds for multiplication. '3' Was pushed into X.
+Expression :   END
+
+           *-----*
+           |  3  |
+*-----*    *-----*              X -Operator Stack
+|  *  |    |  3  |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+```
+
+**Step 7**
+```md
+The expression reached the END. Thus the last operation(multiplication of '3' and '3')
+will be performed. The final answer will be push back into Y.
+Expression :   END
+
+*-----*    *-----*              X -Operator Stack
+|     |    |  9  |              Y -Operand  Stack
+*-----*    *-----*
+   X          Y
+ 3 * 3 = 9 ---^
 ```
