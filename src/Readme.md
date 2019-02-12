@@ -333,7 +333,7 @@ The final answer '8' pushed back into Y.
    X          Y
 ```
 
-# <a name="ex2"></a> Complex expression example
+# <a name="ex4"></a> Complex expression example
 Expression : 100 *(8 --2 *4) / 5
 
 **Step 0**
