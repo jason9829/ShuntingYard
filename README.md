@@ -1,4 +1,4 @@
-# ShuntingYard
+# ShuntingYard ![GitHub top language](https://img.shields.io/github/languages/top/jason9829/ShuntingYard) ![GitHub repo size](https://img.shields.io/github/repo-size/jason9829/ShuntingYard) ![GitHub last commit](https://img.shields.io/github/last-commit/jason9829/ShuntingYard)
 An algorithm that parse mathematical expressions into infix notation. This is one of the methods to solve the operator precedence problems in calculation (machine will read and calculate the mathematical expression without considering which operator should operated first).
 
 ## Structure of this project
