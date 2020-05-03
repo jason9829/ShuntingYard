@@ -1,21 +1,24 @@
-# ShuntingYard ![GitHub top language](https://img.shields.io/github/languages/top/jason9829/ShuntingYard) ![GitHub repo size](https://img.shields.io/github/repo-size/jason9829/ShuntingYard) ![GitHub last commit](https://img.shields.io/github/last-commit/jason9829/ShuntingYard)
-An algorithm that parse mathematical expressions into infix notation. This is one of the methods to solve the operator precedence problems in calculation (machine will read and calculate the mathematical expression without considering which operator should operated first).
+# Shunting Yard 
+An algorithm that parse mathematical expressions into infix notation. This is one of the methods to solve the operator precedence problems in calculation (machine will read and calculate the mathematical expression without considering which operator should operated first).  
 
-## Structure of this project
-The code can be seperated into two parts:
-1. Tokenizer (forked from https://github.com/chaosAD/TokenizerSkeleton).
-2. ShuntingYard algorithm (this repo).
+<br/>
 
-## Requirements
-Software : Ruby, mingw32/64, ceedling.
+## Table of Contents
+1. [Requirements](#req)
+2. [Explaination of the algorithm](#exAlgo)
+   * [Example without brackets](#ex1) 
+   * [Example with brackets](#ex2)
+   * [Example with prefix](#ex3)
+   * [Complex expression example](#ex4)
+2. [Reference](#ref) 
 
-## Sections
-1. [Explaination of the algorithm](#exAlgo)
-    1. [Example without brackets](#ex1) 
-    2. [Example with brackets](#ex2)
-    3. [Example with prefix](#ex3)
-    4. [Complex expression example](#ex4)
-2. [Reference](#ref)      
+## <a name="req"></a>Requirements
+- Ruby
+- mingw32/64
+- ceedling 
+- Tokenizer (forked from https://github.com/chaosAD/TokenizerSkeleton).
+
+<br/>    
   
 ## <a name="exAlgo"></a> Explatination of the algorithm
 ### <a name="ex1"></a> 1. Example without brackets
@@ -135,6 +138,8 @@ performed. The final answer '7' will be pushed back to Y.
    X          Y
   1 = 6 = 7----^
 ```
+
+<br/> 
 
 ### <a name="ex2"></a> 2. Example with brackets
 Expression : (1 + 2) * 3
@@ -274,7 +279,10 @@ will be performed. The final answer will be push back into Y.
 *-----*    *-----*
    X          Y
  3 * 3 = 9 ---^
-```
+```  
+
+
+<br/> 
 
 ### <a name="ex3"></a> 3. Example with prefix
 Expression : 9 + -1
@@ -343,7 +351,9 @@ The final answer '8' pushed back into Y.
 |     |    |  8  |              Y -Operand  Stack
 *-----*    *-----*
    X          Y
-```
+```  
+
+<br/> 
 
 ### <a name="ex4"></a> 4. Complex expression example
 Expression : 100 *(8 --2 *4) / 5
@@ -591,6 +601,9 @@ is performed then the final answer 320 is push into Y.
    X          Y  
 ```
 
-# <a name="ref"></a> Reference
+<br/> 
+
+
+## <a name="ref"></a> Reference
 1. [C Operator Precedence](https://en.cppreference.com/w/c/language/operator_precedence)
 2. [Operator Precedence Description](https://github.com/jason9829/ShuntingYard/blob/master/src/Readme_Precedence.md)
