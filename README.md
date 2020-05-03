@@ -12,6 +12,8 @@ An algorithm that parse mathematical expressions into infix notation. This is on
    * [Complex expression example](#ex4)
 2. [Reference](#ref) 
 
+<br/> 
+
 ## <a name="req"></a>Requirements
 - Ruby
 - mingw32/64
